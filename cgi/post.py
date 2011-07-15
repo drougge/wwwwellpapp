@@ -27,7 +27,7 @@ prt(u'<script type="text/javascript">resize();</script>\n')
 if rels:
 	prt(u'<div id="related">')
 	prt(u'Related posts:')
-	thumbs(rels)
+	prt_posts([{"md5": m} for m in rels])
 	prt(u'</div>\n')
 prt(u'</div>\n')
 prt_tagbox(tags)

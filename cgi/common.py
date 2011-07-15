@@ -36,10 +36,6 @@ def taglist(post, impl):
 	z = zip(post[prefix + "tagname"], post[prefix + "tagguid"])
 	return [(tagfmt(n), g, impl) for n, g in z]
 
-def thumbs(posts):
-	for m in posts:
-		prt(u'<div>' + m + u'</div>')
-
 def prt_tagbox(tags):
 	prt(u'<ul id="tags">')
 	for n, g, impl in sorted(tags):
@@ -52,9 +48,11 @@ def prt_posts(posts):
 	prt(u'<div id="thumbs">\n')
 	for post in posts:
 		m = post["md5"]
-		title = u' '.join([tagfmt(n) for n in sorted(post["tagname"])])
 		prt('<div class="thumb"><a href="../post/' + m + u'"><img ')
-		prtfields((u'src', u'../image/200/' + m), (u'alt', m), (u'title', title))
+		prtfields((u'src', u'../image/200/' + m), (u'alt', m))
+		if "tagname" in post:
+			title = u' '.join([tagfmt(n) for n in sorted(post["tagname"])])
+			prtfields((u'title', title))
 		prt(u'></a></div>')
 	prt(u'</div>')
 
