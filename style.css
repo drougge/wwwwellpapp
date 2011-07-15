@@ -53,3 +53,14 @@ li:nth-child(even) {
 	left: 170px;
 	top: 8px;
 }
+
+h1 {
+	font-size: 150%;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.prio {
+	margin-left: 0.6em;
+	color: #777;
+}
