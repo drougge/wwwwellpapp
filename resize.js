@@ -1,6 +1,6 @@
 var scale_state = 0;
 var orgWidth = 0, orgHeight = 0;
-var scale_margin = 180;
+var scale_margin = 190;
 
 function resize()
 {
@@ -19,8 +19,8 @@ function resize()
 			img.width = w;
 			img.height = w * orgHeight / orgWidth;
 			scale_state = 2;
+			msg.style.display = "inline-block";
 		}
-		msg.style.display = "inline-block";
 	} else {
 		img.width = orgWidth;
 		img.height = orgHeight;
