@@ -48,6 +48,16 @@ def prt_tagbox(tags):
 		prt(u'<li class="' + c + u'"><a href="../tag/' + g + u'">'+ n + u'</a></li>\n')
 	prt(u'</ul>')
 
+def prt_posts(posts):
+	prt(u'<div id="thumbs">\n')
+	for post in posts:
+		m = post["md5"]
+		title = u' '.join([tagfmt(n) for n in sorted(post["tagname"])])
+		prt('<div class="thumb"><a href="../post/' + m + u'"><img ')
+		prtfields((u'src', u'../image/200/' + m), (u'alt', m), (u'title', title))
+		prt(u'></a></div>')
+	prt(u'</div>')
+
 def prt_head(extra=u''):
 	prt(u"""<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

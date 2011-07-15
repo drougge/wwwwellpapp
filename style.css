@@ -64,3 +64,12 @@ h1 {
 	margin-left: 0.6em;
 	color: #777;
 }
+
+.thumb {
+	display: inline-block;
+	float: left;
+	text-align: center;
+	vertical-align: middle;
+	width: 220px;
+	height: 220px;
+}
