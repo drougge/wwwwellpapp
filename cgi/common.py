@@ -54,7 +54,7 @@ def prt_tagbox(tags):
 	for n, g, impl in sorted(tags):
 		c = u'tag implied' if impl else u'tag'
 		#c += u' tt-' + tt
-		prt(u'<li class="' + c + u'"><a href="../tag/' + g + u'">'+ n + u'</a></li>\n')
+		prt(u'<li class="' + c + u'"><a href="../tag/' + g[-27:] + u'">'+ n + u'</a></li>\n')
 	prt(u'</ul>')
 
 def prt_posts(posts):
