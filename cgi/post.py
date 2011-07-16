@@ -10,12 +10,16 @@ m = environ["PATH_INFO"][1:]
 if not re.match(r"^[0-9a-f]{32}$", m):
 	notfound()
 
-post = client.get_post(m, wanted=["width", "height", "ext", "tagname", "tagguid"], separate_implied=True)
+post = client.get_post(m, wanted=["width", "height", "ext", "tagname", "tagguid", "rotate"], separate_implied=True)
 if not post: notfound()
 
 tags = taglist(post, False) + taglist(post, True)
 rels = client.post_rels(m)
-img = u'../image/' + m + u'.' + post["ext"]
+if post["rotate"] > 0:
+	spec = u'%(width)dx%(height)d-%(rotate)d' % post
+	img = u'../rotate/' + spec + u'/' + m + u'.' + post["ext"]
+else:
+	img = u'../image/' + m + u'.' + post["ext"]
 
 prt_head(u'<script src="../resize.js" type="text/javascript"></script>\n')
 prt(u'<div id="main">\n')
