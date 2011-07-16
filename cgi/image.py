@@ -8,6 +8,7 @@ from dbclient import dbclient, dbcfg
 from os.path import exists
 from os import stat
 from sys import stdout
+from time import strftime, gmtime, time
 
 cgitb.enable()
 
@@ -18,11 +19,16 @@ def notfound():
 	print "404 Post not found"
 	exit()
 
+def fmttime(t):
+	return strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(t))
+
 def serve(fn, ext):
 	if not exists(fn): notfound()
 	z = stat(fn).st_size
 	print "Content-Type: image/" + ext
 	print "Content-Lenght: " + str(z)
+	print "Expires: " + fmttime(time() + 60*60*24 * 10)
+	print "Date: " + fmttime(time())
 	print
 	fh = open(fn)
 	data = fh.read(65536)
