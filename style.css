@@ -83,18 +83,22 @@ h1 {
 
 .pagelink {
 	float: left;
-	padding: 3px;
 	margin: 2px 2px 2px 2px;
 	border: 1px solid #000;
+	padding: 4px 0px 4px 0px;
 }
 .currentpage {
 	border: 1px solid #faa;
+	padding: 4px;
 }
 .linkspace {
 	border: 0;
 }
 .pagelink:first-child {
 	clear: left;
+}
+.pagelink > a {
+	padding: 4px;
 }
 
 #query-string {
