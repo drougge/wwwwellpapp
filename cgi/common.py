@@ -128,6 +128,8 @@ def prt_foot():
 	prt(u'</body></html>')
 
 def finish():
+	data = u''.join(outdata).encode("utf-8")
 	print "Content-Type: text/html; charset=UTF-8"
+	print "Content-Length: " + str(len(data) + 1)
 	print
-	print u''.join(outdata).encode("utf-8")
+	print data

@@ -52,6 +52,6 @@ url = "../../image/" + img
 data = data % locals()
 
 print "Content-Type: image/svg+xml"
-print "Content-Lenght: " + str(len(data))
+print "Content-Length: " + str(len(data) + 1)
 print
 print data
