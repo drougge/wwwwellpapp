@@ -61,12 +61,12 @@ def prt_posts(posts):
 	prt(u'<div id="thumbs">\n')
 	for post in posts:
 		m = post["md5"]
-		prt('<div class="thumb"><a href="../post/' + m + u'"><img ')
+		prt('<span class="thumb"><a href="../post/' + m + u'"><img ')
 		prtfields((u'src', u'../image/200/' + m), (u'alt', m))
 		if "tagname" in post:
 			title = u' '.join([tagfmt(n, False) for n in sorted(post["tagname"])])
 			prtfields((u'title', title))
-		prt(u'/></a></div>\n')
+		prt(u'/></a></span>\n')
 	prt(u'</div>\n')
 
 def makelink(base, *args):
