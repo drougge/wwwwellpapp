@@ -12,19 +12,23 @@ a:hover {
 	text-decoration: underline;
 }
 
+#left {
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	width: 150px;
+}
+
 #tags {
 	border-top: 1px solid #ddd;
 	border-left: 1px solid #ddd;
 	border-right: 1px solid #aaa;
 	border-bottom: 1px solid #aaa;
 	list-style-type: none;
-	margin: 0;
 	padding: 0;
 	background-color: #590;
-	position: absolute;
-	top: 8px;
-	left: 8px;
 	width: 150px;
+	clear: left;
 }
 .tag {
 	background-color: #f3fff7;
@@ -109,4 +113,22 @@ h1 {
 }
 .unknowntag {
 	text-decoration: line-through;
+}
+
+form {
+	padding: 0;
+	margin: 0;
+}
+
+input {
+	display: block;
+	margin: 2px 0 2px 0;
+}
+input[type=text] {
+	width: 140px;
+}
+#search-box {
+	float: left;
+	margin-right: 15px;
+	padding-bottom: 5px;
 }

@@ -49,7 +49,7 @@ def taglist(post, impl):
 	z = zip(post[prefix + "tagname"], post[prefix + "tagguid"])
 	return [(tagfmt(n), g, impl) for n, g in z]
 
-def prt_tagbox(tags):
+def prt_tags(tags):
 	prt(u'<ul id="tags">')
 	for n, g, impl in sorted(tags):
 		c = u'tag implied' if impl else u'tag'
@@ -68,6 +68,14 @@ def prt_posts(posts):
 			prtfields((u'title', title))
 		prt(u'/></a></span>\n')
 	prt(u'</div>\n')
+
+def prt_search_form(q=u''):
+	prt(u'<form action="../search/" method="get">\n')
+	prt(u'<div id="search-box">\n')
+	prt(u'<input type="text" name="q" value="' + escape(q, True) + u'" />\n')
+	prt(u'<input type="submit" name="sBtn" value="Search" />\n')
+	prt(u'</div>\n')
+	prt(u'</form>\n')
 
 def makelink(base, *args):
 	if not args: return base

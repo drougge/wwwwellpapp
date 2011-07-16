@@ -34,7 +34,10 @@ if rels:
 	prt_posts([{"md5": m} for m in rels])
 	prt(u'</div>\n')
 prt(u'</div>\n')
-prt_tagbox(tags)
+prt(u'<div id="left">\n')
+prt_search_form()
+prt_tags(tags)
+prt(u'</div>\n')
 prt_foot()
 
 finish()

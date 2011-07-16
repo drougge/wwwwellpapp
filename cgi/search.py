@@ -27,6 +27,7 @@ if "q" in fs:
 		pq = u' '.join(filter(None, pqa))
 
 prt_head()
+prt_search_form(q)
 
 if qa:
 	prt(u'<div id="query-string">\n')
