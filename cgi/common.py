@@ -22,10 +22,12 @@ def prt(str):
 def prtfields(*fields):
 	map(lambda f: prt(f[0] + u'="' + escape(unicode(f[1])) + u'" '), fields)
 
-def tagfmt(n):
+def tagfmt(n, html_ok=True):
 	for s in u":_-/><&":
 		n = n.replace(s, s + u'\u200b')
-	return escape(n).replace(u'\u200b', u'<wbr /><span class="wbr">\u200b</span>')
+	n = escape(n)
+	if html_ok: n = n.replace(u'\u200b', u'<wbr /><span class="wbr">\u200b</span>')
+	return n
 
 def tagname(guid):
 	tag = client.get_tag(guid)
@@ -51,7 +53,7 @@ def prt_posts(posts):
 		prt('<div class="thumb"><a href="../post/' + m + u'"><img ')
 		prtfields((u'src', u'../image/200/' + m), (u'alt', m))
 		if "tagname" in post:
-			title = u' '.join([tagfmt(n) for n in sorted(post["tagname"])])
+			title = u' '.join([tagfmt(n, False) for n in sorted(post["tagname"])])
 			prtfields((u'title', title))
 		prt(u'></a></div>')
 	prt(u'</div>')
