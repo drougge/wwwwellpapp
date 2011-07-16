@@ -37,7 +37,7 @@ def tagfmt(n, html_ok=True):
 	for s in u":_-/><&":
 		n = n.replace(s, s + u'\u200b')
 	n = escape(n)
-	if html_ok: n = n.replace(u'\u200b', u'<wbr /><span class="wbr">\u200b</span>')
+	if html_ok: n = n.replace(u'\u200b', u'<span class="wbr">\u200b</span>')
 	return n
 
 def tagname(guid):
@@ -66,8 +66,8 @@ def prt_posts(posts):
 		if "tagname" in post:
 			title = u' '.join([tagfmt(n, False) for n in sorted(post["tagname"])])
 			prtfields((u'title', title))
-		prt(u'></a></div>')
-	prt(u'</div>')
+		prt(u'/></a></div>\n')
+	prt(u'</div>\n')
 
 def makelink(base, *args):
 	if not args: return base
@@ -76,7 +76,7 @@ def makelink(base, *args):
 	else:
 		middle = u'?'
 	args = urlencode([(a, v.encode("utf-8")) for a, v in args])
-	return base + middle + args
+	return base + middle + escape(args)
 
 def pagelinks(link, page, result_count):
 	global outdata
@@ -95,7 +95,7 @@ def pagelinks(link, page, result_count):
 	prev = -1
 	for p in pages:
 		if p != prev + 1:
-			prt(u'<div class="pagelink linkspace">...</div>')
+			prt(u'<div class="pagelink linkspace">...</div>\n')
 		prev = p
 		prt(u'<div class="pagelink')
 		if p == page:
