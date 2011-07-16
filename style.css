@@ -73,7 +73,36 @@ h1 {
 	width: 220px;
 	height: 220px;
 }
+.thumb:first-child {
+	clear: left;
+}
 
 .wbr {
 	visibility: hidden;
+}
+
+.pagelink {
+	float: left;
+	padding: 3px;
+	margin: 2px 2px 2px 2px;
+	border: 1px solid #000;
+}
+.currentpage {
+	border: 1px solid #faa;
+}
+.linkspace {
+	border: 0;
+}
+.pagelink:first-child {
+	clear: left;
+}
+
+#query-string {
+	font-size: 120%;
+}
+.qword {
+	
+}
+.unknowntag {
+	text-decoration: line-through;
 }

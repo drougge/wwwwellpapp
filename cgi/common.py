@@ -1,13 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from cgi import escape
+from cgi import escape, FieldStorage
 import cgitb
 from dbclient import dbclient, dbcfg
+from urllib import urlencode
 
 cgitb.enable()
 
+per_page = 32
 outdata = []
 client = dbclient(dbcfg(None, [".wellpapprc"]))
+fs = FieldStorage()
+
+def getarg(n):
+	v = fs[n].value
+	try:
+		v = v.decode("utf-8")
+	except Exception:
+		v = v.decode("iso-8859-1")
+	return v
 
 def notfound():
 	print "Status: 404 Not Found"
@@ -57,6 +68,49 @@ def prt_posts(posts):
 			prtfields((u'title', title))
 		prt(u'></a></div>')
 	prt(u'</div>')
+
+def makelink(base, *args):
+	if not args: return base
+	if u'?' in base:
+		middle = u'&amp;'
+	else:
+		middle = u'?'
+	args = urlencode([(a, v.encode("utf-8")) for a, v in args])
+	return base + middle + args
+
+def pagelinks(link, page, result_count):
+	global outdata
+	pages = range(result_count // per_page + 1)
+	if len(pages) == 1: return u''
+	real_outdata = outdata
+	outdata = []
+	if len(pages) > 16:
+		if page < 8:
+			pages = pages[:10] + pages[-6:]
+		elif page > len(pages) - 8:
+			pages = pages[:6] + pages[-10:]
+		else:
+			pages = pages[:6] + pages[page - 2:page + 3] + pages[-5:]
+	prt(u'<div>')
+	prev = -1
+	for p in pages:
+		if p != prev + 1:
+			prt(u'<div class="pagelink linkspace">...</div>')
+		prev = p
+		prt(u'<div class="pagelink')
+		if p == page:
+			prt(u' currentpage">')
+		else:
+			prt(u'"><a href="' + link)
+			prt(u'&amp;page=' + unicode(p) + u'">')
+		prt(unicode(p))
+		if p != page:
+			prt(u'</a>')
+		prt(u'</div>\n')
+	prt(u'</div>')
+	res = u''.join(outdata)
+	outdata = real_outdata
+	return res
 
 def prt_head(extra=u''):
 	prt(u"""<?xml version="1.0" encoding="utf-8"?>
