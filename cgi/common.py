@@ -25,7 +25,7 @@ def prtfields(*fields):
 def tagfmt(n):
 	for s in u":_-/><&":
 		n = n.replace(s, s + u'\u200b')
-	return escape(n)
+	return escape(n).replace(u'\u200b', u'<wbr /><span class="wbr">\u200b</span>')
 
 def tagname(guid):
 	tag = client.get_tag(guid)
