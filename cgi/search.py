@@ -34,7 +34,7 @@ if qa:
 		c = u'qword'
 		if not pn: c += u' unknowntag'
 		prt(u'<span class="' + c + u'">' + escape(qn) + u'</span>\n')
-	prt(u'</div\n')
+	prt(u'</div>\n')
 	if None in pqa:
 		q = u' '.join([qw for qw, pqw in zip(qa, pqa) if pqw])
 
