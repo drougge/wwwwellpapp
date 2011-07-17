@@ -26,7 +26,6 @@ a:hover {
 	border-bottom: 1px solid #aaa;
 	list-style-type: none;
 	padding: 0;
-	background-color: #590;
 	width: 150px;
 	clear: left;
 }
@@ -35,10 +34,13 @@ a:hover {
 	padding: 0.05em 0.2em 0.05em 0.2em;
 }
 .implied {
-	background-color: #fff3f7;
+	background-color: #ffedf3;
 }
-li:nth-child(even) {
-	opacity: 0.93;
+li:nth-child(even).tag {
+	background-color: #d7edcc;
+}
+li:nth-child(even).implied {
+	background-color: #ecccd5;
 }
 
 #rescaled-msg {
