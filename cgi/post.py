@@ -23,7 +23,10 @@ else:
 
 prt_head(u'<script src="../resize.js" type="text/javascript"></script>\n')
 prt(u'<div id="main">\n')
-prt(u'<div onclick="return resize();" id="rescaled-msg"></div>\n')
+prt(u'<noscript><div id="no-resize" class="msgbox">')
+prt(u'If you had javascript, image resizing might work')
+prt(u'</div></noscript>\n')
+prt(u'<div onclick="return resize();" id="rescaled-msg" class="msgbox"></div>\n')
 prt(u'<img id="main-image" onclick="return resize();" ')
 prtfields((u'src', img), (u'alt', m), (u'width', post["width"]), (u'height', post["height"]))
 prt(u'/>\n')

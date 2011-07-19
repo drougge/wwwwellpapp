@@ -43,14 +43,21 @@ li:nth-child(even).implied {
 	background-color: #ecccd5;
 }
 
-#rescaled-msg {
+.msgbox {
 	border: 2px outset #888;
 	padding: 2px 6px 2px 6px;
 	background-color: #ddd;
-	color: #b00;
-	display: none;
 	text-align: center;
 	margin-bottom: 8px;
+	color: #000;
+	display: inline-block;
+}
+#rescaled-msg {
+	color: #b00;
+	display: none;
+}
+#no-resize {
+	color: #b00;
 }
 
 #main {
