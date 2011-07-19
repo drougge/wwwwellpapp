@@ -46,10 +46,13 @@ if pq:
 	else:
 		range = [per_page * page, per_page * page + per_page - 1]
 	posts, props = client.search_post(guids=filter(None, pqa), order="created", range=range, wanted=["tagname", "implied"])
-	pl = pagelinks(makelink(u'../search/', (u'pq', pq), (u'q', q)), page, props.result_count)
-	prt(pl)
-	prt_posts(posts)
-	prt(pl)
+	if posts:
+		pl = pagelinks(makelink(u'../search/', (u'pq', pq), (u'q', q)), page, props.result_count)
+		prt(pl)
+		prt_posts(posts)
+		prt(pl)
+	else:
+		prt(u'<p>No results.</p>')
 else:
 	prt(u'No query?')
 
