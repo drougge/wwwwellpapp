@@ -35,12 +35,14 @@ prt(u'<script type="text/javascript">resize();</script>\n')
 if rels:
 	prt(u'<div id="related">')
 	prt(u'Related posts:')
-	prt_posts([Post(md5=m) for m in rels])
+	prt_posts([Post(md5=md5) for md5 in rels])
 	prt(u'</div>\n')
 prt(u'</div>\n')
 prt(u'<div id="left">\n')
 prt_search_form()
 prt_tags(tags)
+if user:
+	prt_tagform(m)
 prt(u'</div>\n')
 prt_foot()
 

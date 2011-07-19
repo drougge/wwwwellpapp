@@ -127,6 +127,15 @@ def pagelinks(link, page, result_count):
 	outdata = real_outdata
 	return res
 
+def prt_tagform(m):
+	prt(u'<form action="../modify-tag" method="post">\n')
+	prt(u'<div id="tag-form">\n')
+	prt(u'<input type="hidden" name="post" value="' + m + u'" />\n')
+	prt(u'<input type="text" name="tags" />\n')
+	prt(u'<input type="submit" name="sBtn" value="Tag" />\n')
+	prt(u'</div>\n')
+	prt(u'</form>\n')
+
 def prt_head(extra=u''):
 	prt(u"""<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
