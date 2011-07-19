@@ -23,8 +23,8 @@ else:
 
 prt_head(u'<script src="../resize.js" type="text/javascript"></script>\n')
 prt(u'<div id="main">\n')
-prt(u'<div onclick="resize();" id="rescaled-msg">Image rescaled<br />click to see full size</div>\n')
-prt(u'<img id="main-image" onclick="resize();" ')
+prt(u'<div onclick="return resize();" id="rescaled-msg"></div>\n')
+prt(u'<img id="main-image" onclick="return resize();" ')
 prtfields((u'src', img), (u'alt', m), (u'width', post["width"]), (u'height', post["height"]))
 prt(u'/>\n')
 prt(u'<script type="text/javascript">resize();</script>\n')
