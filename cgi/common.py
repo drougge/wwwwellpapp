@@ -11,6 +11,7 @@ per_page = 32
 outdata = []
 client = dbclient(dbcfg(None, [".wellpapprc"]))
 fs = FieldStorage()
+user = "fake"
 
 def getarg(n):
 	v = fs[n].value
@@ -119,6 +120,8 @@ def pagelinks(link, page, result_count):
 		if p != page:
 			prt(u'</a>')
 		prt(u'</div>\n')
+	if user and page >= 0:
+		prt(u'<div class="pagelink"><a href="' + link + u'&amp;ALL=1">ALL</a></div>\n')
 	prt(u'</div>')
 	res = u''.join(outdata)
 	outdata = real_outdata

@@ -40,7 +40,11 @@ if qa:
 		q = u' '.join([qw for qw, pqw in zip(qa, pqa) if pqw])
 
 if pq:
-	range = [per_page * page, per_page * page + per_page - 1]
+	if user and "ALL" in fs:
+		range = [0, 1 << 31 - 1]
+		page = -1
+	else:
+		range = [per_page * page, per_page * page + per_page - 1]
 	posts, props = client.search_post(guids=filter(None, pqa), order="created", range=range, wanted=["tagname", "implied"])
 	pl = pagelinks(makelink(u'../search/', (u'pq', pq), (u'q', q)), page, props.result_count)
 	prt(pl)
