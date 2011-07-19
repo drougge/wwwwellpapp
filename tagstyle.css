@@ -1,0 +1,27 @@
+/* This is for specifying the colours you want on tag types */
+/* Add whatever tag types you have */
+
+.tt-unspecified > a {
+	color: #777778;
+}
+.tt-ambiguous > a {
+	color: #ff0000;
+}
+.tt-meta > a {
+	color: #00aa00;
+}
+.tt-inimage > a {
+	color: #000000;
+}
+.tt-photographer > a {
+	color: #cc99ff;
+}
+.tt-person > a {
+	color: #0000ff;
+}
+.tt-location > a {
+	color: #33aaff;
+}
+.tt-group > a {
+	color: #ccb000;
+}

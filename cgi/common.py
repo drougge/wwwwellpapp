@@ -132,6 +132,7 @@ def prt_head(extra=u''):
 	<title>WWWwellpapp</title>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="../style.css" />
+	<link rel="stylesheet" href="../tagstyle.css" />
 	""")
 	prt(extra)
 	prt(u'</head>\n<body>\n')
