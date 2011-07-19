@@ -18,16 +18,16 @@ prt(u'<div id="left">\n')
 prt_search_form()
 prt(u'</div>\n')
 prt(u'<div id="main">\n')
-prt(u'<h1>' + tagfmt(tag["name"]) + u'</h1>')
+prt(u'<h1>' + tagfmt(tag.name) + u'</h1>')
 prt(u'<ul>')
 if "alias" in tag:
 	prt(u'<li>Aliases:\n  <ul>\n')
-	for alias in tag["alias"]:
+	for alias in tag.alias:
 		prt(u'  <li>' + tagfmt(alias) + u'</li>\n')
 	prt(u'  </ul></li>\n')
-prt(u'<li>Type: ' + tag["type"] + u'</li>\n')
-prt(u'<li>Posts: ' + unicode(tag["posts"]) + u'</li>\n')
-prt(u'<li>Weak posts: ' + unicode(tag["weak_posts"]) + u'</li>\n')
+prt(u'<li>Type: ' + tag.type + u'</li>\n')
+prt(u'<li>Posts: ' + unicode(tag.posts) + u'</li>\n')
+prt(u'<li>Weak posts: ' + unicode(tag.weak_posts) + u'</li>\n')
 for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 	tags = client.tag_implies(guid, reverse=rev)
 	if tags:
@@ -43,7 +43,7 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 prt(u'</ul>\n')
 posts, props = client.search_post(guids=[guid], order="created", range=[0, per_page - 1], wanted=["tagname", "implied"])
 prt_posts(posts)
-prt(pagelinks(makelink(u'../search/', (u'pq', guid), (u'q', tag["name"])), 0, props["result_count"]))
+prt(pagelinks(makelink(u'../search/', (u'pq', guid), (u'q', tag.name)), 0, props.result_count))
 prt(u'</div>\n')
 prt_foot()
 

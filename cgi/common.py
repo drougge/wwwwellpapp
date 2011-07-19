@@ -42,7 +42,7 @@ def tagfmt(n, html_ok=True):
 
 def tagname(guid):
 	tag = client.get_tag(guid)
-	return tag["name"]
+	return tag.name
 
 def taglist(post, impl):
 	prefix = "impl" if impl else ""
@@ -60,11 +60,11 @@ def prt_tags(tags):
 def prt_posts(posts):
 	prt(u'<div id="thumbs">\n')
 	for post in posts:
-		m = post["md5"]
+		m = post.md5
 		prt('<span class="thumb"><a href="../post/' + m + u'"><img ')
 		prtfields((u'src', u'../image/200/' + m), (u'alt', m))
 		if "tagname" in post:
-			title = u' '.join([tagfmt(n, False) for n in sorted(post["tagname"])])
+			title = u' '.join([tagfmt(n, False) for n in sorted(post.tagname)])
 			prtfields((u'title', title))
 		prt(u'/></a></span>\n')
 	prt(u'</div>\n')

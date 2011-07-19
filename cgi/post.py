@@ -15,11 +15,11 @@ if not post: notfound()
 
 tags = taglist(post, False) + taglist(post, True)
 rels = client.post_rels(m)
-if post["rotate"] > 0:
+if post.rotate > 0:
 	spec = u'%(width)dx%(height)d-%(rotate)d' % post
-	img = u'../rotate/' + spec + u'/' + m + u'.' + post["ext"]
+	img = u'../rotate/' + spec + u'/' + m + u'.' + post.ext
 else:
-	img = u'../image/' + m + u'.' + post["ext"]
+	img = u'../image/' + m + u'.' + post.ext
 
 prt_head(u'<script src="../resize.js" type="text/javascript"></script>\n')
 prt(u'<div id="main">\n')
@@ -28,7 +28,7 @@ prt(u'If you had javascript, image resizing might work')
 prt(u'</div></noscript>\n')
 prt(u'<div onclick="return resize();" id="rescaled-msg" class="msgbox"></div>\n')
 prt(u'<img id="main-image" onclick="return resize();" ')
-prtfields((u'src', img), (u'alt', m), (u'width', post["width"]), (u'height', post["height"]))
+prtfields((u'src', img), (u'alt', m), (u'width', post.width), (u'height', post.height))
 prt(u'/>\n')
 prt(u'<script type="text/javascript">resize();</script>\n')
 if rels:
