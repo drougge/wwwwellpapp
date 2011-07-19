@@ -5,12 +5,13 @@ import re
 from os import environ
 from sys import exit
 from common import *
+from dbclient import Post
 
 m = environ["PATH_INFO"][1:]
 if not re.match(r"^[0-9a-f]{32}$", m):
 	notfound()
 
-post = client.get_post(m, wanted=["width", "height", "ext", "tagname", "tagguid", "rotate"], separate_implied=True)
+post = client.get_post(m, wanted=["width", "height", "ext", "tagname", "tagguid", "tagdata", "rotate"], separate_implied=True)
 if not post: notfound()
 
 tags = taglist(post, False) + taglist(post, True)
@@ -34,7 +35,7 @@ prt(u'<script type="text/javascript">resize();</script>\n')
 if rels:
 	prt(u'<div id="related">')
 	prt(u'Related posts:')
-	prt_posts([{"md5": m} for m in rels])
+	prt_posts([Post(md5=m) for m in rels])
 	prt(u'</div>\n')
 prt(u'</div>\n')
 prt(u'<div id="left">\n')

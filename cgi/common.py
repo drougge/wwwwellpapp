@@ -45,16 +45,20 @@ def tagname(guid):
 	return tag.name
 
 def taglist(post, impl):
-	prefix = "impl" if impl else ""
-	z = zip(post[prefix + "tagname"], post[prefix + "tagguid"])
-	return [(tagfmt(n), g, impl) for n, g in z]
+	if impl:
+		full, weak = post.impltags, post.implweaktags
+	else:
+		full, weak = post.tags, post.weaktags
+	full = [(tagfmt(t.name), t, impl) for t in full]
+	weak = [(tagfmt(u'~' + t.name), t, impl) for t in weak]
+	return full + weak
 
 def prt_tags(tags):
 	prt(u'<ul id="tags">')
-	for n, g, impl in sorted(tags):
+	for n, t, impl in sorted(tags):
 		c = u'tag implied' if impl else u'tag'
-		#c += u' tt-' + tt
-		prt(u'<li class="' + c + u'"><a href="../tag/' + g[-27:] + u'">'+ n + u'</a></li>\n')
+		c += u' tt-' + t.type
+		prt(u'<li class="' + c + u'"><a href="../tag/' + t.guid + u'">'+ n + u'</a></li>\n')
 	prt(u'</ul>')
 
 def prt_posts(posts):
