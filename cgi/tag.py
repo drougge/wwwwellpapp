@@ -18,13 +18,13 @@ prt(u'<div id="left">\n')
 prt_search_form()
 prt(u'</div>\n')
 prt(u'<div id="main">\n')
-prt(u'<h1>' + tagfmt(tag.name) + u'</h1>')
-prt(u'<ul>')
-if "alias" in tag:
+prt(u'<h1>' + tagfmt(tag.name) + u'</h1>\n')
+prt(u'<ul>\n')
+if "alias" in tag and tag.alias:
 	prt(u'<li>Aliases:\n  <ul>\n')
 	for alias in tag.alias:
 		prt(u'  <li>' + tagfmt(alias) + u'</li>\n')
-	prt(u'  </ul></li>\n')
+	prt(u'  </ul>\n</li>\n')
 prt(u'<li>Type: ' + tag.type + u'</li>\n')
 prt(u'<li>Posts: ' + unicode(tag.posts) + u'</li>\n')
 prt(u'<li>Weak posts: ' + unicode(tag.weak_posts) + u'</li>\n')
