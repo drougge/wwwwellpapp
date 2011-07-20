@@ -33,7 +33,5 @@ if full_tag:
 	if len(alts) > 20: alts = []
 	res["alts"] = alts
 prt(json.dumps(res));
-import time
-time.sleep(0.5)
 
 finish("application/json")

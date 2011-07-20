@@ -17,7 +17,7 @@ function init_completion(el)
 	completion[el.id] = {"value": el.value, "x": null, "word": "",
 	                     "load": load, "abort": false, "tO": false,
 	                     "r": null};
-	el.onkeyup = soon_completion;
+	el.onkeypress = soon_completion;
 	el.onblur = remove_completion;
 }
 
@@ -34,6 +34,7 @@ function find_word(el)
 
 function soon_completion(ev)
 {
+	if (ev.keyCode == 8) return;
 	var el = this;
 	var c = completion[el.id];
 	if (c.tO) clearTimeout(c.tO);
