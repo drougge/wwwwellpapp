@@ -28,6 +28,13 @@ def notfound():
 	print "404 Not Found"
 	exit()
 
+def clean(n):
+	if n[0] in u"-~": return n[1:]
+	return n
+def prefix(n):
+	if n[0] in u"-~": return n[0]
+	return ""
+
 def prt(str):
 	outdata.append(str)
 
@@ -77,7 +84,8 @@ def prt_posts(posts):
 def prt_search_form(q=u''):
 	prt(u'<form action="../search/" method="get">\n')
 	prt(u'<div id="search-box">\n')
-	prt(u'<input type="text" name="q" value="' + escape(q, True) + u'" />\n')
+	prt(u'<input type="text" name="q" id="search-q" value="' + escape(q, True))
+	prt(u'" onfocus="init_completion(this);" />\n')
 	prt(u'<input type="submit" name="sBtn" value="Search" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')
@@ -131,7 +139,7 @@ def prt_tagform(m):
 	prt(u'<form action="../modify-tag" method="post">\n')
 	prt(u'<div id="tag-form">\n')
 	prt(u'<input type="hidden" name="post" value="' + m + u'" />\n')
-	prt(u'<input type="text" name="tags" />\n')
+	prt(u'<input type="text" name="q" id="tag-q" />\n')
 	prt(u'<input type="submit" name="sBtn" value="Tag" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')
@@ -145,6 +153,7 @@ def prt_head(extra=u''):
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="../style.css" />
 	<link rel="stylesheet" href="../tagstyle.css" />
+	<script src="../complete.js" type="text/javascript"></script>
 	""")
 	prt(extra)
 	prt(u'</head>\n<body>\n')
@@ -152,9 +161,12 @@ def prt_head(extra=u''):
 def prt_foot():
 	prt(u'</body></html>')
 
-def finish():
+def finish(ctype = "text/html"):
 	data = u''.join(outdata).encode("utf-8")
-	print "Content-Type: text/html; charset=UTF-8"
+	ctype = str(ctype)
+	if (ctype[:5] == "text/" or ctype == "application/json") and "charset" not in ctype:
+		ctype += "; charset=UTF-8"
+	print "Content-Type: " + ctype
 	print "Content-Length: " + str(len(data) + 1)
 	print
 	print data

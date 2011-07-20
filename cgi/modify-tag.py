@@ -4,13 +4,6 @@
 from sys import exit
 from common import *
 
-def clean(n):
-	if n[0] in u"-~": return n[1:]
-	return n
-def prefix(n):
-	if n[0] in u"-~": return n[0]
-	return ""
-
 m = getarg("post")
 post = client.get_post(m)
 tags = getarg("tags")

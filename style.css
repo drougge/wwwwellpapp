@@ -129,6 +129,12 @@ form {
 	margin: 0;
 }
 
+.ajaxload {
+	position: absolute;
+	left: 152px;
+	top: 3px;
+	z-index: 3;
+}
 input {
 	display: block;
 	margin: 2px 0 2px 0;
@@ -140,4 +146,5 @@ input[type=text] {
 	float: left;
 	margin-right: 15px;
 	padding-bottom: 5px;
+	position: relative;
 }
