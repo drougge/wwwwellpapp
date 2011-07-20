@@ -45,6 +45,7 @@ posts, props = client.search_post(guids=[guid], order="created", range=[0, per_p
 prt_posts(posts)
 prt(pagelinks(makelink(u'../search/', (u'pq', guid), (u'q', tag.name)), 0, props.result_count))
 prt(u'</div>\n')
+prt(u'<div id="qqq" style="z-index: 50; position: absolute; top: 600px;"></div>')
 prt_foot()
 
 finish()
