@@ -36,7 +36,7 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 		prt(u'<li>' + txt)
 		prt(u'<ul>')
 		for t, prio in tags:
-			prt(u'<li><a href="../tag/' + t + u'">')
+			prt(u'<li><a href="' + base + u'tag/' + t + u'">')
 			prt(tagfmt(tagname(t)))
 			prt(u'</a>')
 			if prio: prt(u'<span class="prio">(' + unicode(prio) + u')</span>')
@@ -45,7 +45,7 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 prt(u'</ul>\n')
 posts, props = client.search_post(guids=[guid], order="created", range=[0, per_page - 1], wanted=["tagname", "implied"])
 prt_posts(posts)
-prt(pagelinks(makelink(u'../search/', (u'pq', guid), (u'q', tag.name)), 0, props.result_count))
+prt(pagelinks(makelink(u'search', (u'pq', guid), (u'q', tag.name)), 0, props.result_count))
 prt(u'</div>\n')
 prt(u'<div id="qqq" style="z-index: 50; position: absolute; top: 600px;"></div>')
 prt_foot()

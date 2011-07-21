@@ -12,6 +12,8 @@ outdata = []
 client = dbclient(dbcfg(None, [".wellpapprc"]))
 fs = FieldStorage()
 user = "fake"
+base = unicode(client.cfg.webbase)
+assert base
 
 def getarg(n):
 	v = fs[n].value
@@ -79,15 +81,15 @@ def prt_tags(tags):
 	for n, t, impl in tags:
 		c = u'tag implied' if impl else u'tag'
 		c += u' tt-' + t.type
-		prt(u'<li class="' + c + u'"><a href="../tag/' + t.guid + u'">'+ n + u'</a></li>\n')
+		prt(u'<li class="' + c + u'"><a href="' + base + u'tag/' + t.guid + u'">'+ n + u'</a></li>\n')
 	prt(u'</ul>')
 
 def prt_posts(posts):
 	prt(u'<div id="thumbs">\n')
 	for post in posts:
 		m = post.md5
-		prt('<span class="thumb"><a href="../post/' + m + u'"><img ')
-		prtfields((u'src', u'../image/200/' + m), (u'alt', m))
+		prt('<span class="thumb"><a href="' + base + u'post/' + m + u'"><img ')
+		prtfields((u'src', base + u'image/200/' + m), (u'alt', m))
 		if "tagname" in post:
 			title = u' '.join([tagfmt(n, False) for n in sorted(post.tagname)])
 			prtfields((u'title', title))
@@ -95,7 +97,7 @@ def prt_posts(posts):
 	prt(u'</div>\n')
 
 def prt_search_form(q=u''):
-	prt(u'<form action="../search/" method="get">\n')
+	prt(u'<form action="' + base + u'search" method="get">\n')
 	prt(u'<div id="search-box">\n')
 	prt(u'<input type="text" name="q" id="search-q" value="' + escape(q, True))
 	prt(u'" onfocus="init_completion(this);" />\n')
@@ -103,14 +105,15 @@ def prt_search_form(q=u''):
 	prt(u'</div>\n')
 	prt(u'</form>\n')
 
-def makelink(base, *args):
-	if not args: return base
-	if u'?' in base:
+def makelink(fn, *args):
+	fn = base + fn
+	if not args: return fn
+	if u'?' in fn:
 		middle = u'&amp;'
 	else:
 		middle = u'?'
 	args = urlencode([(a, v.encode("utf-8")) for a, v in args])
-	return base + middle + escape(args)
+	return fn + middle + escape(args)
 
 def pagelinks(link, page, result_count):
 	global outdata
@@ -149,7 +152,7 @@ def pagelinks(link, page, result_count):
 	return res
 
 def prt_tagform(m):
-	prt(u'<form action="../modify-tag" method="post">\n')
+	prt(u'<form action="' + base + u'modify-tag" method="post">\n')
 	prt(u'<div id="tag-form">\n')
 	prt(u'<input type="hidden" name="post" value="' + m + u'" />\n')
 	prt(u'<input type="text" name="q" id="tag-q" />\n')
@@ -164,10 +167,10 @@ def prt_head(extra=u''):
 <head>
 	<title>WWWwellpapp</title>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="../style.css" />
-	<link rel="stylesheet" href="../tagstyle.css" />
-	<script src="../complete.js" type="text/javascript"></script>
-	""")
+	<link rel="stylesheet" href="%(base)sstyle.css" />
+	<link rel="stylesheet" href="%(base)stagstyle.css" />
+	<script src="%(base)scomplete.js" type="text/javascript"></script>
+	""" % {"base": base})
 	prt(extra)
 	prt(u'</head>\n<body>\n')
 

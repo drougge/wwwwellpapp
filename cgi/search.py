@@ -50,7 +50,7 @@ if pq:
 		range = [per_page * page, per_page * page + per_page - 1]
 	posts, props = client.search_post(guids=pqa, order="created", range=range, wanted=["tagname", "implied"])
 	if posts:
-		pl = pagelinks(makelink(u'../search/', (u'pq', pq), (u'q', q)), page, props.result_count)
+		pl = pagelinks(makelink(u'search', (u'pq', pq), (u'q', q)), page, props.result_count)
 		prt(pl)
 		prt_posts(posts)
 		prt(pl)

@@ -18,11 +18,11 @@ tags = taglist(post, False) + taglist(post, True)
 rels = client.post_rels(m)
 if post.rotate > 0:
 	spec = u'%(width)dx%(height)d-%(rotate)d' % post
-	img = u'../rotate/' + spec + u'/' + m + u'.' + post.ext
+	img = base + u'rotate/' + spec + u'/' + m + u'.' + post.ext
 else:
-	img = u'../image/' + m + u'.' + post.ext
+	img = base + u'image/' + m + u'.' + post.ext
 
-prt_head(u'<script src="../resize.js" type="text/javascript"></script>\n')
+prt_head(u'<script src="' + base + u'resize.js" type="text/javascript"></script>\n')
 prt(u'<div id="main">\n')
 prt(u'<noscript><div id="no-resize" class="msgbox">')
 prt(u'If you had javascript, image resizing might work')
