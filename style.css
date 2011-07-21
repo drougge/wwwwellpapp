@@ -173,3 +173,20 @@ input[type=text] {
 	padding-bottom: 5px;
 	position: relative;
 }
+
+#tagbar {
+	z-index: 5;
+	position: absolute;
+	left: 170px;
+	top: 8px;
+	background: #cfc;
+	border: 2px solid #8c8;
+	padding: 6px 2px 6px 2px;
+	display: none;
+}
+#tagbar > a {
+	border: 1px solid #171;
+	margin: 4px;
+	padding: 2px 4px 2px 4px;
+	background: #bfb;
+}
