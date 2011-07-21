@@ -26,7 +26,9 @@ def md5file(fn):
 	return m.hexdigest()
 
 if not client.cfg.browsebase: forbidden()
-path = normpath(client.cfg.browsebase + normpath("/" + environ["PATH_INFO"]))
+# Three slashes, because normpath is stupidly posix-compliant.
+pathpart = normpath("///" + environ["PATH_INFO"])
+path = normpath(client.cfg.browsebase + pathpart)
 if not exists(path): forbidden()
 
 posts = []
@@ -42,7 +44,7 @@ for fn in listdir(path):
 	elif isdir(ffn):
 		dirs.append(fn)
 dirs.sort()
-if path != client.cfg.browsebase: dirs = [".."] + dirs
+if pathpart != "/": dirs = [".."] + dirs
 
 prt_head()
 prt(u'<div id="left">\n')
@@ -52,6 +54,7 @@ for d in dirs:
 prt(u'</ul>\n')
 prt(u'</div>\n')
 prt(u'<div id="main">\n')
+prt(u'<h1>' + pathpart + u'</h1>\n')
 prt_posts([p[1] for p in sorted(posts)])
 prt(u'</div>\n')
 prt_foot()
