@@ -90,10 +90,14 @@ def prt_posts(posts):
 	prt(u'<div id="thumbs">\n')
 	for post in posts:
 		m = post.md5
-		prt('<span class="thumb"><a href="' + base + u'post/' + m + u'"><img ')
+		prt(u'<span class="thumb"')
+		if user:
+			prt(u' id="' + m + u'"')
+		prt(u'><a href="' + base + u'post/' + m + u'"><img ')
 		prtfields((u'src', base + u'image/' + thumbsize + u'/' + m), (u'alt', m))
-		if "tagname" in post:
-			title = u' '.join([tagfmt(n, False) for n in sorted(post.tagname)])
+		if post.tags:
+			names = sorted([t.name for t in post.tags])
+			title = u' '.join([tagfmt(n, False) for n in names])
 			prtfields((u'title', title))
 		prt(u'/></a></span>\n')
 	prt(u'</div>\n')
@@ -120,7 +124,9 @@ def makelink(fn, *args):
 def pagelinks(link, page, result_count):
 	global outdata
 	pages = range(result_count // per_page + 1)
-	if len(pages) == 1: return u''
+	if len(pages) == 1:
+		if not user: return u''
+		pages = []
 	real_outdata = outdata
 	outdata = []
 	if len(pages) > 16:
@@ -130,7 +136,7 @@ def pagelinks(link, page, result_count):
 			pages = pages[:6] + pages[-10:]
 		else:
 			pages = pages[:6] + pages[page - 2:page + 3] + pages[-5:]
-	prt(u'<div>')
+	prt(u'<div class="pagelinks">')
 	prev = -1
 	for p in pages:
 		if p != prev + 1:
@@ -146,9 +152,13 @@ def pagelinks(link, page, result_count):
 		if p != page:
 			prt(u'</a>')
 		prt(u'</div>\n')
-	if user and page >= 0:
-		prt(u'<div class="pagelink"><a href="' + link + u'&amp;ALL=1">ALL</a></div>\n')
-	prt(u'</div>')
+	if user:
+		if pages:
+			prt(u'<div class="pagelink"><a href="' + link)
+			prt(u'&amp;ALL=1">ALL</a></div>\n')
+		prt(u'<div class="pagelink"><a href="#" onclick="return toggle_tagmode();">')
+		prt(u'Tagmode</a></div>\n')
+	prt(u'</div>\n')
 	res = u''.join(outdata)
 	outdata = real_outdata
 	return res
@@ -173,6 +183,8 @@ def prt_head(extra=u''):
 	<link rel="stylesheet" href="%(base)stagstyle.css" />
 	<script src="%(base)scomplete.js" type="text/javascript"></script>
 	""" % {"base": base})
+	if user:
+		prt(u'<script src="' + base + u'tagmode.js" type="text/javascript"></script>\n\t')
 	prt(extra)
 	prt(u'</head>\n<body>\n')
 

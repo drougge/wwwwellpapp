@@ -81,13 +81,38 @@ h1 {
 .thumb {
 	display: inline-block;
 	float: left;
-	text-align: center;
-	vertical-align: middle;
 	width: 220px;
 	height: 220px;
+	position: relative;
 }
 .thumb:first-child {
 	clear: left;
+}
+.thumb > a {
+	display: table-cell;
+	height: 214px;
+	width: 214px;
+	text-align: center;
+	vertical-align: middle;
+	margin: 3px;
+}
+.thumb > span {
+	z-index: 3;
+	position: absolute;
+	left: 5px;
+	bottom: 10px;
+	width: 32px;
+	height: 32px;
+}
+.selected > span {
+	background: url("selected.png");
+}
+.selected > a {
+	background-color: #ccc;
+}
+
+img {
+	border-style: none;
 }
 
 .wbr {
