@@ -61,9 +61,22 @@ def taglist(post, impl):
 	weak = [(tagfmt(u'~' + t.name), t, impl) for t in weak]
 	return full + weak
 
+def tagcloud(guids):
+	guids = set(guids)
+	posts = client.search_post(guids=guids, wanted=["tagname", "tagguid", "tagdata"])[0]
+	tags = {}
+	guid = {}
+	for p in posts:
+		for t in p.tags:
+			tags[t.guid] = t
+			guid[t.guid] = guid.get(t.guid, 0) + 1
+	show = sorted(guid, lambda x, y: cmp(guid[y], guid[x]))
+	show = [g for g in show[:20 + len(guids)] if g not in guids]
+	return [(tagfmt(tags[g].name), tags[g], False) for g in show]
+
 def prt_tags(tags):
 	prt(u'<ul id="tags">')
-	for n, t, impl in sorted(tags):
+	for n, t, impl in tags:
 		c = u'tag implied' if impl else u'tag'
 		c += u' tt-' + t.type
 		prt(u'<li class="' + c + u'"><a href="../tag/' + t.guid + u'">'+ n + u'</a></li>\n')

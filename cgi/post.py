@@ -40,7 +40,7 @@ if rels:
 prt(u'</div>\n')
 prt(u'<div id="left">\n')
 prt_search_form()
-prt_tags(tags)
+prt_tags(sorted(tags))
 if user:
 	prt_tagform(m)
 prt(u'</div>\n')

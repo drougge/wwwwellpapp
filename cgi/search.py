@@ -12,6 +12,7 @@ def parse_tag(name):
 
 pq = None
 qa = []
+tags = []
 try:
 	page = max(0, int(getarg("page")))
 except Exception:
@@ -27,7 +28,8 @@ if "q" in fs:
 		pq = u' '.join(filter(None, pqa))
 
 prt_head()
-prt_search_form(q)
+
+prt(u'<div id="main">\n')
 
 if qa:
 	prt(u'<div id="query-string">\n')
@@ -36,8 +38,9 @@ if qa:
 		if not pn: c += u' unknowntag'
 		prt(u'<span class="' + c + u'">' + escape(qn) + u'</span>\n')
 	prt(u'</div>\n')
-	if None in pqa:
-		q = u' '.join([qw for qw, pqw in zip(qa, pqa) if pqw])
+if None in pqa:
+	q = u' '.join([qw for qw, pqw in zip(qa, pqa) if pqw])
+	pqa = filter(None, pqa)
 
 if pq:
 	if user and "ALL" in fs:
@@ -45,16 +48,23 @@ if pq:
 		page = -1
 	else:
 		range = [per_page * page, per_page * page + per_page - 1]
-	posts, props = client.search_post(guids=filter(None, pqa), order="created", range=range, wanted=["tagname", "implied"])
+	posts, props = client.search_post(guids=pqa, order="created", range=range, wanted=["tagname", "implied"])
 	if posts:
 		pl = pagelinks(makelink(u'../search/', (u'pq', pq), (u'q', q)), page, props.result_count)
 		prt(pl)
 		prt_posts(posts)
 		prt(pl)
+		tags = tagcloud(pqa)
 	else:
 		prt(u'<p>No results.</p>')
 else:
 	prt(u'No query?')
+prt(u'</div>\n')
+
+prt(u'<div id="left">\n')
+prt_search_form(q)
+prt_tags(tags)
+prt(u'</div>\n')
 
 prt_foot()
 finish()
