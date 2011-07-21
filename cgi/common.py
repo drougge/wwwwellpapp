@@ -14,6 +14,8 @@ fs = FieldStorage()
 user = "fake"
 base = unicode(client.cfg.webbase)
 assert base
+thumbsize = unicode(client.cfg.thumb_sizes.split()[0])
+assert thumbsize
 
 def getarg(n):
 	v = fs[n].value
@@ -89,7 +91,7 @@ def prt_posts(posts):
 	for post in posts:
 		m = post.md5
 		prt('<span class="thumb"><a href="' + base + u'post/' + m + u'"><img ')
-		prtfields((u'src', base + u'image/200/' + m), (u'alt', m))
+		prtfields((u'src', base + u'image/' + thumbsize + u'/' + m), (u'alt', m))
 		if "tagname" in post:
 			title = u' '.join([tagfmt(n, False) for n in sorted(post.tagname)])
 			prtfields((u'title', title))
