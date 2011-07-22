@@ -14,6 +14,7 @@ function tagmode_mka(txt, func, cn)
 		return false;
 	}
 	if (cn) a.className = cn;
+	a.href = "#";
 	return a;
 }
 
