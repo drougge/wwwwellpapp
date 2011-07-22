@@ -11,6 +11,7 @@ def parse_tag(name):
 	return client.find_tag(name, with_prefix=True)
 
 pq = None
+q = u''
 qa = []
 tags = []
 try:
@@ -26,6 +27,9 @@ if "q" in fs:
 	else:
 		pqa = map(parse_tag, qa)
 		pq = u' '.join(filter(None, pqa))
+elif "pq" in fs and getarg("pq") == u'ALL':
+	pq = u'ALL'
+	pqa = []
 
 prt_head()
 

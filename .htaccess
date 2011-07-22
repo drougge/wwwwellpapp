@@ -13,6 +13,7 @@ RewriteRule ^modify-tag(?:/.*)?$ cgi/modify-tag.py [L]
 RewriteRule ^complete-tag(?:/.*)?$ cgi/complete-tag.py [L]
 RewriteRule ^ajax-tag(?:/.*)?$ cgi/ajax-tag.py [L]
 RewriteRule ^browse/(.*) cgi/browse.py/$1 [L]
+RewriteRule ^$ cgi/search.py?pq=ALL [L]
 
 # deny any files except the ones we know we want to serve.
 RewriteCond $1 !^static/
