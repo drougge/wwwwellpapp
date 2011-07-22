@@ -18,12 +18,18 @@ function tagmode_mka(txt, func, cn)
 	return a;
 }
 
+/* I wish javascript had this for arrays and not just objects.. */
+function _foreach(a, func)
+{
+	for (var i = 0; i < a.length; i++) {
+		func(a[i]);
+	}
+}
+
 function tagmode_loop(func)
 {
 	var thumbs = document.getElementsByClassName("thumb");
-	for (var i = 0; i < thumbs.length; i++) {
-		func(thumbs[i]);
-	}
+	_foreach(thumbs, func);
 }
 
 function tagmode_init()
@@ -45,6 +51,7 @@ function tagmode_init()
 		tagbar.appendChild(tagmode_mka("Exit tagmode", tagmode_disable, "exit"));
 		var form = document.createElement("form");
 		form.onsubmit = tagmode_apply;
+		form.id = "tag";
 		var div = document.createElement("div");
 		form.appendChild(div);
 		tagging_input = document.createElement("input");
@@ -61,6 +68,7 @@ function tagmode_init()
 function tagmode_disable()
 {
 	tagging = false;
+	var tagbar = document.getElementById("tagbar");
 	tagbar.style.display = "none";
 	tagmode_unselect_all();
 	return false;
@@ -154,4 +162,81 @@ function tagmode_result(r)
 		}
 	});
 	if (r.msg) alert(r.msg);
+	if (r.failed) tagmode_create_init(r.types);
+}
+
+function tagmode_create()
+{
+	var form = this;
+	var name = form.name.value;
+	var type = form.type.value;
+	var data = "name=" + encodeURIComponent(name) + "&type=" + encodeURIComponent(type);
+	form.onsubmit = function () { return false; };
+	_foreach(form.getElementsByTagName("img"), function (img) {
+		img.style.visibility = "visible";
+	});
+	var x = new XMLHttpRequest();
+	x.open("POST", uribase + "ajax-createtag", true);
+	x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	x.onreadystatechange = function() {
+		if (x.readyState != 4) return;
+		form.parentNode.removeChild(form);
+		var txt = x.responseText;
+		var err = "Error creating tag " + name + "\n\n";
+		if (x.status != 200) {
+			alert(err + x.status + "\n\n" + txt);
+			return;
+		}
+		if (txt.substr(0, 2) != "OK" || txt.length > 4) {
+			alert(err + txt);
+			return;
+		}
+	};
+	x.send(data);
+	return false;
+}
+
+function tagmode_create_cancel()
+{
+	var form = this.parentNode.parentNode;
+	form.parentNode.removeChild(form);
+	return false;
+}
+
+function tagmode_create_init(types)
+{
+	var tagbar = document.getElementById("tagbar");
+	_foreach(tagging_input.value.split(" "), function (n) {
+		var form = document.createElement("form");
+		form.onsubmit = tagmode_create;
+		var div = document.createElement("div");
+		div.className = "createtag";
+		form.appendChild(div);
+		div.appendChild(document.createTextNode("Create " + n + " "));
+		var input = document.createElement("input");
+		input.type = "hidden";
+		input.name = "name";
+		input.value = n;
+		div.appendChild(input);
+		var sel = document.createElement("select");
+		sel.name = "type";
+		div.appendChild(sel);
+		_foreach(types, function (n) {
+			opt = document.createElement("option");
+			opt.value = n;
+			opt.appendChild(document.createTextNode(n));
+			sel.appendChild(opt);
+		});
+		_foreach(["Create", "Cancel"], function (n) {
+			input = document.createElement("input");
+			input.type = "submit";
+			input.value = n;
+			div.appendChild(input);
+		});
+		input.onclick = tagmode_create_cancel;
+		img = document.createElement("img");
+		img.src = uribase + "static/ajaxload.gif";
+		div.appendChild(img);
+		tagbar.appendChild(form);
+	});
 }

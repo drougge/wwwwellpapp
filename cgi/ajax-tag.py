@@ -43,9 +43,11 @@ if full or weak or remove:
 			p = client.get_post(p.md5)
 			res[p.md5] = tags_as_html(p)
 	client.end_transaction()
-if not res and not msg:
+if not res and not msg and not failed:
 	msg = u'Nothing to do?'
 
 res = dict(failed=u' '.join(failed), m=res, msg=msg)
-prt(json.dumps(res));
+if failed:
+	res["types"] = tagtypes()
+prt(json.dumps(res))
 finish("application/json")

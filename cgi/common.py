@@ -88,6 +88,11 @@ def tagcloud(guids):
 	show = [g for g in show[:20 + len(guids)] if g not in guids]
 	return [(tagfmt(tags[g].name), tags[g], False) for g in show]
 
+def tagtypes():
+	# The server doesn't support this yet, so fake it for now
+	return [u'unspecified', u'ambiguous', u'meta', u'inimage',
+	        u'photographer', u'person', u'location', u'text', u'group']
+
 def prt_tags(tags):
 	prt(u'<ul id="tags">')
 	for n, t, impl in tags:
