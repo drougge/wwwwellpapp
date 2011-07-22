@@ -5,7 +5,7 @@ function init_completion(el)
 	return; /* @@disabled */
 	var load = document.createElement("img");
 	load.className = "ajaxload";
-	load.src = uribase + "ajaxload.gif";
+	load.src = uribase + "static/ajaxload.gif";
 	load.style.visibility = "hidden";
 	el.parentNode.insertBefore(load, el.nextSibling);
 	if (completion[el.id]) {

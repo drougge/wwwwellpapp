@@ -39,7 +39,7 @@ function tagmode_init()
 		tagbar.appendChild(tagmode_mka("Toggle selection", tagmode_toggle_all, null));
 		tagbar.appendChild(tagmode_mka("Apply", tagmode_apply, "apply"));
 		tagging_img = document.createElement("img");
-		tagging_img.src = uribase + "ajaxload.gif";
+		tagging_img.src = uribase + "static/ajaxload.gif";
 		tagbar.appendChild(tagging_img);
 		tagbar.appendChild(tagmode_mka("Exit tagmode", tagmode_disable, "exit"));
 		var form = document.createElement("form");
