@@ -1,6 +1,9 @@
 AddDefaultCharset utf-8
 Options +FollowSymLinks -MultiViews
 RewriteEngine On
+
+# mod_rewrite doesn't really listen to [L] as you would expect when used
+# in a .htaccess file, but in this case it works anyway.
 RewriteRule ^image/(.*) cgi/image.py/$1 [L]
 RewriteRule ^post/(.*) cgi/post.py/$1 [L]
 RewriteRule ^tag/(.*) cgi/tag.py/$1 [L]
@@ -10,3 +13,12 @@ RewriteRule ^modify-tag(?:/.*)?$ cgi/modify-tag.py [L]
 RewriteRule ^complete-tag(?:/.*)?$ cgi/complete-tag.py [L]
 RewriteRule ^ajax-tag(?:/.*)?$ cgi/ajax-tag.py [L]
 RewriteRule ^browse/(.*) cgi/browse.py/$1 [L]
+
+# deny any files except the ones we know we want to serve.
+RewriteCond $1 !^static/
+RewriteCond $1 !^cgi/
+RewriteCond $1 !=robots.txt
+RewriteCond $1 !=favicon.ico
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.*)$ $1 [F,L]
