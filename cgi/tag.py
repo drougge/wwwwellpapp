@@ -24,7 +24,7 @@ prt(u'<h1>' + tagfmt(tag.name) + u'</h1>\n')
 prt(u'<ul>\n')
 if "alias" in tag and tag.alias:
 	prt(u'<li>Aliases:\n  <ul>\n')
-	for alias in tag.alias:
+	for alias in sorted(tag.alias):
 		prt(u'  <li>' + tagfmt(alias) + u'</li>\n')
 	prt(u'  </ul>\n</li>\n')
 prt(u'<li>Type: ' + tag.type + u'</li>\n')
@@ -35,9 +35,9 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 	if tags:
 		prt(u'<li>' + txt)
 		prt(u'<ul>')
-		for t, prio in tags:
+		for n, t, prio in sorted([(tagname(t), t, prio) for t, prio in tags]):
 			prt(u'<li><a href="' + base + u'tag/' + t + u'">')
-			prt(tagfmt(tagname(t)))
+			prt(tagfmt(n))
 			prt(u'</a>')
 			if prio: prt(u'<span class="prio">(' + unicode(prio) + u')</span>')
 			prt(u'</li>')
