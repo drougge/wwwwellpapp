@@ -168,7 +168,8 @@ def pagelinks(link, page, result_count):
 		if pages:
 			prt(u'<div class="pagelink"><a href="' + link)
 			prt(u'&amp;ALL=1">ALL</a></div>\n')
-		prt(u'<div class="pagelink"><a href="#" onclick="return tagmode_init();">')
+		prt(u'<div class="pagelink"><a href="' + base);
+		prt(u'jserror.html" onclick="return tagmode_init();">')
 		prt(u'Tagmode</a></div>\n')
 	prt(u'</div>\n')
 	res = u''.join(outdata)
