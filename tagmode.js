@@ -107,12 +107,12 @@ function tagmode_apply()
 	var m = [];
 	tagmode_loop(function (t) {
 		if (t.className != "thumb") {
-			m.push(t.id);
+			m.push(t.id.substr(1));
 		}
 	});
 	if (!m.length && confirm("Nothing selected, apply to all?")) {
 		tagmode_loop(function (t) {
-			m.push(t.id);
+			m.push(t.id.substr(1));
 		});
 	}
 	if (!m.length) return false;
@@ -146,9 +146,10 @@ function tagmode_result(r)
 {
 	tagging_input.value = r.failed;
 	tagmode_loop(function (t) {
-		if (r.m[t.id]) {
+		var m = t.id.substr(1);
+		if (r.m[m]) {
 			var img = t.getElementsByTagName("img")[0];
-			img.title = r.m[t.id];
+			img.title = r.m[m];
 		}
 	});
 	if (r.msg) alert(r.msg);

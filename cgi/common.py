@@ -102,7 +102,7 @@ def prt_posts(posts):
 		m = post.md5
 		prt(u'<span class="thumb"')
 		if user:
-			prt(u' id="' + m + u'"')
+			prt(u' id="p' + m + u'"')
 		prt(u'><a href="' + base + u'post/' + m + u'"><img ')
 		prtfields((u'src', base + u'image/' + thumbsize + u'/' + m), (u'alt', m))
 		prtfields((u'title', tags_as_html(post)))
