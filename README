@@ -1,0 +1,19 @@
+Web interface for wellpapp.
+
+Supports basic operations, including tagging selections of images, and can
+browse the filesystem so you don't have to make your images findable by a
+search before you can tag them. You do have to import them though.
+
+Quick start (with an Apache-like webserver):
+
+Set AllowOverride All on the directory where you placed wwwwellpapp.
+Optionally configure mod_python if you don't like CGIs.
+Create a .wellpapprc in the cgi directory with at least the following:
+
+thumb_sizes=200 # you can use something else, but it might look bad
+webbase=/path/ # where your server exposes wwwwellpapp root
+server, port, image_base, thumb_base as in your normal rc.
+
+If you want to browse the filesystem, also set browsebase to the directory
+you want to browse under. Assuming webbase=/foo/ and browsebase=/test/ you
+would go to /foo/browse/bar/ to view files in /test/bar/.
