@@ -124,7 +124,7 @@ def prt_search_form(q=u''):
 	prt(u'<div id="search-box">\n')
 	prt(u'<input type="text" name="q" id="search-q" value="' + escape(q, True))
 	prt(u'" onfocus="init_completion(this);" />\n')
-	prt(u'<input type="submit" name="sBtn" value="Search" />\n')
+	prt(u'<input type="submit" value="Search" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')
 
@@ -186,7 +186,7 @@ def prt_tagform(m):
 	prt(u'<div id="tag-form">\n')
 	prt(u'<input type="hidden" name="post" value="' + m + u'" />\n')
 	prt(u'<input type="text" name="q" id="tag-q" />\n')
-	prt(u'<input type="submit" name="sBtn" value="Tag" />\n')
+	prt(u'<input type="submit" value="Tag" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')
 
