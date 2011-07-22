@@ -22,7 +22,7 @@ if post.rotate > 0:
 else:
 	img = base + u'image/' + m + u'.' + post.ext
 
-prt_head(u'<script src="' + base + u'resize.js" type="text/javascript"></script>\n')
+prt_head(u'<script src="' + base + u'static/resize.js" type="text/javascript"></script>\n')
 prt(u'<div id="main">\n')
 prt(u'<noscript><div id="no-resize" class="msgbox">')
 prt(u'If you had javascript, image resizing might work')

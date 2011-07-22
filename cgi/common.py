@@ -169,7 +169,7 @@ def pagelinks(link, page, result_count):
 			prt(u'<div class="pagelink"><a href="' + link)
 			prt(u'&amp;ALL=1">ALL</a></div>\n')
 		prt(u'<div class="pagelink"><a href="' + base);
-		prt(u'jserror.html" onclick="return tagmode_init();">')
+		prt(u'static/jserror.html" onclick="return tagmode_init();">')
 		prt(u'Tagmode</a></div>\n')
 	prt(u'</div>\n')
 	res = u''.join(outdata)
@@ -192,13 +192,13 @@ def prt_head(extra=u''):
 <head>
 	<title>WWWwellpapp</title>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" href="%(base)sstyle.css" />
-	<link rel="stylesheet" href="%(base)stagstyle.css" />
+	<link rel="stylesheet" href="%(base)sstatic/style.css" />
+	<link rel="stylesheet" href="%(base)sstatic/tagstyle.css" />
 	<script type="text/javascript">var uribase="%(base)s";</script>
-	<script src="%(base)scomplete.js" type="text/javascript"></script>
+	<script src="%(base)sstatic/complete.js" type="text/javascript"></script>
 	""" % {"base": base})
 	if user:
-		prt(u'<script src="' + base + u'tagmode.js" type="text/javascript"></script>\n\t')
+		prt(u'<script src="' + base + u'static/tagmode.js" type="text/javascript"></script>\n\t')
 	prt(extra)
 	prt(u'</head>\n<body>\n')
 	if user:
