@@ -179,14 +179,36 @@ input[type=text] {
 	position: absolute;
 	left: 170px;
 	top: 8px;
-	background: #cfc;
+	background-color: #cfc;
 	border: 2px solid #8c8;
-	padding: 6px 2px 6px 2px;
+	padding: 7px 2px 3px 2px;
 	display: none;
 }
 #tagbar > a {
 	border: 1px solid #171;
 	margin: 4px;
 	padding: 2px 4px 2px 4px;
-	background: #bfb;
+	background-color: #bfb;
+}
+#tagbar > a.apply {
+	background-color: #efa;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+#tagbar > a.exit {
+	background-color: #fca;
+	margin-left: 25px;
+}
+#tagbar > img {
+	visibility: hidden;
+}
+#tagbar > form {
+	width: 100%;
+	margin: 8px 4px 0px 4px;
+}
+#tagbar > form > div {
+	margin-right: 14px;
+}
+#tagbar > form > div > input {
+	width: 100%;
 }

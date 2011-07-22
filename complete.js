@@ -5,7 +5,7 @@ function init_completion(el)
 	return; /* @@disabled */
 	var load = document.createElement("img");
 	load.className = "ajaxload";
-	load.src = "../ajaxload.gif";
+	load.src = uribase + "ajaxload.gif";
 	load.style.visibility = "hidden";
 	el.parentNode.insertBefore(load, el.nextSibling);
 	if (completion[el.id]) {
@@ -84,7 +84,7 @@ function run_completion(el)
 	}
 	c.load.style.visibility = "visible";
 	var x = new XMLHttpRequest();
-	x.open("GET", "../complete-tag?q=" + encodeURIComponent(word));
+	x.open("GET", uribase + "complete-tag?q=" + encodeURIComponent(word));
 	x.onreadystatechange = function() {
 		if (c.abort) return;
 		if (x.readyState != 4) return;
@@ -97,7 +97,7 @@ function run_completion(el)
 		set_complete(el, r);
 				document.getElementById("qqq").innerHTML = word + " :" + cnt + txt;
 				cnt++;
-	}
+	};
 	x.send();
 }
 

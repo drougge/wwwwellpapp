@@ -17,8 +17,18 @@ assert base
 thumbsize = unicode(client.cfg.thumb_sizes.split()[0])
 assert thumbsize
 
-def getarg(n):
-	v = fs[n].value
+def getarg(n, default=None, as_list=False):
+	if default is not None and n not in fs: return default
+	a = fs[n]
+	if as_list:
+		if not isinstance(a, list):
+			a = [a]
+		return [_argdec(e.value) for e in a]
+	else:
+		if isinstance(a, list):
+			a = a[0]
+		return _argdec(a.value)
+def _argdec(v):
 	try:
 		v = v.decode("utf-8")
 	except Exception:
@@ -95,12 +105,14 @@ def prt_posts(posts):
 			prt(u' id="' + m + u'"')
 		prt(u'><a href="' + base + u'post/' + m + u'"><img ')
 		prtfields((u'src', base + u'image/' + thumbsize + u'/' + m), (u'alt', m))
-		if post.tags:
-			names = sorted([t.name for t in post.tags])
-			title = u' '.join([tagfmt(n, False) for n in names])
-			prtfields((u'title', title))
+		prtfields((u'title', tags_as_html(post)))
 		prt(u'/></a></span>\n')
 	prt(u'</div>\n')
+
+def tags_as_html(post):
+	names = sorted([t.name for t in post.tags or []])
+	names += sorted([u'~' + t.name for t in post.weaktags or []])
+	return u' '.join([tagfmt(n, False) for n in names])
 
 def prt_search_form(q=u''):
 	prt(u'<form action="' + base + u'search" method="get">\n')
@@ -181,6 +193,7 @@ def prt_head(extra=u''):
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="%(base)sstyle.css" />
 	<link rel="stylesheet" href="%(base)stagstyle.css" />
+	<script type="text/javascript">var uribase="%(base)s";</script>
 	<script src="%(base)scomplete.js" type="text/javascript"></script>
 	""" % {"base": base})
 	if user:
