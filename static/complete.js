@@ -34,6 +34,54 @@ function soon_completion_ev()
 	soon_completion(this);
 }
 
+function comp_keydown(ev)
+{
+	var c = completion[this.id];
+	if (!c) return;
+	if (ev.keyCode == 40) { /* down */
+		sel_move(c.list, 1);
+		c.skip = true;
+	} else if (ev.keyCode == 38) { /* up */
+		sel_move(c.list, -1);
+		c.skip = true;
+	} else {
+		c.skip = false;
+	}
+	return true;
+}
+
+function comp_keypress(ev)
+{
+	var c = completion[this.id];
+	if (!c) return;
+	var d = {"idx": -1};
+	var val = "";
+	var full = true;
+	if (ev.keyCode == 9) { /* tab */
+		d = sel_find(c.list);
+		if (d.idx == -1) {
+			if (d.lis.length == 1) {
+				d.idx = 0;
+			} else {
+				val = c.complete;
+				full = false;
+			}
+		}
+	} else if (ev.keyCode == 13) { /* return */
+		d = sel_find(c.list);
+	}
+	if (d.idx >= 0) {
+		val = d.lis[d.idx].firstChild.firstChild.data;
+	}
+	if (val) {
+		return sel_done(this, val, full);
+	}
+	if (c.skip) return false;
+	clear_completion(this);
+	soon_completion(this);
+	return true;
+}
+
 function set_complete(el, r)
 {
 	var alts = r.alts;
@@ -76,55 +124,18 @@ function set_complete(el, r)
 		li.appendChild(span);
 		li.onmouseover = sel_this;
 		li.onclick = function (ev) {
+			var e;
 			try {
 				ev.stopPropagation();
 			} catch(e) {}
-			return sel_done(el, li.firstChild.firstChild.data, true);
+			return sel_done(el, n, true);
 		};
 		ul.appendChild(li);
 	});
 	document.getElementsByTagName("body")[0].appendChild(div);
 	c.list = div;
-	el.onkeydown = function (ev) {
-		if (ev.keyCode == 40) { /* down */
-			sel_move(ul, 1);
-			c.skip = true;
-		} else if (ev.keyCode == 38) { /* up */
-			sel_move(ul, -1);
-			c.skip = true;
-		} else {
-			c.skip = false;
-		}
-		return true;
-	};
-	el.onkeypress = function (ev) {
-		var d = {"idx": -1};
-		var val = "";
-		var full = true;
-		if (ev.keyCode == 9) { /* tab */
-			d = sel_find(ul);
-			if (d.idx == -1) {
-				if (d.lis.length == 1) {
-					d.idx = 0;
-				} else {
-					val = c.complete;
-					full = false;
-				}
-			}
-		} else if (ev.keyCode == 13) { /* return */
-			d = sel_find(ul);
-		}
-		if (d.idx >= 0) {
-			val = d.lis[d.idx].firstChild.firstChild.data;
-		}
-		if (val) {
-			return sel_done(el, val, full);
-		}
-		if (c.skip) return false;
-		clear_completion(el);
-		soon_completion(el);
-		return true;
-	};
+	el.onkeydown = comp_keydown;
+	el.onkeypress = comp_keypress;
 }
 
 function run_completion(el)
@@ -144,6 +155,7 @@ function run_completion(el)
 		if (c.abort) return;
 		if (x.readyState != 4) return;
 		c.load.style.visibility = "hidden";
+		c.x = null;
 		if (x.status != 200) return;
 		var txt = x.responseText;
 		if (txt.substr(0, 1) != "{") return;
@@ -151,6 +163,7 @@ function run_completion(el)
 		c.r = r;
 		set_complete(el, r);
 	};
+	c.x = x;
 	x.send();
 }
 
@@ -199,7 +212,7 @@ function sel_move(el, dir)
 function sel_find(el)
 {
 	var lis = el.getElementsByTagName("li");
-	res = {"idx": -1, "lis": lis};
+	var res = {"idx": -1, "lis": lis};
 	for (var i = 0; i < lis.length; i++) {
 		if (lis[i].className == "sel") {
 			res.idx = i;
@@ -236,7 +249,7 @@ function sel_done(el, comp, full)
 		if (end.length) end = " " + end;
 		txt = txt.substr(0, start) + prefix + comp;
 		if (full) txt += " ";
-		pos = txt.length;
+		var pos = txt.length;
 		txt = txt + end;
 		el.value = txt;
 		el.setSelectionRange(pos, pos);
