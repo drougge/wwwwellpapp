@@ -41,3 +41,21 @@ function tag_clean(word)
 	if (tag_prefix(word)) return word.substr(1);
 	return word;
 }
+
+/*************************************/
+/* And now, the compatibility hacks. */
+/*************************************/
+
+function fixGetElementsByClassName(name)
+{
+	var a = [];
+	var re = new RegExp("\\b" + name + "\\b");
+	_foreach(document.all, function (el) {
+		if (re.test(el.className)) a.push(el);
+	});
+	return a;
+}
+
+if (!document.getElementsByClassName) {
+	document.constructor.prototype.getElementsByClassName = fixGetElementsByClassName;
+}
