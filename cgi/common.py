@@ -185,7 +185,8 @@ def prt_tagform(m):
 	prt(u'<form action="' + base + u'modify-tag" method="post">\n')
 	prt(u'<div id="tag-form">\n')
 	prt(u'<input type="hidden" name="post" value="' + m + u'" />\n')
-	prt(u'<input type="text" name="q" id="tag-q" />\n')
+	prt(u'<input type="text" name="tags" id="tag-q" ');
+	prt(u' onfocus="init_completion(this);" autocomplete="off" />\n')
 	prt(u'<input type="submit" value="Tag" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')

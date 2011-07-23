@@ -59,6 +59,7 @@ function tagmode_init()
 		div.appendChild(tagging_input);
 		tagbar.appendChild(form);
 		tagging_inited = true;
+		init_completion(tagging_input);
 	}
 	tagging = true;
 	tagbar.style.display = "block";
