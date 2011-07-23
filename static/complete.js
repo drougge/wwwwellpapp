@@ -47,14 +47,14 @@ function set_complete(el, r)
 	if (!alts) return;
 	if (!alts.length) {
 		if (r.type) {
-			alts = [r.complete];
+			alts = [[r.complete, r.type]];
 		} else {
 			return;
 		}
 	}
 	if (alts.length == 1) {
 		var word = tag_clean(find_word(el));
-		if (word == alts[0]) return;
+		if (word == alts[0][0]) return;
 	}
 	var old_div = document.getElementById("suggestions");
 	if (old_div) {
@@ -73,15 +73,20 @@ function set_complete(el, r)
 	if (el.id == "tagmode-tags") div.style.position = "fixed";
 	var ul = document.createElement("ul");
 	div.appendChild(ul);
-	_foreach(alts, function (n) {
+	_foreach(alts, function (td) {
+		var n = td[0];
+		var t = td[1];
 		var li = document.createElement("li");
-		li.appendChild(document.createTextNode(n));
+		var span = document.createElement("span");
+		span.appendChild(document.createTextNode(n));
+		span.className = "tt-" + t;
+		li.appendChild(span);
 		li.onmouseover = sel_this;
 		li.onclick = function (ev) {
 			try {
 				ev.stopPropagation();
 			} catch(e) {}
-			return sel_done(el, li.firstChild.data, true);
+			return sel_done(el, li.firstChild.firstChild.data, true);
 		};
 		ul.appendChild(li);
 	});
@@ -117,7 +122,7 @@ function set_complete(el, r)
 			d = sel_find(ul);
 		}
 		if (d.idx >= 0) {
-			val = d.lis[d.idx].firstChild.data;
+			val = d.lis[d.idx].firstChild.firstChild.data;
 		}
 		if (val) {
 			return sel_done(el, val, full);

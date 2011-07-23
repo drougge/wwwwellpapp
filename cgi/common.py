@@ -97,8 +97,8 @@ def prt_tags(tags):
 	prt(u'<ul id="tags">')
 	for n, t, impl in tags:
 		c = u'tag implied' if impl else u'tag'
-		c += u' tt-' + t.type
-		prt(u'<li class="' + c + u'"><a href="' + base + u'tag/' + t.guid + u'">'+ n + u'</a></li>\n')
+		prt(u'<li class="' + c + u'"><a class="tt-' + t.type + u'" href="')
+		prt(base + u'tag/' + t.guid + u'">'+ n + u'</a></li>\n')
 	prt(u'</ul>')
 
 def prt_posts(posts):
