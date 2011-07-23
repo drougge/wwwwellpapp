@@ -104,7 +104,6 @@ function set_complete(el, r)
 	};
 }
 
-				var cnt = 0;
 function run_completion(el)
 {
 	var c = completion[el.id];
@@ -126,8 +125,6 @@ function run_completion(el)
 		var r = eval("(" + txt + ")");
 		c.r = r;
 		set_complete(el, r);
-				document.getElementById("qqq").innerHTML = word + " :" + cnt + txt;
-				cnt++;
 	};
 	x.send();
 }
