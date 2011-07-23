@@ -18,14 +18,6 @@ function tagmode_mka(txt, func, cn)
 	return a;
 }
 
-/* I wish javascript had this for arrays and not just objects.. */
-function _foreach(a, func)
-{
-	for (var i = 0; i < a.length; i++) {
-		func(a[i]);
-	}
-}
-
 function tagmode_loop(func)
 {
 	var thumbs = document.getElementsByClassName("thumb");
