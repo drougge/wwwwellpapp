@@ -56,6 +56,7 @@ function tagmode_init()
 		form.appendChild(div);
 		tagging_input = document.createElement("input");
 		tagging_input.type = "text";
+		tagging_input.id = "tagmode-tags";
 		div.appendChild(tagging_input);
 		tagbar.appendChild(form);
 		tagging_inited = true;

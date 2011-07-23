@@ -56,7 +56,6 @@ function set_complete(el, r)
 		var word = find_word(el);
 		if (word == alts[0]) return;
 	}
-	var pos = findpos(el);
 	var old_div = document.getElementById("suggestions");
 	if (old_div) {
 		/* There seems to be a bug where we sometimes *
@@ -66,9 +65,11 @@ function set_complete(el, r)
 	var div = document.createElement("div");
 	var c = completion[el.id];
 	div.id = "suggestions";
+	var pos = findpos(el);
 	div.style.left = "" + pos.x + "px";
 	div.style.top = "" + pos.y + "px";
 	div.style.minWidth = "" + el.offsetWidth + "px";
+	if (el.id == "tagmode-tags") div.style.position = "fixed";
 	var ul = document.createElement("ul");
 	div.appendChild(ul);
 	_foreach(alts, function (n) {
