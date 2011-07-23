@@ -10,7 +10,8 @@ import json
 def complete(word):
 	pre = prefix(word)
 	word = clean(word)
-	for t, get in ("EI", lambda t: t.name), ("EAI", lambda t: t.alias[0]):
+	for t, get in ("EI", lambda t: t.name), ("EAI", lambda t: t.alias[0]), \
+	              ("FI", lambda t: t.name), ("FAI", lambda t: t.alias[0]):
 		tags = client.find_tags(t, word).values()
 		if len(tags) == 1: return pre + get(tags[0]), []
 		if len(tags) > 1: break
@@ -24,7 +25,7 @@ def complete(word):
 tag = getarg("q")
 full_tag, alts = complete(tag)
 res = {}
-if full_tag:
+if full_tag or alts:
 	res["complete"] = full_tag
 	if not alts:
 		tag = {}

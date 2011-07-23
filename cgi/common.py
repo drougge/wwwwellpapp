@@ -123,7 +123,7 @@ def prt_search_form(q=u''):
 	prt(u'<form action="' + base + u'search" method="get">\n')
 	prt(u'<div id="search-box">\n')
 	prt(u'<input type="text" name="q" id="search-q" value="' + escape(q, True))
-	prt(u'" onfocus="init_completion(this);" />\n')
+	prt(u'" onfocus="init_completion(this);" autocomplete="off" />\n')
 	prt(u'<input type="submit" value="Search" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')
