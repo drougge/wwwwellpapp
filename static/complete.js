@@ -52,6 +52,10 @@ function set_complete(el, r)
 			return;
 		}
 	}
+	if (alts.length == 1) {
+		var word = find_word(el);
+		if (word == alts[0]) return;
+	}
 	var pos = findpos(el);
 	var div = document.createElement("div");
 	var c = completion[el.id];
@@ -109,6 +113,7 @@ function run_completion(el)
 	var c = completion[el.id];
 	if (!c) return;
 	if (c.value == el.value) return;
+	c.value = el.value;
 	var word = find_word(el);
 	if (!word) return;
 	c.load.style.visibility = "visible";
