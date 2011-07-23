@@ -142,7 +142,7 @@ function run_completion(el)
 	c.value = el.value;
 	var word = find_word(el);
 	word = tag_clean(word);
-	if (!word) return;
+	if (word.length < 2) return;
 	c.load.style.visibility = "visible";
 	c.abort = false;
 	var x = new XMLHttpRequest();
