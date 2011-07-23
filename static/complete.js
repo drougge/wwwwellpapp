@@ -53,7 +53,7 @@ function set_complete(el, r)
 		}
 	}
 	if (alts.length == 1) {
-		var word = find_word(el);
+		var word = tag_clean(find_word(el));
 		if (word == alts[0]) return;
 	}
 	var old_div = document.getElementById("suggestions");
@@ -136,6 +136,7 @@ function run_completion(el)
 	if (c.value == el.value) return;
 	c.value = el.value;
 	var word = find_word(el);
+	word = tag_clean(word);
 	if (!word) return;
 	c.load.style.visibility = "visible";
 	c.abort = false;
@@ -232,9 +233,10 @@ function sel_done(el, comp, full)
 		var c = completion[el.id];
 		while (start > 0 && txt.substr(start - 1, 1) != " ") start--;
 		while (end < txt.length && txt.substr(end - 1, 1) != " ") end++;
+		var prefix = tag_prefix(txt.substr(start, 1));
 		end = txt.substr(end);
 		if (end.length) end = " " + end;
-		txt = txt.substr(0, start) + comp;
+		txt = txt.substr(0, start) + prefix + comp;
 		if (full) txt += " ";
 		pos = txt.length;
 		txt = txt + end;
@@ -258,4 +260,17 @@ function findpos(el)
 		el = el.offsetParent;
 	}
 	return {"x": x, "y": y};
+}
+
+function tag_prefix(word)
+{
+	var c = word.substr(0, 1);
+	if (c == "-" || c == "~" || c == "!") return c;
+	return ""
+}
+
+function tag_clean(word)
+{
+	if (tag_prefix(word)) return word.substr(1);
+	return word;
 }
