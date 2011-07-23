@@ -10,7 +10,7 @@ function init_completion(el)
 	el.parentNode.insertBefore(load, el.nextSibling);
 	completion[el.id] = {"value": el.value, "x": null, "skip": false,
 	                     "load": load, "abort": false, "tO": false,
-	                     "r": null, "list": null};
+	                     "r": null, "list": null, "complete": ""};
 	el.onfocus = null;
 	el.onkeypress = soon_completion_ev;
 	el.onblur = remove_completion_ev;
@@ -64,6 +64,7 @@ function set_complete(el, r)
 	}
 	var div = document.createElement("div");
 	var c = completion[el.id];
+	c.complete = r.complete;
 	div.id = "suggestions";
 	var pos = findpos(el);
 	div.style.left = "" + pos.x + "px";
@@ -80,7 +81,7 @@ function set_complete(el, r)
 			try {
 				ev.stopPropagation();
 			} catch(e) {}
-			return sel_done(el, li);
+			return sel_done(el, li.firstChild.data, true);
 		};
 		ul.appendChild(li);
 	});
@@ -99,14 +100,27 @@ function set_complete(el, r)
 		return true;
 	};
 	el.onkeypress = function (ev) {
-		if (ev.keyCode == 13 || ev.keyCode == 9) { /* return or tab */
+		var d = {"idx": -1};
+		var val = "";
+		var full = true;
+		if (ev.keyCode == 9) { /* tab */
 			d = sel_find(ul);
-			if (d.idx == -1 && ev.keyCode == 9 && d.lis.length == 1) {
-				d.idx = 0;
+			if (d.idx == -1) {
+				if (d.lis.length == 1) {
+					d.idx = 0;
+				} else {
+					val = c.complete;
+					full = false;
+				}
 			}
-			if (d.idx >= 0) {
-				return sel_done(el, d.lis[d.idx]);
-			}
+		} else if (ev.keyCode == 13) { /* return */
+			d = sel_find(ul);
+		}
+		if (d.idx >= 0) {
+			val = d.lis[d.idx].firstChild.data;
+		}
+		if (val) {
+			return sel_done(el, val, full);
 		}
 		if (c.skip) return false;
 		clear_completion(el);
@@ -208,27 +222,27 @@ function sel_this()
 	});
 }
 
-function sel_done(el, li)
+function sel_done(el, comp, full)
 {
 	var e;
 	try {
 		var start = el.selectionStart;
 		var end = el.selectionEnd;
 		var txt = el.value;
-		var comp = li.firstChild.data;
 		var c = completion[el.id];
 		while (start > 0 && txt.substr(start - 1, 1) != " ") start--;
 		while (end < txt.length && txt.substr(end - 1, 1) != " ") end++;
 		end = txt.substr(end);
 		if (end.length) end = " " + end;
-		txt = txt.substr(0, start) + comp + " ";
+		txt = txt.substr(0, start) + comp;
+		if (full) txt += " ";
 		pos = txt.length;
 		txt = txt + end;
 		el.value = txt;
 		el.setSelectionRange(pos, pos);
 		c.value = txt;
 		c.word = "";
-		clear_completion(el);
+		if (full) clear_completion(el);
 		el.focus();
 	} catch(e) {}
 	return false;
