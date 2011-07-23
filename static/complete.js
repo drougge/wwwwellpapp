@@ -3,11 +3,15 @@ var completion = {};
 function init_completion(el)
 {
 	if (completion[el.id]) return;
+	var pos = findpos(el);
 	var load = document.createElement("img");
 	load.className = "ajaxload";
+	load.style.left = "" + (pos.x + el.offsetWidth + 4) + "px";
+	load.style.top = "" + (pos.y + 2) + "px";
+	if (el.id == "tagmode-tags") load.style.position = "fixed";
 	load.src = uribase + "static/ajaxload.gif";
 	load.style.visibility = "hidden";
-	el.parentNode.insertBefore(load, el.nextSibling);
+	document.getElementsByTagName("body")[0].appendChild(load);
 	completion[el.id] = {"value": el.value, "x": null, "skip": false,
 	                     "load": load, "abort": false, "tO": false,
 	                     "r": null, "list": null, "complete": ""};
@@ -68,7 +72,7 @@ function set_complete(el, r)
 	div.id = "suggestions";
 	var pos = findpos(el);
 	div.style.left = "" + pos.x + "px";
-	div.style.top = "" + pos.y + "px";
+	div.style.top = "" + (pos.y + el.offsetHeight) + "px";
 	div.style.minWidth = "" + el.offsetWidth + "px";
 	if (el.id == "tagmode-tags") div.style.position = "fixed";
 	var ul = document.createElement("ul");
@@ -258,7 +262,7 @@ function sel_done(el, comp, full)
 function findpos(el)
 {
 	var x = 0;
-	var y = el.offsetHeight;
+	var y = 0;
 	while (el) {
 		x += el.offsetLeft;
 		y += el.offsetTop;
