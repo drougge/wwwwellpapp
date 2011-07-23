@@ -57,9 +57,15 @@ function set_complete(el, r)
 		if (word == alts[0]) return;
 	}
 	var pos = findpos(el);
+	var old_div = document.getElementById("suggestions");
+	if (old_div) {
+		/* There seems to be a bug where we sometimes *
+		 * still have an old one, so get rid of that. */
+		document.getElementsByTagName("body")[0].removeChild(old_div);
+	}
 	var div = document.createElement("div");
 	var c = completion[el.id];
-	div.className = "suggestion";
+	div.id = "suggestions";
 	div.style.left = "" + pos.x + "px";
 	div.style.top = "" + pos.y + "px";
 	div.style.minWidth = "" + el.offsetWidth + "px";

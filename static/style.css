@@ -223,29 +223,29 @@ input[type=text] {
 	margin-left: 7px;
 }
 
-.suggestion {
+#suggestions {
 	background-color: #adb;
 	position: absolute;
 	padding: 0;
 	margin: 0;
 	z-index: 6;
 }
-.suggestion ul {
+#suggestions ul {
 	list-style-type: none;
 	padding: 2px;
 	padding-top: 0;
 	margin: 0;
 }
-.suggestion li {
+#suggestions li {
 	background-color: #f3fff7;
 	border: 1px solid #f3fff7;
 	padding: 0.05em 0.5em 0.05em 0.5em;
 }
-.suggestion li:nth-child(even) {
+#suggestions li:nth-child(even) {
 	background-color: #d7edcc;
 	border: 1px solid #d7edcc;
 }
-.suggestion li.sel {
+#suggestions li.sel {
 	background-color: #fff;
 	border: 1px solid black;
 }
