@@ -44,8 +44,10 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 		prt(u'</ul></li>\n')
 prt(u'</ul>\n')
 posts, props = client.search_post(guids=[guid], order="created", range=[0, per_page - 1], wanted=["tagname", "implied"])
+pl = pagelinks(makelink(u'search', (u'pq', guid), (u'q', tag.name)), 0, props.result_count)
+prt(pl)
 prt_posts(posts)
-prt(pagelinks(makelink(u'search', (u'pq', guid), (u'q', tag.name)), 0, props.result_count))
+prt(pl)
 prt(u'</div>\n')
 prt_foot()
 
