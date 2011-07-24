@@ -97,7 +97,11 @@ function tagmode_taglinkclick() {
 	val = wp.tagging_input.value;
 	if (val !== "") {
 		lastc = val.substr(val.length - 1);
-		lastc2 = val.substr(val.length - 2, 1);
+		if (val.length > 1) {
+			lastc2 = val.substr(val.length - 2, 1);
+		} else {
+			lastc2 = " ";
+		}
 		if (lastc !== " " && (lastc2 !== " " || tag_prefix(lastc) === "")) {
 			val += " ";
 		}
