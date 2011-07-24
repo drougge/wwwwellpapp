@@ -30,16 +30,7 @@ if full or weak or remove:
 	for p in map(client.get_post, m):
 		if not p:
 			msg = u'Posts missing?'
-			continue
-		post_full = set([t.guid for t in p.tags])
-		post_weak = set([t.guid for t in p.weaktags])
-		set_full = full.difference(post_full)
-		set_weak = weak.difference(post_weak)
-		set_remove_full = post_full.intersection(remove)
-		set_remove_weak = post_weak.intersection(remove)
-		set_remove = set_remove_full.union(set_remove_weak)
-		if set_full or set_weak or set_remove:
-			client.tag_post(p.md5, full_tags=set_full, weak_tags=set_weak, remove_tags=set_remove)
+		elif tag_post(p, full, weak, remove):
 			p = client.get_post(p.md5)
 			res[p.md5] = tags_as_html(p)
 	client.end_transaction()

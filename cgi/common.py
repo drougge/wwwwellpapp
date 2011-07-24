@@ -10,7 +10,7 @@ cgitb.enable()
 per_page = 32
 outdata = []
 client = dbclient(dbcfg(None, [".wellpapprc"]))
-fs = FieldStorage()
+fs = FieldStorage(keep_blank_values=True)
 user = "fake"
 base = unicode(client.cfg.webbase)
 assert base
@@ -92,6 +92,18 @@ def tagtypes():
 	# The server doesn't support this yet, so fake it for now
 	return [u'unspecified', u'ambiguous', u'meta', u'inimage',
 	        u'photographer', u'person', u'location', u'text', u'group']
+
+def tag_post(p, full, weak, remove):
+	post_full = set([t.guid for t in p.tags])
+	post_weak = set([t.guid for t in p.weaktags])
+	set_full = full.difference(post_full)
+	set_weak = weak.difference(post_weak)
+	set_remove_full = post_full.intersection(remove)
+	set_remove_weak = post_weak.intersection(remove)
+	set_remove = set_remove_full.union(set_remove_weak)
+	if set_full or set_weak or set_remove:
+		client.tag_post(p.md5, full_tags=set_full, weak_tags=set_weak, remove_tags=set_remove)
+		return True
 
 def prt_tags(tags):
 	if not tags: return
@@ -183,7 +195,7 @@ def pagelinks(link, page, result_count):
 	return res
 
 def prt_tagform(m):
-	prt(u'<form action="' + base + u'modify-tag" method="post">\n')
+	prt(u'<form action="' + base + u'post-tag" method="post">\n')
 	prt(u'<div id="tag-form">\n')
 	prt(u'<input type="hidden" name="post" value="' + m + u'" />\n')
 	prt(u'<input type="text" name="tags" id="tag-q" ');
