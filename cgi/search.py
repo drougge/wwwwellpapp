@@ -11,15 +11,14 @@ def parse_tag(name):
 	return client.find_tag(name, with_prefix=True)
 
 pq = None
-q = u''
 qa = []
 tags = []
 try:
 	page = max(0, int(getarg("page")))
 except Exception:
 	page = 0
-if "q" in fs:
-	q = getarg("q")
+q = getarg("q", u'').strip()
+if q:
 	qa = q.split()
 	if "pq" in fs:
 		pq = getarg("pq")
@@ -27,7 +26,7 @@ if "q" in fs:
 	else:
 		pqa = map(parse_tag, qa)
 		pq = u' '.join(filter(None, pqa))
-elif "pq" in fs and getarg("pq") == u'ALL':
+elif getarg("pq", u'') == u'ALL':
 	pq = u'ALL'
 	pqa = []
 
