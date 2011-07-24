@@ -1,26 +1,26 @@
+var wp = {};
+
 /* I wish javascript had this for arrays and not just objects.. */
-function _foreach(a, func)
-{
-	for (var i = 0; i < a.length; i++) {
+function wp_foreach(a, func) {
+	var i;
+	for (i = 0; i < a.length; i++) {
 		func(a[i]);
 	}
 }
 
-function find_word(el)
-{
-	var start = el.selectionStart;
-	var end = el.selectionEnd;
-	if (!start || start != end) return "";
-	var txt = el.value;
-	if (end < txt.length && txt.substr(end, 1) != " ") return "";
-	while (start > 0 && txt.substr(start - 1, 1) != " ") start--;
+function find_word(el) {
+	var start, end, txt;
+	start = el.selectionStart;
+	end = el.selectionEnd;
+	if (!start || start !== end) { return ""; }
+	txt = el.value;
+	if (end < txt.length && txt.substr(end, 1) !== " ") { return ""; }
+	while (start > 0 && txt.substr(start - 1, 1) !== " ") { start--; }
 	return txt.substr(start, end - start);
 }
 
-function findpos(el)
-{
-	var x = 0;
-	var y = 0;
+function findpos(el) {
+	var x = 0, y = 0;
 	while (el) {
 		x += el.offsetLeft;
 		y += el.offsetTop;
@@ -29,16 +29,14 @@ function findpos(el)
 	return {"x": x, "y": y};
 }
 
-function tag_prefix(word)
-{
+function tag_prefix(word) {
 	var c = word.substr(0, 1);
-	if (c == "-" || c == "~" || c == "!") return c;
-	return ""
+	if (c === "-" || c === "~" || c === "!") { return c; }
+	return "";
 }
 
-function tag_clean(word)
-{
-	if (tag_prefix(word)) return word.substr(1);
+function tag_clean(word) {
+	if (tag_prefix(word)) { return word.substr(1); }
 	return word;
 }
 
@@ -47,19 +45,18 @@ function tag_clean(word)
 /*************************************/
 
 var JSON;
-if (!JSON) JSON = {};
+if (!JSON) { JSON = {}; }
 if (!JSON.parse) {
 	JSON.parse = function (txt) {
 		return eval("(" + txt + ")");
 	};
 }
 
-function fixGetElementsByClassName(name)
-{
-	var a = [];
-	var re = new RegExp("\\b" + name + "\\b");
-	_foreach(document.all, function (el) {
-		if (re.test(el.className)) a.push(el);
+function fixGetElementsByClassName(name) {
+	var a = [], re;
+	re = new RegExp("\\b" + name + "\\b");
+	wp_foreach(document.all, function (el) {
+		if (re.test(el.className)) { a.push(el); }
 	});
 	return a;
 }

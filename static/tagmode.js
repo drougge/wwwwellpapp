@@ -1,115 +1,100 @@
-var tagging = false;
-var tagging_inited = false;
-var tagging_input = null;
-var tagging_ajax = null;
-var tagging_img = null;
-
-function tagmode_mka(txt, func, cn)
-{
-	var a = document.createElement("a");
-	var txt = document.createTextNode(txt);
-	a.appendChild(txt)
+function tagmode_mka(txt, func, cn) {
+	var a;
+	a = document.createElement("a");
+	txt = document.createTextNode(txt);
+	a.appendChild(txt);
 	a.onclick = function () {
 		func();
 		return false;
-	}
-	if (cn) a.className = cn;
+	};
+	if (cn) { a.className = cn; }
 	a.href = "#";
 	return a;
 }
 
-function tagmode_loop(func)
-{
+function tagmode_loop(func) {
 	var thumbs = document.getElementsByClassName("thumb");
-	_foreach(thumbs, func);
+	wp_foreach(thumbs, func);
 }
 
-function tagmode_init()
-{
-	var tagbar = document.getElementById("tagbar");
-	if (!tagging_inited) {
+function tagmode_init() {
+	var form, div;
+	wp.tagbar = document.getElementById("tagbar");
+	if (!wp.tagging_inited) {
 		tagmode_loop(function (t) {
 			var span = document.createElement("span");
 			t.insertBefore(span, t.firstChild);
 			t.onclick = tag_toggle;
 		});
-		tagbar.appendChild(tagmode_mka("Select all", tagmode_select_all, null));
-		tagbar.appendChild(tagmode_mka("Select none", tagmode_unselect_all, null));
-		tagbar.appendChild(tagmode_mka("Toggle selection", tagmode_toggle_all, null));
-		tagbar.appendChild(tagmode_mka("Apply", tagmode_apply, "apply"));
-		tagging_img = document.createElement("img");
-		tagging_img.src = uribase + "static/ajaxload.gif";
-		tagbar.appendChild(tagging_img);
-		tagbar.appendChild(tagmode_mka("Exit tagmode", tagmode_disable, "exit"));
-		var form = document.createElement("form");
+		wp.tagbar.appendChild(tagmode_mka("Select all", tagmode_select_all, null));
+		wp.tagbar.appendChild(tagmode_mka("Select none", tagmode_unselect_all, null));
+		wp.tagbar.appendChild(tagmode_mka("Toggle selection", tagmode_toggle_all, null));
+		wp.tagbar.appendChild(tagmode_mka("Apply", tagmode_apply, "apply"));
+		wp.tagging_spinner = document.createElement("img");
+		wp.tagging_spinner.src = wp.uribase + "static/ajaxload.gif";
+		wp.tagbar.appendChild(wp.tagging_spinner);
+		wp.tagbar.appendChild(tagmode_mka("Exit tagmode", tagmode_disable, "exit"));
+		form = document.createElement("form");
 		form.onsubmit = tagmode_apply;
 		form.id = "tag";
-		var div = document.createElement("div");
+		div = document.createElement("div");
 		form.appendChild(div);
-		tagging_input = document.createElement("input");
-		tagging_input.type = "text";
-		tagging_input.id = "tagmode-tags";
-		div.appendChild(tagging_input);
-		tagbar.appendChild(form);
-		tagging_inited = true;
+		wp.tagging_input = document.createElement("input");
+		wp.tagging_input.type = "text";
+		wp.tagging_input.id = "tagmode-tags";
+		div.appendChild(wp.tagging_input);
+		wp.tagbar.appendChild(form);
+		wp.tagging_inited = true;
 	}
-	tagging = true;
-	tagbar.style.display = "block";
-	init_completion(tagging_input);
+	wp.tagging = true;
+	wp.tagbar.style.display = "block";
+	init_completion(wp.tagging_input);
 	return false;
 }
 
-function tagmode_disable()
-{
-	tagging = false;
-	var tagbar = document.getElementById("tagbar");
-	tagbar.style.display = "none";
+function tagmode_disable() {
+	wp.tagging = false;
+	wp.tagbar.style.display = "none";
 	tagmode_unselect_all();
 	return false;
 }
 
-function tagmode_select_all()
-{
+function tagmode_select_all() {
 	tagmode_loop(function (t) {
 		t.className = "thumb selected";
 	});
 }
 
-function tagmode_unselect_all()
-{
+function tagmode_unselect_all() {
 	tagmode_loop(function (t) {
 		t.className = "thumb";
 	});
 }
 
-function tagmode_toggle_all()
-{
+function tagmode_toggle_all() {
 	tagmode_loop(tag_toggle_i);
 }
 
-function tag_toggle_i(t)
-{
-	if (t.className == "thumb") {
+function tag_toggle_i(t) {
+	if (t.className === "thumb") {
 		t.className = "thumb selected";
 	} else {
 		t.className = "thumb";
 	}
 }
 
-function tag_toggle()
-{
-	if (!tagging) return true;
+function tag_toggle() {
+	if (!wp.tagging) { return true; }
 	tag_toggle_i(this);
 	return false;
 }
 
-function tagmode_apply()
-{
-	if (tagging_ajax) return false;
-	if (tagging_input.value == "") return false;
-	var m = [];
+function tagmode_apply() {
+	var m = [], data, x;
+	if (wp.tagging_ajax) { return false; }
+	if (wp.tagging_input.value === "") { return false; }
 	tagmode_loop(function (t) {
-		if (t.className != "thumb") {
+		if (t.className !== "thumb") {
 			m.push(t.id.substr(1));
 		}
 	});
@@ -118,70 +103,71 @@ function tagmode_apply()
 			m.push(t.id.substr(1));
 		});
 	}
-	if (!m.length) return false;
-	tagging_img.style.visibility = "visible";
-	var data = "tags=" + encodeURIComponent(tagging_input.value) + "&m=" + m.join("&m=");
-	var x = new XMLHttpRequest();
-	tagging_ajax = x;
-	x.open("POST", uribase + "ajax-tag", true);
+	if (!m.length) { return false; }
+	wp.tagging_spinner.style.visibility = "visible";
+	data = "tags=" + encodeURIComponent(wp.tagging_input.value) + "&m=" + m.join("&m=");
+	x = new XMLHttpRequest();
+	wp.tagging_ajax = x;
+	x.open("POST", wp.uribase + "ajax-tag", true);
 	x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	x.onreadystatechange = function() {
-		if (x.readyState != 4) return;
-		tagging_ajax = null;
-		tagging_img.style.visibility = "hidden";
-		var txt = x.responseText;
-		if (x.status != 200) {
+	x.onreadystatechange = function () {
+		var txt, r;
+		if (x.readyState !== 4) { return; }
+		wp.tagging_ajax = null;
+		wp.tagging_spinner.style.visibility = "hidden";
+		txt = x.responseText;
+		if (x.status !== 200) {
 			alert("Error " + x.status + "\n\n" + txt);
 			return;
 		}
-		if (txt.substr(0, 1) != "{") {
+		if (txt.substr(0, 1) !== "{") {
 			alert("Error\n\n" + txt);
 			return;
 		}
-		var r = JSON.parse(txt);
+		r = JSON.parse(txt);
 		tagmode_result(r);
 	};
 	x.send(data);
 	return false;
 }
 
-function tagmode_result(r)
-{
-	tagging_input.value = r.failed;
+function tagmode_result(r) {
+	wp.tagging_input.value = r.failed;
 	tagmode_loop(function (t) {
-		var m = t.id.substr(1);
+		var m, img;
+		m = t.id.substr(1);
 		if (r.m[m]) {
-			var img = t.getElementsByTagName("img")[0];
+			img = t.getElementsByTagName("img")[0];
 			img.title = r.m[m];
 		}
 	});
-	if (r.msg) alert(r.msg);
-	if (r.failed) tagmode_create_init(r.types);
+	if (r.msg) { alert(r.msg); }
+	if (r.failed) { tagmode_create_init(r.types); }
 }
 
-function tagmode_create()
-{
-	var form = this;
-	var name = form.name.value;
-	var type = form.type.value;
-	var data = "name=" + encodeURIComponent(name) + "&type=" + encodeURIComponent(type);
+function tagmode_create() {
+	var form = this, name, type, data, x;
+	name = form.name.value;
+	type = form.type.value;
+	data = "name=" + encodeURIComponent(name) + "&type=" + encodeURIComponent(type);
 	form.onsubmit = function () { return false; };
-	_foreach(form.getElementsByTagName("img"), function (img) {
+	wp_foreach(form.getElementsByTagName("img"), function (img) {
 		img.style.visibility = "visible";
 	});
-	var x = new XMLHttpRequest();
-	x.open("POST", uribase + "ajax-createtag", true);
+	x = new XMLHttpRequest();
+	x.open("POST", wp.uribase + "ajax-createtag", true);
 	x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	x.onreadystatechange = function() {
-		if (x.readyState != 4) return;
+	x.onreadystatechange = function () {
+		var txt, err;
+		if (x.readyState !== 4) { return; }
 		form.parentNode.removeChild(form);
-		var txt = x.responseText;
-		var err = "Error creating tag " + name + "\n\n";
-		if (x.status != 200) {
+		txt = x.responseText;
+		err = "Error creating tag " + name + "\n\n";
+		if (x.status !== 200) {
 			alert(err + x.status + "\n\n" + txt);
 			return;
 		}
-		if (txt.substr(0, 2) != "OK" || txt.length > 4) {
+		if (txt.substr(0, 2) !== "OK" || txt.length > 4) {
 			alert(err + txt);
 			return;
 		}
@@ -190,38 +176,36 @@ function tagmode_create()
 	return false;
 }
 
-function tagmode_create_cancel()
-{
+function tagmode_create_cancel() {
 	var form = this.parentNode.parentNode;
 	form.parentNode.removeChild(form);
 	return false;
 }
 
-function tagmode_create_init(types)
-{
-	var tagbar = document.getElementById("tagbar");
-	_foreach(tagging_input.value.split(" "), function (n) {
-		var form = document.createElement("form");
+function tagmode_create_init(types) {
+	wp_foreach(wp.tagging_input.value.split(" "), function (n) {
+		var form, div, input, sel;
+		form = document.createElement("form");
 		form.onsubmit = tagmode_create;
-		var div = document.createElement("div");
+		div = document.createElement("div");
 		div.className = "createtag";
 		form.appendChild(div);
 		div.appendChild(document.createTextNode("Create " + n + " "));
-		var input = document.createElement("input");
+		input = document.createElement("input");
 		input.type = "hidden";
 		input.name = "name";
 		input.value = n;
 		div.appendChild(input);
-		var sel = document.createElement("select");
+		sel = document.createElement("select");
 		sel.name = "type";
 		div.appendChild(sel);
-		_foreach(types, function (n) {
+		wp_foreach(types, function (n) {
 			opt = document.createElement("option");
 			opt.value = n;
 			opt.appendChild(document.createTextNode(n));
 			sel.appendChild(opt);
 		});
-		_foreach(["Create", "Cancel"], function (n) {
+		wp_foreach(["Create", "Cancel"], function (n) {
 			input = document.createElement("input");
 			input.type = "submit";
 			input.value = n;
@@ -229,8 +213,8 @@ function tagmode_create_init(types)
 		});
 		input.onclick = tagmode_create_cancel;
 		img = document.createElement("img");
-		img.src = uribase + "static/ajaxload.gif";
+		img.src = wp.uribase + "static/ajaxload.gif";
 		div.appendChild(img);
-		tagbar.appendChild(form);
+		wp.tagbar.appendChild(form);
 	});
 }
