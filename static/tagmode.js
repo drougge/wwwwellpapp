@@ -58,6 +58,13 @@ function tagmode_init() {
 		wp.tagbar.appendChild(form);
 		wp.tagging_inited = true;
 	}
+	if (wp.tagging_saved) {
+		tagmode_loop(function (t) {
+			if (wp.tagging_saved[t.id]) {
+				t.className = "thumb selected";
+			}
+		});
+	}
 	wp.tagging = true;
 	wp.tagbar.style.display = "block";
 	init_completion(wp.tagging_input);
@@ -98,11 +105,16 @@ function tagmode_taglinkclick() {
 }
 
 function tagmode_disable() {
-	if (tagmode_confirm()) {
-		wp.tagging = false;
-		wp.tagbar.style.display = "none";
-		tagmode_unselect_all();
-	}
+	var saved = {};
+	tagmode_loop(function (t) {
+		if (t.className !== "thumb") {
+			saved[t.id] = true;
+			t.className = "thumb";
+		}
+	});
+	wp.tagging_saved = saved;
+	wp.tagging = false;
+	wp.tagbar.style.display = "none";
 	return false;
 }
 
