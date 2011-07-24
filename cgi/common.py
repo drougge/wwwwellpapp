@@ -94,6 +94,7 @@ def tagtypes():
 	        u'photographer', u'person', u'location', u'text', u'group']
 
 def prt_tags(tags):
+	if not tags: return
 	prt(u'<ul id="tags">')
 	for n, t, impl in tags:
 		c = u'tag implied' if impl else u'tag'
