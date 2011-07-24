@@ -18,7 +18,7 @@ function tagmode_loop(func) {
 }
 
 function tagmode_init() {
-	var form, div;
+	var form, div, tags;
 	wp.tagbar = document.getElementById("tagbar");
 	if (!wp.tagging_inited) {
 		tagmode_loop(function (t) {
@@ -26,6 +26,12 @@ function tagmode_init() {
 			t.insertBefore(span, t.firstChild);
 			t.onclick = tag_toggle;
 		});
+		tags = document.getElementById("tags");
+		if (tags) {
+			wp_foreach(tags.getElementsByTagName("a"), function (el) {
+				el.onclick = tagmode_taglinkclick;
+			});
+		}
 		wp.tagbar.appendChild(tagmode_mka("Select all", tagmode_select_all, null));
 		wp.tagbar.appendChild(tagmode_mka("Select none", tagmode_unselect_all, null));
 		wp.tagbar.appendChild(tagmode_mka("Toggle selection", tagmode_toggle_all, null));
@@ -49,6 +55,27 @@ function tagmode_init() {
 	wp.tagging = true;
 	wp.tagbar.style.display = "block";
 	init_completion(wp.tagging_input);
+	return false;
+}
+
+function tagmode_taglinkclick() {
+	var txt = "", val, lastc, lastc2;
+	if (!wp.tagging) { return true; }
+	wp_foreach(this.childNodes, function (el) {
+		if (el.nodeType === 3) {
+			txt += el.data.replace("\u200b", "");
+		}
+	});
+	val = wp.tagging_input.value;
+	if (val !== "") {
+		lastc = val.substr(val.length - 1);
+		lastc2 = val.substr(val.length - 2, 1);
+		if (lastc !== " " && (lastc2 !== " " || tag_prefix(lastc) === "")) {
+			val += " ";
+		}
+	}
+	wp.tagging_input.value = val + txt + " ";
+	wp.tagging_input.focus();
 	return false;
 }
 
