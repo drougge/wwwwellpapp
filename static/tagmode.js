@@ -26,6 +26,12 @@ function tagmode_init() {
 			var span = document.createElement("span");
 			t.insertBefore(span, t.firstChild);
 			t.onclick = tag_toggle;
+			wp_foreach(t.getElementsByTagName("a"), function (a) {
+				a.id = "a" + t.id.substr(1);
+			});
+		});
+		wp_foreach(document.getElementsByTagName("a"), function (a) {
+			if (!a.onclick && !a.id) { a.onclick = tagmode_confirm; }
 		});
 		tags = document.getElementById("tags");
 		if (tags) {
@@ -33,11 +39,6 @@ function tagmode_init() {
 				el.onclick = tagmode_taglinkclick;
 			});
 		}
-		wp_foreach(document.getElementsByClassName("pagelinks"), function (el) {
-			wp_foreach(el.getElementsByTagName("a"), function (a) {
-				if (!a.onclick) { a.onclick = tagmode_confirm; }
-			});
-		});
 		wp.tagbar.appendChild(tagmode_mka("Select all", tagmode_select_all, null));
 		wp.tagbar.appendChild(tagmode_mka("Select none", tagmode_unselect_all, null));
 		wp.tagbar.appendChild(tagmode_mka("Toggle selection", tagmode_toggle_all, null));
