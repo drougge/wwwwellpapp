@@ -159,7 +159,7 @@ function run_completion(el)
 		if (x.status != 200) return;
 		var txt = x.responseText;
 		if (txt.substr(0, 1) != "{") return;
-		var r = eval("(" + txt + ")");
+		var r = JSON.parse(txt);
 		c.r = r;
 		set_complete(el, r);
 	};

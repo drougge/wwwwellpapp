@@ -46,6 +46,14 @@ function tag_clean(word)
 /* And now, the compatibility hacks. */
 /*************************************/
 
+var JSON;
+if (!JSON) JSON = {};
+if (!JSON.parse) {
+	JSON.parse = function (txt) {
+		return eval("(" + txt + ")");
+	};
+}
+
 function fixGetElementsByClassName(name)
 {
 	var a = [];

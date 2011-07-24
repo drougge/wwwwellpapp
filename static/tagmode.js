@@ -138,7 +138,7 @@ function tagmode_apply()
 			alert("Error\n\n" + txt);
 			return;
 		}
-		var r = eval("(" + txt + ")");
+		var r = JSON.parse(txt);
 		tagmode_result(r);
 	};
 	x.send(data);
