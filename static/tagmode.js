@@ -5,6 +5,7 @@ function tagmode_mka(txt, func, cn) {
 	a.appendChild(txt);
 	a.onclick = function () {
 		func();
+		wp.tagging_input.focus();
 		return false;
 	};
 	if (cn) { a.className = cn; }
@@ -68,6 +69,7 @@ function tagmode_init() {
 	}
 	wp.tagging = true;
 	wp.tagbar.style.display = "block";
+	wp.tagging_input.focus();
 	init_completion(wp.tagging_input);
 	return false;
 }
@@ -146,6 +148,7 @@ function tag_toggle_i(t) {
 function tag_toggle() {
 	if (!wp.tagging) { return true; }
 	tag_toggle_i(this);
+	wp.tagging_input.focus();
 	return false;
 }
 
