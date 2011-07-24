@@ -165,10 +165,13 @@ function tagmode_apply() {
 			m.push(t.id.substr(1));
 		}
 	});
-	if (!m.length && confirm("Nothing selected, apply to all?")) {
+	if (!m.length) {
 		tagmode_loop(function (t) {
 			m.push(t.id.substr(1));
 		});
+		if (m.length > 1 && !confirm("Nothing selected, apply to all?")) {
+			return false;
+		}
 	}
 	if (!m.length) { return false; }
 	wp.tagging_spinner.style.visibility = "visible";
