@@ -2,6 +2,9 @@ function init_completion(el) {
 	var pos, load;
 	if (!wp.completion) { wp.completion = {}; }
 	if (wp.completion[el.id]) { return; }
+	try {
+		el.setAttribute("autocomplete", "off");
+	} catch (e) {}
 	pos = findpos(el);
 	load = document.createElement("img");
 	load.className = "ajaxload";
