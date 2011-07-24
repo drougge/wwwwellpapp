@@ -5,7 +5,7 @@ function tagmode_mka(txt, func, cn) {
 	a.appendChild(txt);
 	a.onclick = function () {
 		func();
-		wp.tagging_input.focus();
+		if (wp.tagging) { wp.tagging_input.focus(); }
 		return false;
 	};
 	if (cn) { a.className = cn; }
