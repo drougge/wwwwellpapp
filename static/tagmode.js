@@ -269,6 +269,7 @@ function tagmode_create_init(types) {
 		wp_foreach(types, function (n) {
 			opt = document.createElement("option");
 			opt.value = n;
+			opt.className = "tt-" + n;
 			opt.appendChild(document.createTextNode(n));
 			sel.appendChild(opt);
 		});
