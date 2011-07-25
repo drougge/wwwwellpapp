@@ -213,7 +213,9 @@ def prt_head(extra=u''):
 	<link rel="stylesheet" href="%(base)sstatic/style.css" />
 	<link rel="stylesheet" href="%(base)sstatic/tagstyle.css" />
 	<script src="%(base)sstatic/common.js" type="text/javascript"></script>
-	<script type="text/javascript">wp.uribase="%(base)s";</script>
+	<script type="text/javascript"><!--
+		wp.uribase = "%(base)s";
+	--></script>
 	<script src="%(base)sstatic/complete.js" type="text/javascript"></script>
 	""" % {"base": base})
 	if user:
