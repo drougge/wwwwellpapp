@@ -1,16 +1,15 @@
-function tagmode_mka(txt, func, cn) {
-	var a;
-	a = document.createElement("a");
-	txt = document.createTextNode(txt);
-	a.appendChild(txt);
-	a.onclick = function () {
+function tagmode_mkb(txt, func, cn) {
+	var button;
+	button = document.createElement("input");
+	button.type = "submit";
+	button.value = txt;
+	button.onclick = function () {
 		func();
 		if (wp.tagging) { wp.tagging_input.focus(); }
 		return false;
 	};
-	if (cn) { a.className = cn; }
-	a.href = "#";
-	return a;
+	if (cn) { button.className = cn; }
+	return button;
 }
 
 function tagmode_loop(func) {
@@ -40,23 +39,30 @@ function tagmode_init() {
 				el.onclick = tagmode_taglinkclick;
 			});
 		}
-		wp.tagbar.appendChild(tagmode_mka("Select all", tagmode_select_all, null));
-		wp.tagbar.appendChild(tagmode_mka("Select none", tagmode_unselect_all, null));
-		wp.tagbar.appendChild(tagmode_mka("Toggle selection", tagmode_toggle_all, null));
-		wp.tagbar.appendChild(tagmode_mka("Apply", tagmode_apply, "apply"));
-		wp.tagging_spinner = document.createElement("img");
-		wp.tagging_spinner.src = wp.uribase + "static/ajaxload.gif";
-		wp.tagbar.appendChild(wp.tagging_spinner);
-		wp.tagbar.appendChild(tagmode_mka("Exit tagmode", tagmode_disable, "exit"));
 		form = document.createElement("form");
 		form.onsubmit = tagmode_apply;
 		form.id = "tag";
 		div = document.createElement("div");
+		div.id = "tmr";
+		div.appendChild(tagmode_mkb(" Apply ", tagmode_apply, "apply"));
+		wp.tagging_spinner = document.createElement("img");
+		wp.tagging_spinner.src = wp.uribase + "static/ajaxload.gif";
+		div.appendChild(wp.tagging_spinner);
+		div.appendChild(tagmode_mkb("Exit tagmode", tagmode_disable, "exit"));
+		form.appendChild(div);
+		div = document.createElement("div");
+		div.id = "tml";
+		div.appendChild(tagmode_mkb("Select all", tagmode_select_all, null));
+		div.appendChild(tagmode_mkb("Select none", tagmode_unselect_all, null));
+		div.appendChild(tagmode_mkb("Toggle selection", tagmode_toggle_all, null));
 		form.appendChild(div);
 		wp.tagging_input = document.createElement("input");
 		wp.tagging_input.type = "text";
 		wp.tagging_input.id = "tagmode-tags";
+		div = document.createElement("div");
+		div.id = "tmt";
 		div.appendChild(wp.tagging_input);
+		form.appendChild(div);
 		wp.tagbar.appendChild(form);
 		wp.tagging_inited = true;
 	}

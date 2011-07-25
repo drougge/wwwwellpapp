@@ -182,36 +182,46 @@ input[type=text] {
 	background-color: #cfc;
 	border: 2px solid #8c8;
 	border-top: none;
-	padding: 7px 0 0px 0;
+	padding: 0;
 	display: none;
 }
-#tagbar > a {
-	border: 1px solid #171;
-	margin: 4px;
-	padding: 2px 4px 2px 4px;
+#tagbar input {
+	font-size: 100%;
+}
+#tagbar input[type=submit] {
+	margin: 3px 4px 0 4px;
+	padding: 0 4px 0 4px;
 	background-color: #bfb;
+	display: inline;
 }
-#tagbar > a.apply {
+#tagbar input.apply {
 	background-color: #efa;
-	padding-left: 10px;
-	padding-right: 10px;
 }
-#tagbar > a.exit {
+#tagbar input.exit {
 	background-color: #fca;
-	margin-left: 25px;
+	margin-left: 35px;
 }
 #tagbar img {
+	vertical-align: middle;
 	visibility: hidden;
+	padding-bottom: 2px;
 }
-#tagbar > form#tag {
+#tagbar div {
+	padding: 2px;
+}
+#tagbar div#tmr {
+	float: right;
+}
+#tagbar div#tml {
+	float: left;
+}
+#tagbar div#tmt {
+	clear: both;
+	margin-right: 13px;
+}
+#tagbar input[type=text] {
 	width: 100%;
-	margin: 8px 4px 4px 4px;
-}
-#tagbar > form#tag > div {
-	margin-right: 14px;
-}
-#tagbar > form#tag > div > input {
-	width: 100%;
+	margin: 3px;
 }
 .createtag {
 	border-top: 2px solid #8c8;
