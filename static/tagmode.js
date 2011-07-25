@@ -256,7 +256,7 @@ function tagmode_create() {
 	var form = this, name, type, m, data, x;
 	name = form.name.value;
 	type = form.type.value;
-	m = form.m.value;
+	m = tagmode_getselected(false).join("+");
 	data = "name=" + encodeURIComponent(name) + "&type=" + encodeURIComponent(type) + "&m=" + m;
 	form.onsubmit = function () { return false; };
 	wp_foreach(form.getElementsByTagName("img"), function (img) {
@@ -305,7 +305,6 @@ function tagmode_create_cancel() {
 }
 
 function tagmode_create_init(types) {
-	var m = tagmode_getselected(false);
 	wp_foreach(wp.tm_input.value.split(" "), function (n) {
 		var form, div, input, sel;
 		tagmode_lock();
@@ -319,11 +318,6 @@ function tagmode_create_init(types) {
 		input.type = "hidden";
 		input.name = "name";
 		input.value = n;
-		div.appendChild(input);
-		input = document.createElement("input");
-		input.type = "hidden";
-		input.name = "m";
-		input.value = m.join("+");
 		div.appendChild(input);
 		sel = document.createElement("select");
 		sel.name = "type";
