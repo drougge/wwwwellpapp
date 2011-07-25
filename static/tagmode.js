@@ -5,7 +5,7 @@ function tagmode_mkb(txt, func, cn) {
 	button.value = txt;
 	button.onclick = function () {
 		func();
-		if (wp.tagging) { wp.tagging_input.focus(); }
+		if (wp.tagging) { wp.tm_input.focus(); }
 		return false;
 	};
 	if (cn) { button.className = cn; }
@@ -21,7 +21,7 @@ function tagmode_init() {
 	var form, div, tags;
 	if (wp.tagging) { return tagmode_disable(); }
 	wp.tagbar = document.getElementById("tagbar");
-	if (!wp.tagging_inited) {
+	if (!wp.tm_inited) {
 		tagmode_loop(function (t) {
 			var span = document.createElement("span");
 			t.insertBefore(span, t.firstChild);
@@ -45,9 +45,9 @@ function tagmode_init() {
 		div = document.createElement("div");
 		div.id = "tmr";
 		div.appendChild(tagmode_mkb(" Apply ", tagmode_apply, "apply"));
-		wp.tagging_spinner = document.createElement("img");
-		wp.tagging_spinner.src = wp.uribase + "static/ajaxload.gif";
-		div.appendChild(wp.tagging_spinner);
+		wp.tm_spinner = document.createElement("img");
+		wp.tm_spinner.src = wp.uribase + "static/ajaxload.gif";
+		div.appendChild(wp.tm_spinner);
 		div.appendChild(tagmode_mkb("Exit tagmode", tagmode_disable, "exit"));
 		form.appendChild(div);
 		div = document.createElement("div");
@@ -56,27 +56,27 @@ function tagmode_init() {
 		div.appendChild(tagmode_mkb("Select none", tagmode_unselect_all, null));
 		div.appendChild(tagmode_mkb("Toggle selection", tagmode_toggle_all, null));
 		form.appendChild(div);
-		wp.tagging_input = document.createElement("input");
-		wp.tagging_input.type = "text";
-		wp.tagging_input.id = "tagmode-tags";
+		wp.tm_input = document.createElement("input");
+		wp.tm_input.type = "text";
+		wp.tm_input.id = "tagmode-tags";
 		div = document.createElement("div");
 		div.id = "tmt";
-		div.appendChild(wp.tagging_input);
+		div.appendChild(wp.tm_input);
 		form.appendChild(div);
 		wp.tagbar.appendChild(form);
-		wp.tagging_inited = true;
+		wp.tm_inited = true;
 	}
-	if (wp.tagging_saved) {
+	if (wp.tm_saved) {
 		tagmode_loop(function (t) {
-			if (wp.tagging_saved[t.id]) {
+			if (wp.tm_saved[t.id]) {
 				t.className = "thumb selected";
 			}
 		});
 	}
 	wp.tagging = true;
 	wp.tagbar.style.display = "block";
-	wp.tagging_input.focus();
-	init_completion(wp.tagging_input);
+	wp.tm_input.focus();
+	init_completion(wp.tm_input);
 	return false;
 }
 
@@ -86,7 +86,7 @@ function tagmode_confirm() {
 	tagmode_loop(function (t) {
 		if (t.className !== "thumb") { anysel = true; }
 	});
-	if (wp.tagging_input.value !== "" || anysel) {
+	if (wp.tm_input.value !== "" || anysel) {
 		return confirm("Leave tagmode?");
 	}
 	return true;
@@ -100,7 +100,7 @@ function tagmode_taglinkclick() {
 			txt += el.data.replace("\u200b", "");
 		}
 	});
-	val = wp.tagging_input.value;
+	val = wp.tm_input.value;
 	if (val !== "") {
 		lastc = val.substr(val.length - 1);
 		if (val.length > 1) {
@@ -112,8 +112,8 @@ function tagmode_taglinkclick() {
 			val += " ";
 		}
 	}
-	wp.tagging_input.value = val + txt + " ";
-	wp.tagging_input.focus();
+	wp.tm_input.value = val + txt + " ";
+	wp.tm_input.focus();
 	return false;
 }
 
@@ -125,7 +125,7 @@ function tagmode_disable() {
 			t.className = "thumb";
 		}
 	});
-	wp.tagging_saved = saved;
+	wp.tm_saved = saved;
 	wp.tagging = false;
 	wp.tagbar.style.display = "none";
 	return false;
@@ -158,7 +158,7 @@ function tag_toggle_i(t) {
 function tag_toggle() {
 	if (!wp.tagging) { return true; }
 	tag_toggle_i(this);
-	wp.tagging_input.focus();
+	wp.tm_input.focus();
 	return false;
 }
 
@@ -182,21 +182,21 @@ function tagmode_getselected(ask) {
 
 function tagmode_apply() {
 	var m, data, x;
-	if (wp.tagging_ajax) { return false; }
-	if (wp.tagging_input.value === "") { return false; }
+	if (wp.tm_ajax) { return false; }
+	if (wp.tm_input.value === "") { return false; }
 	m = tagmode_getselected(true);
 	if (!m.length) { return false; }
-	wp.tagging_spinner.style.visibility = "visible";
-	data = "tags=" + encodeURIComponent(wp.tagging_input.value) + "&m=" + m.join("+");
+	wp.tm_spinner.style.visibility = "visible";
+	data = "tags=" + encodeURIComponent(wp.tm_input.value) + "&m=" + m.join("+");
 	x = new XMLHttpRequest();
-	wp.tagging_ajax = x;
+	wp.tm_ajax = x;
 	x.open("POST", wp.uribase + "ajax-tag", true);
 	x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	x.onreadystatechange = function () {
 		var txt, r;
 		if (x.readyState !== 4) { return; }
-		wp.tagging_ajax = null;
-		wp.tagging_spinner.style.visibility = "hidden";
+		wp.tm_ajax = null;
+		wp.tm_spinner.style.visibility = "hidden";
 		txt = x.responseText;
 		if (x.status !== 200) {
 			alert("Error " + x.status + "\n\n" + txt);
@@ -223,7 +223,7 @@ function tagmode_result(r, full) {
 		}
 	});
 	if (full) {
-		wp.tagging_input.value = r.failed;
+		wp.tm_input.value = r.failed;
 		if (r.msg) { alert(r.msg); }
 		if (r.failed) { tagmode_create_init(r.types); }
 	}
@@ -269,8 +269,8 @@ function tagmode_create() {
 
 function tagmode_create_cancel_put(form) {
 	var txt = form.name.value;
-	if (wp.tagging_input.value.length) { txt = " " + txt; }
-	wp.tagging_input.value += txt;
+	if (wp.tm_input.value.length) { txt = " " + txt; }
+	wp.tm_input.value += txt;
 }
 function tagmode_create_cancel() {
 	var form = this.parentNode.parentNode;
@@ -281,7 +281,7 @@ function tagmode_create_cancel() {
 
 function tagmode_create_init(types) {
 	var m = tagmode_getselected(false);
-	wp_foreach(wp.tagging_input.value.split(" "), function (n) {
+	wp_foreach(wp.tm_input.value.split(" "), function (n) {
 		var form, div, input, sel;
 		form = document.createElement("form");
 		form.onsubmit = tagmode_create;
@@ -321,5 +321,5 @@ function tagmode_create_init(types) {
 		div.appendChild(img);
 		wp.tagbar.appendChild(form);
 	});
-	wp.tagging_input.value = "";
+	wp.tm_input.value = "";
 }
