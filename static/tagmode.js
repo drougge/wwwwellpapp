@@ -1,6 +1,7 @@
 function tagmode_mkb(txt, func, cn) {
 	var button;
 	button = document.createElement("input");
+	if (cn !== "exit") { wp.tm_disablable.push(button); }
 	button.type = "submit";
 	button.value = txt;
 	button.onclick = function () {
@@ -39,6 +40,7 @@ function tagmode_init() {
 				el.onclick = tagmode_taglinkclick;
 			});
 		}
+		wp.tm_disablable = [];
 		form = document.createElement("form");
 		form.onsubmit = tagmode_apply;
 		form.id = "tag";
@@ -57,6 +59,7 @@ function tagmode_init() {
 		div.appendChild(tagmode_mkb("Toggle selection", tagmode_toggle_all, null));
 		form.appendChild(div);
 		wp.tm_input = document.createElement("input");
+		wp.tm_disablable.push(wp.tm_input);
 		wp.tm_input.type = "text";
 		wp.tm_input.id = "tagmode-tags";
 		div = document.createElement("div");
@@ -64,6 +67,7 @@ function tagmode_init() {
 		div.appendChild(wp.tm_input);
 		form.appendChild(div);
 		wp.tagbar.appendChild(form);
+		wp.tm_lock = 0;
 		wp.tm_inited = true;
 	}
 	if (wp.tm_saved) {
@@ -131,6 +135,24 @@ function tagmode_disable() {
 	return false;
 }
 
+function tagmode_lock() {
+	if (!wp.tm_lock) {
+		wp_foreach(wp.tm_disablable, function (i) {
+			i.disabled = true;
+		});
+	}
+	wp.tm_lock++;
+}
+
+function tagmode_unlock() {
+	wp.tm_lock--;
+	if (!wp.tm_lock) {
+		wp_foreach(wp.tm_disablable, function (i) {
+			i.disabled = false;
+		});
+	}
+}
+
 function tagmode_select_all() {
 	tagmode_loop(function (t) {
 		t.className = "thumb selected";
@@ -157,6 +179,7 @@ function tag_toggle_i(t) {
 
 function tag_toggle() {
 	if (!wp.tagging) { return true; }
+	if (wp.tm_lock) { return false; }
 	tag_toggle_i(this);
 	wp.tm_input.focus();
 	return false;
@@ -262,6 +285,7 @@ function tagmode_create() {
 		if (!good) { tagmode_create_cancel_put(form); }
 		form.parentNode.removeChild(form);
 		tagmode_result(r, false);
+		tagmode_unlock();
 	};
 	x.send(data);
 	return false;
@@ -276,6 +300,7 @@ function tagmode_create_cancel() {
 	var form = this.parentNode.parentNode;
 	tagmode_create_cancel_put(form);
 	form.parentNode.removeChild(form);
+	tagmode_unlock();
 	return false;
 }
 
@@ -283,6 +308,7 @@ function tagmode_create_init(types) {
 	var m = tagmode_getselected(false);
 	wp_foreach(wp.tm_input.value.split(" "), function (n) {
 		var form, div, input, sel;
+		tagmode_lock();
 		form = document.createElement("form");
 		form.onsubmit = tagmode_create;
 		div = document.createElement("div");
