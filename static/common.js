@@ -52,15 +52,13 @@ if (!JSON.parse) {
 	};
 }
 
-function fixGetElementsByClassName(name) {
-	var a = [], re;
-	re = new RegExp("\\b" + name + "\\b");
-	wp_foreach(document.all, function (el) {
-		if (re.test(el.className)) { a.push(el); }
-	});
-	return a;
-}
-
 if (!document.getElementsByClassName) {
-	document.constructor.prototype.getElementsByClassName = fixGetElementsByClassName;
+	document.getElementsByClassName = function (name) {
+		var a = [], re;
+		re = new RegExp("\\b" + name + "\\b");
+		wp_foreach(document.all, function (el) {
+			if (re.test(el.className)) { a.push(el); }
+		});
+		return a;
+	};
 }
