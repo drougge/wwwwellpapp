@@ -1,37 +1,33 @@
-var scale_state = 0;
-var orgWidth = 0, orgHeight = 0;
-var scale_margin = 160;
-var resized_msg = document.createElement("div");
-resized_msg.appendChild(document.createTextNode("Image rescaled"));
-resized_msg.appendChild(document.createElement("br"));
-resized_msg.appendChild(document.createTextNode("click to see full size"));
-
-function resize()
-{
-	var img = document.getElementById("main-image");
-	var resized_div = document.getElementById("rescaled-msg");
-	if (!img || !resized_div) return 0;
-	if (scale_state == 0) {
-		orgWidth = img.width;
-		orgHeight = img.height;
-		scale_state = 1;
+function resize() {
+	var w;
+	if (!wp.resize_state) {
+		wp.resize_img = document.getElementById("main-image");
+		wp.resize_div = document.getElementById("rescaled-msg");
+		if (!wp.resize_img || !wp.resize_div) { return false; }
+		wp.resized_msg = document.createElement("div");
+		wp.resized_msg.appendChild(document.createTextNode("Image rescaled"));
+		wp.resized_msg.appendChild(document.createElement("br"));
+		wp.resized_msg.appendChild(document.createTextNode("click to see full size"));
+		wp.resize_orgWidth = wp.resize_img.width;
+		wp.resize_orgHeight = wp.resize_img.height;
+		wp.resize_state = 1;
 	}
-	if (scale_state == 1) {
-		var w = document.body.offsetWidth - scale_margin;
-		if (w < 128) w = 128;
-		if (w < orgWidth) {
-			img.width = w;
-			img.height = w * orgHeight / orgWidth;
-			scale_state = 2;
-			resized_div.appendChild(resized_msg);
-			resized_div.style.display = "inline-block";
+	if (wp.resize_state === 1) {
+		w = document.body.offsetWidth - 160;
+		if (w < 128) { w = 128; }
+		if (w < wp.resize_orgWidth) {
+			wp.resize_img.width = w;
+			wp.resize_img.height = w * wp.resize_orgHeight / wp.resize_orgWidth;
+			wp.resize_state = 2;
+			wp.resize_div.appendChild(wp.resized_msg);
+			wp.resize_div.style.display = "inline-block";
 		}
 	} else {
-		img.width = orgWidth;
-		img.height = orgHeight;
-		scale_state = 1;
-		resized_div.style.display = "none";
-		resized_div.removeChild(resized_msg);
+		wp.resize_img.width = wp.resize_orgWidth;
+		wp.resize_img.height = wp.resize_orgHeight;
+		wp.resize_state = 1;
+		wp.resize_div.style.display = "none";
+		wp.resize_div.removeChild(wp.resized_msg);
 	}
-	return 0;
+	return false;
 }
