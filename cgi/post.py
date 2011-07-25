@@ -31,7 +31,11 @@ prt(u'<div onclick="return resize();" id="rescaled-msg" class="msgbox"></div>\n'
 prt(u'<img id="main-image" onclick="return resize();" ')
 prtfields((u'src', img), (u'alt', m), (u'width', post.width), (u'height', post.height))
 prt(u'/>\n')
-prt(u'<script type="text/javascript">resize();</script>\n')
+prt(u"""<script type="text/javascript">
+<!--
+resize();
+--></script>
+""")
 if rels:
 	prt(u'<div id="related">')
 	prt(u'Related posts:')
