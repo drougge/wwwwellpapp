@@ -169,9 +169,9 @@ def pagelinks(link, page, result_count):
 	prev = -1
 	for p in pages:
 		if p != prev + 1:
-			prt(u'<div class="pagelink linkspace">...</div>\n')
+			prt(u'<span class="pagelink linkspace">...</span>\n')
 		prev = p
-		prt(u'<div class="pagelink')
+		prt(u'<span class="pagelink')
 		if p == page:
 			prt(u' currentpage">')
 		else:
@@ -180,14 +180,14 @@ def pagelinks(link, page, result_count):
 		prt(unicode(p))
 		if p != page:
 			prt(u'</a>')
-		prt(u'</div>\n')
+		prt(u'</span>\n')
 	if user:
 		if pages:
-			prt(u'<div class="pagelink"><a href="' + link)
-			prt(u'&amp;ALL=1">ALL</a></div>\n')
-		prt(u'<div class="pagelink"><a href="' + base);
+			prt(u'<span class="pagelink"><a href="' + link)
+			prt(u'&amp;ALL=1">ALL</a></span>\n')
+		prt(u'<span class="pagelink"><a href="' + base);
 		prt(u'static/jserror.html" onclick="return tagmode_init();">')
-		prt(u'Tagmode</a></div>\n')
+		prt(u'Tagmode</a></span>\n')
 	prt(u'</div>\n')
 	res = u''.join(outdata)
 	outdata = real_outdata

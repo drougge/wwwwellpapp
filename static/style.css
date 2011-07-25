@@ -26,6 +26,7 @@ a:hover {
 	border-bottom: 1px solid #aaa;
 	list-style-type: none;
 	padding: 0;
+	margin: 0;
 	width: 150px;
 	clear: left;
 }
@@ -119,11 +120,20 @@ img {
 	visibility: hidden;
 }
 
+#thumbs {
+	clear: both;
+}
+.pagelinks {
+	clear: both;
+}
 .pagelink {
 	float: left;
 	margin: 2px 2px 2px 2px;
 	border: 1px solid #000;
 	padding: 4px 0px 4px 0px;
+}
+.pagelink a {
+	padding: 4px;
 }
 .currentpage {
 	border: 1px solid #faa;
@@ -134,9 +144,6 @@ img {
 }
 .pagelink:first-child {
 	clear: left;
-}
-.pagelink > a {
-	padding: 4px;
 }
 
 #query-string {
