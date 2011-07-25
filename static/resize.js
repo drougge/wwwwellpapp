@@ -1,6 +1,6 @@
 var scale_state = 0;
 var orgWidth = 0, orgHeight = 0;
-var scale_margin = 190;
+var scale_margin = 160;
 var resized_msg = document.createElement("div");
 resized_msg.appendChild(document.createTextNode("Image rescaled"));
 resized_msg.appendChild(document.createElement("br"));
@@ -17,7 +17,7 @@ function resize()
 		scale_state = 1;
 	}
 	if (scale_state == 1) {
-		var w = window.innerWidth - scale_margin;
+		var w = document.body.offsetWidth - scale_margin;
 		if (w < 128) w = 128;
 		if (w < orgWidth) {
 			img.width = w;
