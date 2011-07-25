@@ -5,8 +5,16 @@ from sys import exit
 from common import *
 import json
 
-tags = getarg("tags")
-m = getarg("m", as_list=True)
+tags = getarg("tags", u'')
+name = getarg("name", u'')
+if name:
+	try:
+		type = getarg("type")
+		client.add_tag(name, type)
+		tags = name
+	except Exception:
+		msg = u'Failed to create'
+m = getarg("m", [], True)
 full = set()
 weak = set()
 remove = set()

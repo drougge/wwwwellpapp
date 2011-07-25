@@ -162,10 +162,8 @@ function tag_toggle() {
 	return false;
 }
 
-function tagmode_apply() {
-	var m = [], data, x;
-	if (wp.tagging_ajax) { return false; }
-	if (wp.tagging_input.value === "") { return false; }
+function tagmode_getselected(ask) {
+	var m = [];
 	tagmode_loop(function (t) {
 		if (t.className !== "thumb") {
 			m.push(t.id.substr(1));
@@ -175,13 +173,21 @@ function tagmode_apply() {
 		tagmode_loop(function (t) {
 			m.push(t.id.substr(1));
 		});
-		if (m.length > 1 && !confirm("Nothing selected, apply to all?")) {
-			return false;
+		if (ask && m.length > 1 && !confirm("Nothing selected, apply to all?")) {
+			return [];
 		}
 	}
+	return m;
+}
+
+function tagmode_apply() {
+	var m, data, x;
+	if (wp.tagging_ajax) { return false; }
+	if (wp.tagging_input.value === "") { return false; }
+	m = tagmode_getselected(true);
 	if (!m.length) { return false; }
 	wp.tagging_spinner.style.visibility = "visible";
-	data = "tags=" + encodeURIComponent(wp.tagging_input.value) + "&m=" + m.join("&m=");
+	data = "tags=" + encodeURIComponent(wp.tagging_input.value) + "&m=" + m.join("+");
 	x = new XMLHttpRequest();
 	wp.tagging_ajax = x;
 	x.open("POST", wp.uribase + "ajax-tag", true);
@@ -201,14 +207,13 @@ function tagmode_apply() {
 			return;
 		}
 		r = JSON.parse(txt);
-		tagmode_result(r);
+		tagmode_result(r, true);
 	};
 	x.send(data);
 	return false;
 }
 
-function tagmode_result(r) {
-	wp.tagging_input.value = r.failed;
+function tagmode_result(r, full) {
 	tagmode_loop(function (t) {
 		var m, img;
 		m = t.id.substr(1);
@@ -217,48 +222,65 @@ function tagmode_result(r) {
 			img.title = r.m[m];
 		}
 	});
-	if (r.msg) { alert(r.msg); }
-	if (r.failed) { tagmode_create_init(r.types); }
+	if (full) {
+		wp.tagging_input.value = r.failed;
+		if (r.msg) { alert(r.msg); }
+		if (r.failed) { tagmode_create_init(r.types); }
+	}
 }
 
 function tagmode_create() {
-	var form = this, name, type, data, x;
+	var form = this, name, type, m, data, x;
 	name = form.name.value;
 	type = form.type.value;
-	data = "name=" + encodeURIComponent(name) + "&type=" + encodeURIComponent(type);
+	m = form.m.value;
+	data = "name=" + encodeURIComponent(name) + "&type=" + encodeURIComponent(type) + "&m=" + m;
 	form.onsubmit = function () { return false; };
 	wp_foreach(form.getElementsByTagName("img"), function (img) {
 		img.style.visibility = "visible";
 	});
 	x = new XMLHttpRequest();
-	x.open("POST", wp.uribase + "ajax-createtag", true);
+	x.open("POST", wp.uribase + "ajax-tag", true);
 	x.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	x.onreadystatechange = function () {
-		var txt, err;
+		var txt, err, r, good = true;
 		if (x.readyState !== 4) { return; }
-		form.parentNode.removeChild(form);
 		txt = x.responseText;
 		err = "Error creating tag " + name + "\n\n";
 		if (x.status !== 200) {
 			alert(err + x.status + "\n\n" + txt);
-			return;
-		}
-		if (txt.substr(0, 2) !== "OK" || txt.length > 4) {
+		} else if (txt.substr(0, 1) !== "{") {
 			alert(err + txt);
-			return;
+		} else {
+			good = true;
 		}
+		r = JSON.parse(txt);
+		if (r.msg) {
+			good = false;
+			alert(err + r.msg);
+		}
+		if (!good) { tagmode_create_cancel_put(form); }
+		form.parentNode.removeChild(form);
+		tagmode_result(r, false);
 	};
 	x.send(data);
 	return false;
 }
 
+function tagmode_create_cancel_put(form) {
+	var txt = form.name.value;
+	if (wp.tagging_input.value.length) { txt = " " + txt; }
+	wp.tagging_input.value += txt;
+}
 function tagmode_create_cancel() {
 	var form = this.parentNode.parentNode;
+	tagmode_create_cancel_put(form);
 	form.parentNode.removeChild(form);
 	return false;
 }
 
 function tagmode_create_init(types) {
+	var m = tagmode_getselected(false);
 	wp_foreach(wp.tagging_input.value.split(" "), function (n) {
 		var form, div, input, sel;
 		form = document.createElement("form");
@@ -271,6 +293,11 @@ function tagmode_create_init(types) {
 		input.type = "hidden";
 		input.name = "name";
 		input.value = n;
+		div.appendChild(input);
+		input = document.createElement("input");
+		input.type = "hidden";
+		input.name = "m";
+		input.value = m.join("+");
 		div.appendChild(input);
 		sel = document.createElement("select");
 		sel.name = "type";
@@ -294,4 +321,5 @@ function tagmode_create_init(types) {
 		div.appendChild(img);
 		wp.tagbar.appendChild(form);
 	});
+	wp.tagging_input.value = "";
 }

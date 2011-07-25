@@ -20,14 +20,13 @@ assert thumbsize
 def getarg(n, default=None, as_list=False):
 	if default is not None and n not in fs: return default
 	a = fs[n]
-	if as_list:
-		if not isinstance(a, list):
-			a = [a]
-		return [_argdec(e.value) for e in a]
+	if isinstance(a, list):
+		a = [_argdec(e.value) for e in a]
+		if not as_list: a = u' '.join(a)
 	else:
-		if isinstance(a, list):
-			a = a[0]
-		return _argdec(a.value)
+		a = _argdec(a.value)
+		if as_list: a = a.split()
+	return a
 def _argdec(v):
 	try:
 		v = v.decode("utf-8")
