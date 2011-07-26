@@ -4,6 +4,7 @@ from cgi import escape, FieldStorage
 import cgitb
 from dbclient import dbclient, dbcfg
 from urllib import urlencode
+import re
 
 cgitb.enable()
 
@@ -54,9 +55,15 @@ def prt(*a):
 def prtfields(*fields):
 	map(lambda f: prt(f[0], u'="', escape(unicode(f[1])), u'" '), fields)
 
+_zwsp_pre_re = re.compile(ur'([(<\[]|\b\d)')
+_zwsp_post_re = re.compile(ur'([:/)>\]&\\,\._-])')
+_zwsp_nr_re = re.compile(ur'(\d+)')
+_zwsp_re = re.compile(ur'\u200b+')
 def tagfmt(n, html_ok=True):
-	for s in u":_-/><&":
-		n = n.replace(s, s + u'\u200b')
+	n = _zwsp_pre_re.sub(u'\u200b\\1', n)
+	n = _zwsp_post_re.sub(u'\\1\u200b', n)
+	n = _zwsp_nr_re.sub(u'\u200b\\1\u200b', n)
+	n = _zwsp_re.sub(u'\u200b', n)
 	n = escape(n)
 	if html_ok: n = n.replace(u'\u200b', u'<span class="wbr">\u200b</span>')
 	return n
