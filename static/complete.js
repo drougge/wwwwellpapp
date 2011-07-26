@@ -30,6 +30,9 @@ WP.comp.init = function (el) {
 	};
 };
 
+/* This is called when we might soon want to run completion.  *
+ * It gets aborted again if the user types another character. *
+ */
 WP.comp.soon = function (el) {
 	var c = WP.comp[el.id];
 	if (!c) { return; }
@@ -42,13 +45,14 @@ WP.comp.soon_ev = function () {
 	WP.comp.soon(this);
 };
 
+/* When completions are available, handle possible selecting one by keyboard. */
 WP.comp.keydown = function (ev) {
 	var c = WP.comp[this.id];
 	if (!c) { return; }
-	if (ev.keyCode === 40) { /* down */
+	if (ev.keyCode === 40) { // down
 		WP.comp.move_selection(c.list, 1);
 		c.skip = true;
-	} else if (ev.keyCode === 38) { /* up */
+	} else if (ev.keyCode === 38) { // up
 		WP.comp.move_selection(c.list, -1);
 		c.skip = true;
 	} else {
@@ -57,6 +61,7 @@ WP.comp.keydown = function (ev) {
 	return true;
 };
 
+/* Some keys work better in keydown, some in keypress, so we look at both. */
 WP.comp.keypress = function (ev) {
 	var c, d, val, full;
 	c = WP.comp[this.id];
@@ -64,7 +69,7 @@ WP.comp.keypress = function (ev) {
 	d = {"idx": -1};
 	val = "";
 	full = true;
-	if (ev.keyCode === 9) { /* tab */
+	if (ev.keyCode === 9) { // tab
 		d = WP.comp.find_selection(c.list);
 		if (d.idx === -1) {
 			if (d.lis.length === 1) {
@@ -74,7 +79,7 @@ WP.comp.keypress = function (ev) {
 				full = false;
 			}
 		}
-	} else if (ev.keyCode === 13) { /* return */
+	} else if (ev.keyCode === 13) { // return
 		d = WP.comp.find_selection(c.list);
 	}
 	if (d.idx >= 0) {
@@ -89,6 +94,7 @@ WP.comp.keypress = function (ev) {
 	return true;
 };
 
+/* New completion suggestions available, show them. */
 WP.comp.new_alts = function (el, r) {
 	var alts = r.alts, div, old_div, word, c, pos, ul;
 	if (!alts) { return; }
@@ -144,6 +150,7 @@ WP.comp.new_alts = function (el, r) {
 	el.onkeypress = WP.comp.keypress;
 };
 
+/* Run completion. That is, start a request to the server. */
 WP.comp.run = function (el) {
 	var c, x, word;
 	c = WP.comp[el.id];
@@ -174,6 +181,7 @@ WP.comp.run = function (el) {
 	x.send();
 };
 
+/* Don't show any suggestions anymore. */
 WP.comp.clear = function (el) {
 	var c = WP.comp[el.id];
 	if (c.list) {
@@ -184,6 +192,7 @@ WP.comp.clear = function (el) {
 	el.onkeydown = null;
 };
 
+/* Remove completion for this element, because it lost focus. */
 WP.comp.remove = function (el) {
 	var c = WP.comp[el.id];
 	if (!c) { return; }
@@ -192,6 +201,7 @@ WP.comp.remove = function (el) {
 	WP.comp.clear(el);
 };
 
+/* Move between suggestions by keyboard. */
 WP.comp.move_selection = function (el, dir) {
 	var d, pos;
 	d = WP.comp.find_selection(el);
@@ -204,6 +214,7 @@ WP.comp.move_selection = function (el, dir) {
 	}
 };
 
+/* Find the selected suggestion under this el. */
 WP.comp.find_selection = function (el) {
 	var lis, res, i;
 	lis = el.getElementsByTagName("li");
@@ -217,6 +228,7 @@ WP.comp.find_selection = function (el) {
 	return res;
 };
 
+/* Select this (clicked) element. */
 WP.comp.select_this = function () {
 	var want = this;
 	WP.foreach(this.parentNode.getElementsByTagName("li"), function (li) {
@@ -228,6 +240,7 @@ WP.comp.select_this = function () {
 	});
 };
 
+/* Insert the selected suggestion in text field. */
 WP.comp.selection_insert = function (el, comp, full) {
 	var start, end, txt, c, prefix, pos;
 	try {

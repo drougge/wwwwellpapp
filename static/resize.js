@@ -1,4 +1,8 @@
-WP.size = {};
+/* Toggle the image between full size, and fitting window width.          *
+ * Margin is to make room both for the left div and a possible scrollbar. *
+ */
+
+WP.size = {"margin": 160};
 
 WP.size.toggle = function () {
 	var w;
@@ -15,7 +19,7 @@ WP.size.toggle = function () {
 		WP.size.state = 1;
 	}
 	if (WP.size.state === 1) {
-		w = document.body.offsetWidth - 160;
+		w = document.body.offsetWidth - WP.size.margin;
 		if (w < 128) { w = 128; }
 		if (w < WP.size.orgWidth) {
 			WP.size.img.width = w;

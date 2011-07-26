@@ -1,5 +1,6 @@
 WP.tm = {};
 
+/* Make a button. */
 WP.tm.mkb = function (txt, func, cn) {
 	var button;
 	button = document.createElement("input");
@@ -15,11 +16,13 @@ WP.tm.mkb = function (txt, func, cn) {
 	return button;
 };
 
+/* Foreach all thumbs on this page. */
 WP.tm.loop = function (func) {
 	var thumbs = WP.getElementsByClassName(document, "thumb");
 	WP.foreach(thumbs, func);
 };
 
+/* Set up tagmode. Either constuct or unhide interface, restore selection. */
 WP.tm.init = function () {
 	var form, div, tags;
 	if (WP.tm.enabled) { return WP.tm.disable(); }
@@ -28,7 +31,7 @@ WP.tm.init = function () {
 		WP.tm.loop(function (t) {
 			var span = document.createElement("span");
 			t.insertBefore(span, t.firstChild);
-			t.onclick = WP.tm.toggle;
+			t.onclick = WP.tm.toggle_ev;
 			WP.foreach(t.getElementsByTagName("a"), function (a) {
 				a.id = "a" + t.id.substr(1);
 			});
@@ -67,7 +70,7 @@ WP.tm.init = function () {
 			});
 		}, null));
 		div.appendChild(WP.tm.mkb("Toggle selection", function () {
-			WP.tm.loop(WP.tm.toggle_i);
+			WP.tm.loop(WP.tm.toggle);
 		}, null));
 
 		form.appendChild(div);
@@ -97,6 +100,7 @@ WP.tm.init = function () {
 	return false;
 };
 
+/* Confirm leaving tagmode with unsaved changes. */
 WP.tm.confirm = function () {
 	var anysel = false;
 	if (!WP.tm.enabled) { return true; }
@@ -109,6 +113,7 @@ WP.tm.confirm = function () {
 	return true;
 };
 
+/* Handle clicking a taglink (insert in form). */
 WP.tm.tagLinkClick = function () {
 	var txt = "", val, lastc, lastc2;
 	if (!WP.tm.enabled) { return true; }
@@ -134,6 +139,7 @@ WP.tm.tagLinkClick = function () {
 	return false;
 };
 
+/* Exit tagmode. */
 WP.tm.disable = function () {
 	var saved = {};
 	WP.tm.loop(function (t) {
@@ -148,6 +154,7 @@ WP.tm.disable = function () {
 	return false;
 };
 
+/* (Nesting) lock of tagmode, for tag creation. */
 WP.tm.lock = function () {
 	if (!WP.tm.lock_count) {
 		WP.foreach(WP.tm.disablable, function (i) {
@@ -166,7 +173,8 @@ WP.tm.unlock = function () {
 	}
 };
 
-WP.tm.toggle_i = function (t) {
+/* Toggle selection of a thumb. */
+WP.tm.toggle = function (t) {
 	if (t.className === "thumb") {
 		t.className = "thumb selected";
 	} else {
@@ -174,14 +182,16 @@ WP.tm.toggle_i = function (t) {
 	}
 };
 
-WP.tm.toggle = function () {
+/* Thumb toggling by click. */
+WP.tm.toggle_ev = function () {
 	if (!WP.tm.enabled) { return true; }
 	if (WP.tm.lock_count) { return false; }
-	WP.tm.toggle_i(this);
+	WP.tm.toggle(this);
 	WP.tm.input.focus();
 	return false;
 };
 
+/* Get a list of (ID of) all selected thumbs. */
 WP.tm.getSelected = function (ask) {
 	var m = [];
 	WP.tm.loop(function (t) {
@@ -200,6 +210,7 @@ WP.tm.getSelected = function (ask) {
 	return m;
 };
 
+/* Apply tags to selection. */
 WP.tm.apply = function () {
 	var m, data, x;
 	if (WP.tm.ajax) { return false; }
@@ -233,6 +244,7 @@ WP.tm.apply = function () {
 	return false;
 };
 
+/* Apply result of an ajax request (update thumb titles). */
 WP.tm.applyAjax = function (r, full) {
 	WP.tm.loop(function (t) {
 		var m, img;
@@ -249,6 +261,7 @@ WP.tm.applyAjax = function (r, full) {
 	}
 };
 
+/* Create and apply a tag. */
 WP.tm.createTag = function () {
 	var form = this, name, type, m, data, x;
 	name = form.tm_name.value;
@@ -288,12 +301,14 @@ WP.tm.createTag = function () {
 	return false;
 };
 
+/* Cancel tag creation, inserting the (mistyped?) tag in text field again. */
 WP.tm.createTagCancel = function (form) {
 	var txt = form.tm_name.value;
 	if (WP.tm.input.value.length) { txt = " " + txt; }
 	WP.tm.input.value += txt;
 };
 
+/* Set up interface for tag creation. */
 WP.tm.createTagInit = function (types) {
 	WP.foreach(WP.tm.input.value.split(" "), function (n) {
 		var form, div, input, sel, img;
