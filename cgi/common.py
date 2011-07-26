@@ -64,9 +64,7 @@ def tagfmt(n, html_ok=True):
 	n = _zwsp_post_re.sub(u'\\1\u200b', n)
 	n = _zwsp_nr_re.sub(u'\u200b\\1\u200b', n)
 	n = _zwsp_re.sub(u'\u200b', n)
-	n = escape(n)
-	if html_ok: n = n.replace(u'\u200b', u'<span class="wbr">\u200b</span>')
-	return n
+	return escape(n)
 
 def tagname(guid):
 	tag = client.get_tag(guid)
