@@ -24,10 +24,17 @@ WP.tm.loop = function (func) {
 
 /* Set up tagmode. Either constuct or unhide interface, restore selection. */
 WP.tm.init = function () {
-	var form, div, tags;
+	var form, div, tags, x;
 	if (WP.tm.enabled) { return WP.tm.disable(); }
 	WP.tm.tagbar = document.getElementById("tagbar");
 	if (!WP.tm.inited) {
+		try {
+			x = new XMLHttpRequest();
+		} catch (e) {
+			alert("Sorry, tagmode doesn't work in your browser.");
+			return false;
+		}
+		x = null;
 		WP.tm.loop(function (t) {
 			var span = document.createElement("span");
 			t.insertBefore(span, t.firstChild);
