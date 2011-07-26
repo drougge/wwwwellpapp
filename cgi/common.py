@@ -135,7 +135,7 @@ def prt_search_form(q=u''):
 	prt(u'<form action="' + base + u'search" method="get">\n')
 	prt(u'<div id="search-box">\n')
 	prt(u'<input type="text" name="q" id="search-q" value="' + escape(q, True))
-	prt(u'" onfocus="init_completion(this);" />\n')
+	prt(u'" onfocus="WP.comp.init(this);" />\n')
 	prt(u'<input type="submit" value="Search" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')
@@ -186,7 +186,7 @@ def pagelinks(link, page, result_count):
 			prt(u'<span class="pagelink"><a href="' + link)
 			prt(u'&amp;ALL=1">ALL</a></span>\n')
 		prt(u'<span class="pagelink"><a href="' + base);
-		prt(u'static/jserror.html" onclick="return tagmode_init();">')
+		prt(u'static/jserror.html" onclick="return WP.tm.init();">')
 		prt(u'Tagmode</a></span>\n')
 	prt(u'</div>\n')
 	res = u''.join(outdata)
@@ -198,7 +198,7 @@ def prt_tagform(m):
 	prt(u'<div id="tag-form">\n')
 	prt(u'<input type="hidden" name="post" value="' + m + u'" />\n')
 	prt(u'<input type="text" name="tags" id="tag-q" ');
-	prt(u' onfocus="init_completion(this);" />\n')
+	prt(u' onfocus="WP.comp.init(this);" />\n')
 	prt(u'<input type="submit" value="Tag" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')
@@ -214,7 +214,7 @@ def prt_head(extra=u''):
 	<link rel="stylesheet" href="%(base)sstatic/tagstyle.css" />
 	<script src="%(base)sstatic/common.js" type="text/javascript"></script>
 	<script type="text/javascript"><!--
-		wp.uribase = "%(base)s";
+		WP.uribase = "%(base)s";
 	--></script>
 	<script src="%(base)sstatic/complete.js" type="text/javascript"></script>
 	""" % {"base": base})

@@ -1,33 +1,35 @@
-function resize() {
+WP.size = {};
+
+WP.size.toggle = function () {
 	var w;
-	if (!wp.resize_state) {
-		wp.resize_img = document.getElementById("main-image");
-		wp.resize_div = document.getElementById("rescaled-msg");
-		if (!wp.resize_img || !wp.resize_div) { return false; }
-		wp.resized_msg = document.createElement("div");
-		wp.resized_msg.appendChild(document.createTextNode("Image rescaled"));
-		wp.resized_msg.appendChild(document.createElement("br"));
-		wp.resized_msg.appendChild(document.createTextNode("click to see full size"));
-		wp.resize_orgWidth = wp.resize_img.width;
-		wp.resize_orgHeight = wp.resize_img.height;
-		wp.resize_state = 1;
+	if (!WP.size.state) {
+		WP.size.img = document.getElementById("main-image");
+		WP.size.div = document.getElementById("rescaled-msg");
+		if (!WP.size.img || !WP.size.div) { return false; }
+		WP.size.msg = document.createElement("div");
+		WP.size.msg.appendChild(document.createTextNode("Image rescaled"));
+		WP.size.msg.appendChild(document.createElement("br"));
+		WP.size.msg.appendChild(document.createTextNode("click to see full size"));
+		WP.size.orgWidth = WP.size.img.width;
+		WP.size.orgHeight = WP.size.img.height;
+		WP.size.state = 1;
 	}
-	if (wp.resize_state === 1) {
+	if (WP.size.state === 1) {
 		w = document.body.offsetWidth - 160;
 		if (w < 128) { w = 128; }
-		if (w < wp.resize_orgWidth) {
-			wp.resize_img.width = w;
-			wp.resize_img.height = w * wp.resize_orgHeight / wp.resize_orgWidth;
-			wp.resize_state = 2;
-			wp.resize_div.appendChild(wp.resized_msg);
-			wp.resize_div.style.display = "inline-block";
+		if (w < WP.size.orgWidth) {
+			WP.size.img.width = w;
+			WP.size.img.height = w * WP.size.orgHeight / WP.size.orgWidth;
+			WP.size.state = 2;
+			WP.size.div.appendChild(WP.size.msg);
+			WP.size.div.style.display = "inline-block";
 		}
 	} else {
-		wp.resize_img.width = wp.resize_orgWidth;
-		wp.resize_img.height = wp.resize_orgHeight;
-		wp.resize_state = 1;
-		wp.resize_div.style.display = "none";
-		wp.resize_div.removeChild(wp.resized_msg);
+		WP.size.img.width = WP.size.orgWidth;
+		WP.size.img.height = WP.size.orgHeight;
+		WP.size.state = 1;
+		WP.size.div.style.display = "none";
+		WP.size.div.removeChild(WP.size.msg);
 	}
 	return false;
-}
+};

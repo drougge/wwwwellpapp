@@ -27,13 +27,13 @@ prt(u'<div id="main">\n')
 prt(u'<noscript><div id="no-resize" class="msgbox">')
 prt(u'If you had javascript, image resizing might work')
 prt(u'</div></noscript>\n')
-prt(u'<div onclick="return resize();" id="rescaled-msg" class="msgbox"></div>\n')
-prt(u'<img id="main-image" onclick="return resize();" ')
+prt(u'<div onclick="return WP.size.toggle();" id="rescaled-msg" class="msgbox"></div>\n')
+prt(u'<img id="main-image" onclick="return WP.size.toggle();" ')
 prtfields((u'src', img), (u'alt', m), (u'width', post.width), (u'height', post.height))
 prt(u'/>\n')
 prt(u"""<script type="text/javascript">
 <!--
-resize();
+WP.size.toggle();
 --></script>
 """)
 if rels:
