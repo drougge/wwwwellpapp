@@ -48,11 +48,11 @@ def prefix(n):
 	if n[0] in u"-~": return n[0]
 	return ""
 
-def prt(str):
-	outdata.append(str)
+def prt(*a):
+	outdata.extend(a)
 
 def prtfields(*fields):
-	map(lambda f: prt(f[0] + u'="' + escape(unicode(f[1])) + u'" '), fields)
+	map(lambda f: prt(f[0], u'="', escape(unicode(f[1])), u'" '), fields)
 
 def tagfmt(n, html_ok=True):
 	for s in u":_-/><&":
@@ -109,8 +109,8 @@ def prt_tags(tags):
 	prt(u'<ul id="tags">')
 	for n, t, impl in tags:
 		c = u'tag implied' if impl else u'tag'
-		prt(u'<li class="' + c + u'"><a class="tt-' + t.type + u'" href="')
-		prt(base + u'tag/' + t.guid + u'">'+ n + u'</a></li>\n')
+		prt(u'<li class="', c, u'"><a class="tt-', t.type, u'" href="',
+		    base, u'tag/', t.guid, u'">', n, u'</a></li>\n')
 	prt(u'</ul>')
 
 def prt_posts(posts):
@@ -119,8 +119,8 @@ def prt_posts(posts):
 		m = post.md5
 		prt(u'<span class="thumb"')
 		if user:
-			prt(u' id="p' + m + u'"')
-		prt(u'><a href="' + base + u'post/' + m + u'"><img ')
+			prt(u' id="p', m, u'"')
+		prt(u'><a href="', base, u'post/', m, u'"><img ')
 		prtfields((u'src', base + u'image/' + thumbsize + u'/' + m), (u'alt', m))
 		prtfields((u'title', tags_as_html(post)))
 		prt(u'/></a></span>\n')
@@ -132,13 +132,13 @@ def tags_as_html(post):
 	return u' '.join([tagfmt(n, False) for n in names])
 
 def prt_search_form(q=u''):
-	prt(u'<form action="' + base + u'search" method="get">\n')
-	prt(u'<div id="search-box">\n')
-	prt(u'<input type="text" name="q" id="search-q" value="' + escape(q, True))
-	prt(u'" onfocus="WP.comp_init(this);" />\n')
-	prt(u'<input type="submit" value="Search" />\n')
-	prt(u'</div>\n')
-	prt(u'</form>\n')
+	prt(u'<form action="', base, u'search" method="get">\n',
+	    u'<div id="search-box">\n',
+	    u'<input type="text" name="q" id="search-q" value="', escape(q, True),
+	    u'" onfocus="WP.comp_init(this);" />\n',
+	    u'<input type="submit" value="Search" />\n',
+	    u'</div>\n',
+	    u'</form>\n')
 
 def makelink(fn, *args):
 	fn = base + fn
@@ -175,37 +175,36 @@ def pagelinks(link, page, result_count):
 		if p == page:
 			prt(u' currentpage">')
 		else:
-			prt(u'"><a href="' + link)
-			prt(u'&amp;page=' + unicode(p) + u'">')
+			prt(u'"><a href="', link, u'&amp;page=', unicode(p), u'">')
 		prt(unicode(p))
 		if p != page:
 			prt(u'</a>')
 		prt(u'</span>\n')
 	if user:
 		if pages:
-			prt(u'<span class="pagelink"><a href="' + link)
-			prt(u'&amp;ALL=1">ALL</a></span>\n')
-		prt(u'<span class="pagelink"><a href="' + base);
-		prt(u'static/jserror.html" onclick="return WP.tm_init();">')
-		prt(u'Tagmode</a></span>\n')
+			prt(u'<span class="pagelink"><a href="', link,
+			     '&amp;ALL=1">ALL</a></span>\n')
+		prt(u'<span class="pagelink"><a href="' + base,
+		    u'static/jserror.html" onclick="return WP.tm_init();">',
+		    u'Tagmode</a></span>\n')
 	prt(u'</div>\n')
 	res = u''.join(outdata)
 	outdata = real_outdata
 	return res
 
 def prt_tagform(m):
-	prt(u'<form action="' + base + u'post-tag" method="post">\n')
-	prt(u'<div id="tag-form">\n')
-	prt(u'<input type="hidden" name="post" value="' + m + u'" />\n')
-	prt(u'<input type="text" name="tags" id="tag-q" ');
-	prt(u' onfocus="WP.comp_init(this);" />\n')
-	prt(u'<input type="submit" value="Tag" />\n')
-	prt(u'</div>\n')
-	prt(u'</form>\n')
+	prt(u'<form action="' + base + u'post-tag" method="post">\n',
+	    u'<div id="tag-form">\n',
+	    u'<input type="hidden" name="post" value="' + m + u'" />\n',
+	    u'<input type="text" name="tags" id="tag-q" ',
+	    u' onfocus="WP.comp_init(this);" />\n',
+	    u'<input type="submit" value="Tag" />\n',
+	    u'</div>\n',
+	    u'</form>\n')
 
 def prt_script(script, suffix=u'\n'):
-	prt('<script src="' + base + u'static/' + script)
-	prt(u'" type="text/javascript"></script>' + suffix)
+	prt('<script src="', base, u'static/', script,
+	    u'" type="text/javascript"></script>', suffix)
 
 def prt_head(extra_script=None):
 	prt(u"""<?xml version="1.0" encoding="utf-8"?>

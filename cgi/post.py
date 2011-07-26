@@ -23,12 +23,12 @@ else:
 	img = base + u'image/' + m + u'.' + post.ext
 
 prt_head(u'resize.js')
-prt(u'<div id="main">\n')
-prt(u'<noscript><div id="no-resize" class="msgbox">')
-prt(u'If you had javascript, image resizing might work')
-prt(u'</div></noscript>\n')
-prt(u'<div onclick="return WP.size.toggle();" id="rescaled-msg" class="msgbox"></div>\n')
-prt(u'<img id="main-image" onclick="return WP.size.toggle();" ')
+prt(u'<div id="main">\n',
+    u'<noscript><div id="no-resize" class="msgbox">',
+    u'If you had javascript, image resizing might work',
+    u'</div></noscript>\n',
+    u'<div onclick="return WP.size.toggle();" id="rescaled-msg" class="msgbox"></div>\n',
+    u'<img id="main-image" onclick="return WP.size.toggle();" ')
 prtfields((u'src', img), (u'alt', m), (u'width', post.width), (u'height', post.height))
 prt(u'/>\n')
 prt(u"""<script type="text/javascript">
@@ -37,12 +37,12 @@ WP.size.toggle();
 --></script>
 """)
 if rels:
-	prt(u'<div id="related">')
-	prt(u'Related posts:')
+	prt(u'<div id="related">',
+	    u'Related posts:')
 	prt_posts([Post(md5=md5) for md5 in rels])
 	prt(u'</div>\n')
-prt(u'</div>\n')
-prt(u'<div id="left">\n')
+prt(u'</div>\n',
+    u'<div id="left">\n')
 prt_search_form()
 prt_tags(sorted(tags))
 if user:

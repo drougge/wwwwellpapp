@@ -12,8 +12,8 @@ def forbidden():
 	print "Status: 403 Forbidden"
 	outdata = []
 	prt_head()
-	prt(u'<h1>Forbidden</h1>\n')
-	prt(u'<p>You are not allowed to access this directory.</p>\n')
+	prt(u'<h1>Forbidden</h1>\n',
+	    u'<p>You are not allowed to access this directory.</p>\n')
 	prt_foot()
 	finish()
 	exit(0)
@@ -47,15 +47,15 @@ dirs.sort()
 if pathpart != "/": dirs = [".."] + dirs
 
 prt_head()
-prt(u'<div id="left">\n')
-prt(u'<ul id="dirs">\n')
+prt(u'<div id="left">\n',
+    u'<ul id="dirs">\n')
 for d in dirs:
-	prt(u'<li><a href="' + d + u'/">' + d + u'</a></li>\n')
-prt(u'</ul>\n')
-prt(u'</div>\n')
-prt(u'<div id="main">\n')
-prt(u'<h1>' + pathpart + u'</h1>\n')
-prt(pagelinks(u'', 0, 0))
+	prt(u'<li><a href="', d, u'/">', d, u'</a></li>\n')
+prt(u'</ul>\n',
+    u'</div>\n',
+    u'<div id="main">\n',
+    u'<h1>', pathpart, u'</h1>\n',
+    pagelinks(u'', 0, 0))
 prt_posts([p[1] for p in sorted(posts)])
 prt(u'</div>\n')
 prt_foot()
