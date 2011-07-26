@@ -57,7 +57,7 @@ WP.getElementsByClassName = function (el, name) {
 	}
 	a = [];
 	re = new RegExp("\\b" + name + "\\b");
-	WP.foreach(document.all, function (el) {
+	WP.foreach(el.getElementsByTagName("*"), function (el) {
 		if (re.test(el.className)) { a.push(el); }
 	});
 	return a;
