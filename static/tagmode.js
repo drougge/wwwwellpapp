@@ -1,5 +1,3 @@
-WP.tm = {};
-
 /* Make a button. */
 WP.tm.mkb = function (txt, func, cn) {
 	var button;
@@ -20,91 +18,6 @@ WP.tm.mkb = function (txt, func, cn) {
 WP.tm.loop = function (func) {
 	var thumbs = WP.getElementsByClassName(document, "thumb");
 	WP.foreach(thumbs, func);
-};
-
-/* Set up tagmode. Either constuct or unhide interface, restore selection. */
-WP.tm.init = function () {
-	var form, div, tags, x;
-	if (WP.tm.enabled) { return WP.tm.disable(); }
-	WP.tm.tagbar = document.getElementById("tagbar");
-	if (!WP.tm.inited) {
-		try {
-			x = new XMLHttpRequest();
-		} catch (e) {
-			alert("Sorry, tagmode doesn't work in your browser.");
-			return false;
-		}
-		x = null;
-		WP.tm.loop(function (t) {
-			var span = document.createElement("span");
-			t.insertBefore(span, t.firstChild);
-			t.onclick = WP.tm.toggle_ev;
-			WP.foreach(t.getElementsByTagName("a"), function (a) {
-				a.id = "a" + t.id.substr(1);
-			});
-		});
-		WP.foreach(document.getElementsByTagName("a"), function (a) {
-			if (!a.onclick && !a.id) { a.onclick = WP.tm.confirm; }
-		});
-		tags = document.getElementById("tags");
-		if (tags) {
-			WP.foreach(tags.getElementsByTagName("a"), function (el) {
-				el.onclick = WP.tm.tagLinkClick;
-			});
-		}
-		WP.tm.disablable = [];
-		form = document.createElement("form");
-		form.onsubmit = WP.tm.apply;
-		form.id = "tag";
-		div = document.createElement("div");
-		div.id = "tmr";
-		div.appendChild(WP.tm.mkb(" Apply ", WP.tm.apply, "apply"));
-		WP.tm.spinner = document.createElement("img");
-		WP.tm.spinner.src = WP.uribase + "static/ajaxload.gif";
-		div.appendChild(WP.tm.spinner);
-		div.appendChild(WP.tm.mkb("Exit tagmode", WP.tm.disable, "exit"));
-		form.appendChild(div);
-		div = document.createElement("div");
-		div.id = "tml";
-		div.appendChild(WP.tm.mkb("Select all", function () {
-			WP.tm.loop(function (t) {
-				t.className = "thumb selected";
-			});
-		}, null));
-		div.appendChild(WP.tm.mkb("Select none", function () {
-			WP.tm.loop(function (t) {
-				t.className = "thumb";
-			});
-		}, null));
-		div.appendChild(WP.tm.mkb("Toggle selection", function () {
-			WP.tm.loop(WP.tm.toggle);
-		}, null));
-
-		form.appendChild(div);
-		WP.tm.input = document.createElement("input");
-		WP.tm.disablable.push(WP.tm.input);
-		WP.tm.input.type = "text";
-		WP.tm.input.id = "tagmode-tags";
-		div = document.createElement("div");
-		div.id = "tmt";
-		div.appendChild(WP.tm.input);
-		form.appendChild(div);
-		WP.tm.tagbar.appendChild(form);
-		WP.tm.lock_count = 0;
-		WP.tm.inited = true;
-	}
-	if (WP.tm.saved) {
-		WP.tm.loop(function (t) {
-			if (WP.tm.saved[t.id]) {
-				t.className = "thumb selected";
-			}
-		});
-	}
-	WP.tm.enabled = true;
-	WP.tm.tagbar.style.display = "block";
-	WP.tm.input.focus();
-	WP.comp.init(WP.tm.input);
-	return false;
 };
 
 /* Confirm leaving tagmode with unsaved changes. */
@@ -361,4 +274,82 @@ WP.tm.createTagInit = function (types) {
 		WP.tm.tagbar.appendChild(form);
 	});
 	WP.tm.input.value = "";
+};
+
+/* Set up tagmode. Either constuct or unhide interface, restore selection. */
+WP.tm.init = function () {
+	var form, div, tags;
+	if (WP.tm.enabled) { return WP.tm.disable(); }
+	WP.tm.tagbar = document.getElementById("tagbar");
+	if (!WP.tm.inited) {
+		WP.tm.loop(function (t) {
+			var span = document.createElement("span");
+			t.insertBefore(span, t.firstChild);
+			t.onclick = WP.tm.toggle_ev;
+			WP.foreach(t.getElementsByTagName("a"), function (a) {
+				a.id = "a" + t.id.substr(1);
+			});
+		});
+		WP.foreach(document.getElementsByTagName("a"), function (a) {
+			if (!a.onclick && !a.id) { a.onclick = WP.tm.confirm; }
+		});
+		tags = document.getElementById("tags");
+		if (tags) {
+			WP.foreach(tags.getElementsByTagName("a"), function (el) {
+				el.onclick = WP.tm.tagLinkClick;
+			});
+		}
+		WP.tm.disablable = [];
+		form = document.createElement("form");
+		form.onsubmit = WP.tm.apply;
+		form.id = "tag";
+		div = document.createElement("div");
+		div.id = "tmr";
+		div.appendChild(WP.tm.mkb(" Apply ", WP.tm.apply, "apply"));
+		WP.tm.spinner = document.createElement("img");
+		WP.tm.spinner.src = WP.uribase + "static/ajaxload.gif";
+		div.appendChild(WP.tm.spinner);
+		div.appendChild(WP.tm.mkb("Exit tagmode", WP.tm.disable, "exit"));
+		form.appendChild(div);
+		div = document.createElement("div");
+		div.id = "tml";
+		div.appendChild(WP.tm.mkb("Select all", function () {
+			WP.tm.loop(function (t) {
+				t.className = "thumb selected";
+			});
+		}, null));
+		div.appendChild(WP.tm.mkb("Select none", function () {
+			WP.tm.loop(function (t) {
+				t.className = "thumb";
+			});
+		}, null));
+		div.appendChild(WP.tm.mkb("Toggle selection", function () {
+			WP.tm.loop(WP.tm.toggle);
+		}, null));
+
+		form.appendChild(div);
+		WP.tm.input = document.createElement("input");
+		WP.tm.disablable.push(WP.tm.input);
+		WP.tm.input.type = "text";
+		WP.tm.input.id = "tagmode-tags";
+		div = document.createElement("div");
+		div.id = "tmt";
+		div.appendChild(WP.tm.input);
+		form.appendChild(div);
+		WP.tm.tagbar.appendChild(form);
+		WP.tm.lock_count = 0;
+		WP.tm.inited = true;
+	}
+	if (WP.tm.saved) {
+		WP.tm.loop(function (t) {
+			if (WP.tm.saved[t.id]) {
+				t.className = "thumb selected";
+			}
+		});
+	}
+	WP.tm.enabled = true;
+	WP.tm.tagbar.style.display = "block";
+	WP.tm.input.focus();
+	WP.comp.init(WP.tm.input);
+	return false;
 };

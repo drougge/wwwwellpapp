@@ -1,35 +1,3 @@
-WP.comp = {};
-
-WP.comp.init = function (el) {
-	var pos, load;
-	if (WP.comp[el.id]) { return; }
-	try {
-		el.setAttribute("autocomplete", "off");
-	} catch (e) {}
-	pos = WP.findpos(el);
-	load = document.createElement("img");
-	load.className = "ajaxload";
-	load.style.left = String(pos.x + el.offsetWidth + 4) + "px";
-	load.style.top = String(pos.y + 2) + "px";
-	if (el.id === "tagmode-tags") { load.style.position = "fixed"; }
-	load.src = WP.uribase + "static/ajaxload.gif";
-	load.style.visibility = "hidden";
-	document.getElementsByTagName("body")[0].appendChild(load);
-	WP.comp[el.id] = {"value": el.value, "x": null, "skip": false,
-	                  "load": load, "abort": false, "tO": false,
-	                  "r": null, "list": null, "complete": ""};
-	el.onfocus = null;
-	el.onkeypress = WP.comp.soon_ev;
-	/* We don't want to remove it before the element that was clicked   *
-	 * has had a chance to insert the text, if that's what was clicked. *
-	 * (Yes, it seems we lose focus before the click registers.)        *
-	 */
-	el.onblur = function () {
-		var el = this;
-		setTimeout(function () { WP.comp.remove(el); }, 140);
-	};
-};
-
 /* This is called when we might soon want to run completion.  *
  * It gets aborted again if the user types another character. *
  */
@@ -265,4 +233,34 @@ WP.comp.selection_insert = function (el, comp, full) {
 		el.focus();
 	} catch (e) {}
 	return false;
+};
+
+WP.comp.init = function (el) {
+	var pos, load;
+	if (WP.comp[el.id]) { return; }
+	try {
+		el.setAttribute("autocomplete", "off");
+	} catch (e) {}
+	pos = WP.findpos(el);
+	load = document.createElement("img");
+	load.className = "ajaxload";
+	load.style.left = String(pos.x + el.offsetWidth + 4) + "px";
+	load.style.top = String(pos.y + 2) + "px";
+	if (el.id === "tagmode-tags") { load.style.position = "fixed"; }
+	load.src = WP.uribase + "static/ajaxload.gif";
+	load.style.visibility = "hidden";
+	document.getElementsByTagName("body")[0].appendChild(load);
+	WP.comp[el.id] = {"value": el.value, "x": null, "skip": false,
+	                  "load": load, "abort": false, "tO": false,
+	                  "r": null, "list": null, "complete": ""};
+	el.onfocus = null;
+	el.onkeypress = WP.comp.soon_ev;
+	/* We don't want to remove it before the element that was clicked   *
+	 * has had a chance to insert the text, if that's what was clicked. *
+	 * (Yes, it seems we lose focus before the click registers.)        *
+	 */
+	el.onblur = function () {
+		var el = this;
+		setTimeout(function () { WP.comp.remove(el); }, 140);
+	};
 };

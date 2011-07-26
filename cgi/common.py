@@ -135,7 +135,7 @@ def prt_search_form(q=u''):
 	prt(u'<form action="' + base + u'search" method="get">\n')
 	prt(u'<div id="search-box">\n')
 	prt(u'<input type="text" name="q" id="search-q" value="' + escape(q, True))
-	prt(u'" onfocus="WP.comp.init(this);" />\n')
+	prt(u'" onfocus="WP.comp_init(this);" />\n')
 	prt(u'<input type="submit" value="Search" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')
@@ -186,7 +186,7 @@ def pagelinks(link, page, result_count):
 			prt(u'<span class="pagelink"><a href="' + link)
 			prt(u'&amp;ALL=1">ALL</a></span>\n')
 		prt(u'<span class="pagelink"><a href="' + base);
-		prt(u'static/jserror.html" onclick="return WP.tm.init();">')
+		prt(u'static/jserror.html" onclick="return WP.tm_init();">')
 		prt(u'Tagmode</a></span>\n')
 	prt(u'</div>\n')
 	res = u''.join(outdata)
@@ -198,12 +198,16 @@ def prt_tagform(m):
 	prt(u'<div id="tag-form">\n')
 	prt(u'<input type="hidden" name="post" value="' + m + u'" />\n')
 	prt(u'<input type="text" name="tags" id="tag-q" ');
-	prt(u' onfocus="WP.comp.init(this);" />\n')
+	prt(u' onfocus="WP.comp_init(this);" />\n')
 	prt(u'<input type="submit" value="Tag" />\n')
 	prt(u'</div>\n')
 	prt(u'</form>\n')
 
-def prt_head(extra=u''):
+def prt_script(script, suffix=u'\n'):
+	prt('<script src="' + base + u'static/' + script)
+	prt(u'" type="text/javascript"></script>' + suffix)
+
+def prt_head(extra_script=None):
 	prt(u"""<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -215,17 +219,17 @@ def prt_head(extra=u''):
 	<script src="%(base)sstatic/common.js" type="text/javascript"></script>
 	<script type="text/javascript"><!--
 		WP.uribase = "%(base)s";
-	--></script>
-	<script src="%(base)sstatic/complete.js" type="text/javascript"></script>
-	""" % {"base": base})
-	if user:
-		prt(u'<script src="' + base + u'static/tagmode.js" type="text/javascript"></script>\n\t')
-	prt(extra)
-	prt(u'</head>\n<body>\n')
+	--></script>""" % {"base": base})
+	if extra_script:
+		prt(u'\n\t')
+		prt_script(extra_script, u'');
+	prt(u'\n</head>\n<body>\n')
 	if user:
 		prt(u'<div id="tagbar"></div>\n')
 
 def prt_foot():
+	prt_script(u'complete.js')
+	if user: prt_script(u'tagmode.js')
 	prt(u'</body></html>')
 
 def finish(ctype = "text/html"):

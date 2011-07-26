@@ -1,4 +1,26 @@
-var WP = {};
+var WP = {"comp": {}, "tm": {}};
+
+(function () {
+	try {
+		var x = new XMLHttpRequest();
+		WP.ajax_ok = true;
+	} catch (e) {}
+}());
+
+WP.comp_init = function (el) {
+	if (WP.ajax_ok && WP.comp.init) { WP.comp.init(el); }
+};
+
+WP.tm_init = function () {
+	if (!WP.ajax_ok) {
+		alert("Sorry, tagmode doesn't work in your browser.");
+	} else if (WP.tm.init) {
+		WP.tm.init();
+	} else {
+		alert("Wait until the page has finished loading.");
+	}
+	return false;
+};
 
 /* I wish javascript had foreach for arrays, but alas, I have to provide *
  * it myself. Does what you'd expect.                                    *
