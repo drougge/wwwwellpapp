@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>WWWwellpapp help</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body class="help">
+	<h1>WWWwellpapp help</h1>
+	<h2>Searching</h2>
+	<p>
+		The home page displays the latest posts added to wellpapp.
+		On the left you have a search field where you can type in a
+		search expression. Tags are separated by space, and can be
+		prefixed with - to exclude, ! to require fully set tags,
+		and ~ to require weakly set tags.
+	</p>
+	<p>
+		Under this field there is a list of the most common tags in
+		the search result you're viewing (excluding the tags you
+		searched for). You can click on of them to see posts with
+		that tag instead.
+	</p>
+	<p>
+		I you have a browser with modern javascript support you get
+		completion in text fields (like the search box). This
+		happens for any word you type with at least two characters.
+		It pops up suggestions under the text field, you can use
+		the mouse or arrow keys + enter to select one. In most
+		browsers you can also press tab to get the common prefix of
+		all suggestions (which is the whole thing if there is only
+		a single suggestion).
+	</p>
+	<p>
+		The suggestion mechanism tries to be clever, and will not
+		suggest aliases unless nothing else matches, and will
+		suggest approximate matches if nothing matches exactly.
+	</p>
+	<h2>Tagging</h2>
+	<p>
+		There are two ways to tag. The first is to go to an image
+		and tag just that image. This works in all browsers. If you
+		try to use a tag that doesn't exist you get to choose a
+		type for it and create it.
+	</p>
+	<h3>Tagmode</h3>
+	<p>
+		The second (and much more convenient) way is to use the tag
+		mode. This can be used on any search result (or search
+		result-like page), but only if your browser has modern
+		javascript support.
+	</p>
+	<p>
+		First click Tagmode to enable it. You get the tagmode
+		interface at the top of the page. Clicking a thumbnail
+		toggles selecting that image, and you have buttons to
+		select all, none, or the inverse of what you have selected
+		now. Select the images you wish to tag.
+	</p>
+	<p>
+		Now you can add or remove tags to/from these images. Say
+		you want them to have the tag foo, and the tag bar weakly,
+		but not the tag baz. You would enter "foo ~bar -baz" and
+		press enter (or click apply). If any of these tags don't
+		exist, you will be presented with an opportunity to create
+		them. Choose a type and click create, or click cancel to
+		return the tag to your text field (maybe you misspelled
+		it). It isn't possible to use the rest of tagmode while
+		creating tags.
+	</p>
+	<p>
+		You can also click on one of the tags on the left to enter
+		them in the field. Hovering over one of the images shows
+		what tags it currently has.
+	</p>
+</body>
+</html>

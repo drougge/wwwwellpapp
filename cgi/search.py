@@ -64,10 +64,10 @@ else:
 	prt(u'No query?')
 prt(u'</div>\n')
 
-prt(u'<div id="left">\n')
+prt_left_head()
 prt_search_form(q)
 prt_tags(tags)
-prt(u'</div>\n')
+prt_left_foot()
 
 prt_foot()
 finish()

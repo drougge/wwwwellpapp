@@ -211,6 +211,15 @@ def prt_script(script, suffix=u'\n'):
 	prt('<script src="', base, u'static/', script,
 	    u'" type="text/javascript"></script>', suffix)
 
+def prt_left_head():
+	prt(u'<div id="left">\n')
+
+def prt_left_foot():
+	prt(u'<div id="help"><a href="',
+	    base, u'static/help.html',
+	    u'">Help</a></div>\n',
+	    u'</div>\n')
+
 def prt_head(extra_script=None):
 	prt(u"""<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">

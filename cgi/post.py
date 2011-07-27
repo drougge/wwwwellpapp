@@ -54,13 +54,13 @@ if rels:
 	    u'Related posts:')
 	prt_posts([Post(md5=md5) for md5 in rels])
 	prt(u'</div>\n')
-prt(u'</div>\n',
-    u'<div id="left">\n')
+prt(u'</div>\n')
+prt_left_head()
 prt_search_form()
 prt_tags(sorted(tags))
 if user:
 	prt_tagform(m)
-prt(u'</div>\n')
+prt_left_foot()
 prt_foot()
 
 finish()
