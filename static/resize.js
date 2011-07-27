@@ -23,14 +23,21 @@
 		var ww, wh;   // Window size
 		var iw, ih;   // Rescaled image size
 		var hih;      // Temp for checking height scaling
-		if (document.body && document.body.offsetWidth) {
-			ww = document.body.offsetWidth;
-			wh = document.body.offsetHeight;
+		ww = [0];
+		wh = [0];
+		if (document.body) {
+			ww.push(document.body.offsetWidth);
+			wh.push(document.body.offsetHeight);
 		}
-		if (window.innerWidth && window.innerHeight) {
-			ww = window.innerWidth;
-			wh = window.innerHeight;
+		if (document.documentElement) {
+			ww.push(document.documentElement.clientWidth);
+			wh.push(document.documentElement.clientHeight);
 		}
+		ww.push(window.innerWidth);
+		wh.push(window.innerHeight);
+		ww = WP.max(ww);
+		wh = WP.max(wh);
+		if (ww < 1 || wh < 1) { return false; }
 
 		if (!WP.size.state) {
 			WP.size.img = document.getElementById("main-image");

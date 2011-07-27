@@ -87,6 +87,15 @@ var WP = {"comp": {}, "tm": {}};
 		});
 		return a;
 	};
+
+	// No, Math.max.apply does not portably work.
+	WP.max = function (a) {
+		var v = -Infinity;
+		WP.foreach(a, function (c) {
+			if (c > v) { v = c; }
+		});
+		return v;
+	};
 }());
 
 var JSON;
