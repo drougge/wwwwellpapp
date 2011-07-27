@@ -134,7 +134,7 @@
 		c.load.style.visibility = "visible";
 		c.abort = false;
 		x = new XMLHttpRequest();
-		x.open("GET", WP.uribase + "ajax-completetag?q=" + encodeURIComponent(word));
+		x.open("GET", WP.uribase + "ajax-completetag?q=" + encodeURIComponent(word), true);
 		x.onreadystatechange = function () {
 			var txt, r;
 			if (c.abort) { return; }
@@ -149,7 +149,7 @@
 			WP.comp.new_alts(el, r);
 		};
 		c.x = x;
-		x.send();
+		x.send(null);
 	};
 
 	/* Don't show any suggestions anymore. */

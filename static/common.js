@@ -5,7 +5,9 @@ var WP = {"comp": {}, "tm": {}};
 
 	try {
 		var x = new XMLHttpRequest();
-		WP.ajax_ok = true;
+		if (x.setRequestHeader) {
+			WP.ajax_ok = true;
+		}
 	} catch (e) {}
 
 	WP.comp_init = function (el) {
