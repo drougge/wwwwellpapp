@@ -9,6 +9,7 @@ import re
 cgitb.enable()
 
 per_page = 32
+outdata_head = []
 outdata = []
 client = dbclient(dbcfg(None, [".wellpapprc"]))
 fs = FieldStorage(keep_blank_values=True)
@@ -177,14 +178,22 @@ def pagelinks(link, page, result_count):
 			prt(u'<span class="pagelink linkspace">...</span>\n')
 		prev = p
 		prt(u'<span class="pagelink')
+		plink = link +  u'&amp;page=' + unicode(p)
 		if p == page:
 			prt(u' currentpage">')
 		else:
-			prt(u'"><a href="', link, u'&amp;page=', unicode(p), u'">')
+			prt(u'"><a href="', plink, u'">')
 		prt(unicode(p))
 		if p != page:
 			prt(u'</a>')
 		prt(u'</span>\n')
+		if p == 0:
+			prt_rel(plink, "first")
+		if p == page - 1:
+			prt_rel(plink, "prev")
+		elif p == page + 1:
+			prt_rel(plink, "next")
+	if pages: prt_rel(plink, "last")
 	if user:
 		if pages:
 			prt(u'<span class="pagelink"><a href="', link,
@@ -221,6 +230,8 @@ def prt_left_foot():
 	    u'</div>\n')
 
 def prt_head(extra_script=None):
+	global outdata
+	outdata = outdata_head
 	prt(u"""<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -232,13 +243,23 @@ def prt_head(extra_script=None):
 	<script src="%(base)sstatic/common.js" type="text/javascript"></script>
 	<script type="text/javascript"><!--
 		WP.uribase = "%(base)s";
-	--></script>""" % {"base": base})
+	--></script>
+	<link rel="help" href="%(base)sstatic/help.html" />""" % {"base": base})
 	if extra_script:
 		prt(u'\n\t')
 		prt_script(extra_script, u'');
+	outdata = []
 	prt(u'\n</head>\n<body>\n')
 	if user:
 		prt(u'<div id="tagbar"></div>\n')
+
+def prt_rel(href, rel):
+	if "ALL" in fs: return
+	global outdata
+	real_outdata = outdata
+	outdata = outdata_head
+	prt(u'\n\t<link rel="', rel, u'" href="', href, u'" />')
+	outdata = real_outdata
 
 def prt_foot():
 	prt_script(u'complete.js')
@@ -246,7 +267,7 @@ def prt_foot():
 	prt(u'</body></html>')
 
 def finish(ctype = "text/html"):
-	data = u''.join(outdata).encode("utf-8")
+	data = u''.join(outdata_head + outdata).encode("utf-8")
 	ctype = str(ctype)
 	if (ctype[:5] == "text/" or ctype == "application/json") and "charset" not in ctype:
 		ctype += "; charset=UTF-8"
