@@ -241,7 +241,7 @@
 			div = document.createElement("div");
 			div.className = "createtag";
 			form.appendChild(div);
-			div.appendChild(document.createTextNode("Create " + n + " "));
+			div.appendChild(document.createTextNode("Create " + WP.tag_clean(n) + " "));
 			input = document.createElement("input");
 			input.type = "hidden";
 			input.name = "name";

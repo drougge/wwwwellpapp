@@ -10,7 +10,7 @@ name = getarg("name", u'')
 if name:
 	try:
 		type = getarg("type")
-		client.add_tag(name, type)
+		client.add_tag(clean(name), type)
 		tags = name
 	except Exception:
 		msg = u'Failed to create'
@@ -42,7 +42,7 @@ if full or weak or remove:
 			p = client.get_post(p.md5)
 			res[p.md5] = tags_as_html(p)
 	client.end_transaction()
-if not res and not msg and not failed:
+if not res and not msg and not failed and not (name and name[0] == '-'):
 	msg = u'Nothing to do?'
 
 res = dict(failed=u' '.join(failed), m=res, msg=msg)
