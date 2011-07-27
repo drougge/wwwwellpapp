@@ -51,7 +51,7 @@ li:nth-child(even).implied {
 	text-align: center;
 	margin-bottom: 8px;
 	color: #000;
-	display: inline-block;
+	display: block;
 }
 #rescaled-msg {
 	color: #b00;
