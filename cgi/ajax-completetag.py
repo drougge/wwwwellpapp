@@ -38,6 +38,6 @@ if full_tag[0] or alts:
 	res["type"] = full_tag[1]
 	if len(alts) > 20: alts = []
 	res["alts"] = alts
-prt(json.dumps(res));
+prt(json.dumps(res))
 
 finish("application/json")

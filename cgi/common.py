@@ -20,6 +20,12 @@ thumbsize = unicode(client.cfg.thumb_sizes.split()[0])
 assert thumbsize
 
 def getarg(n, default=None, as_list=False):
+	"""Get a (cgi) argument as a unicode string.
+	Return the first occurance of the argument without as_list, and all
+	occurances in a list with.
+	If you don't pass a default you get an exception if the argument was
+	not provided.
+	"""
 	if default is not None and n not in fs: return default
 	a = fs[n]
 	if isinstance(a, list):
@@ -37,6 +43,7 @@ def _argdec(v):
 	return v
 
 def notfound():
+	"""Return a 404 error"""
 	print "Status: 404 Not Found"
 	print "Content-Type: text/html; charset=UTF-8"
 	print
@@ -44,16 +51,24 @@ def notfound():
 	exit()
 
 def clean(n):
+	"""Get tagname without prefix"""
 	if n[0] in u"-~": return n[1:]
 	return n
 def prefix(n):
+	"""Get prefix of tagname (if any)"""
 	if n[0] in u"-~": return n[0]
 	return ""
 
 def prt(*a):
+	"""Print (unicode) to client.
+	Conceptually at least, nothing is actually sent until finish is called.
+	"""
 	outdata.extend(a)
 
 def prtfields(*fields):
+	"""Print (fieldname, value) pairs as html attributes
+	Output ends with a space.
+	"""
 	map(lambda f: prt(f[0], u'="', escape(unicode(f[1])), u'" '), fields)
 
 _zwsp_pre_re = re.compile(ur'([(<\[]|\b\d)')
@@ -61,6 +76,7 @@ _zwsp_post_re = re.compile(ur'([:/)>\]&\\,\._-])')
 _zwsp_nr_re = re.compile(ur'(\d+)')
 _zwsp_re = re.compile(ur'\u200b+')
 def tagfmt(n, html_ok=True):
+	"""Format a tagname for printing in html"""
 	n = _zwsp_pre_re.sub(u'\u200b\\1', n)
 	n = _zwsp_post_re.sub(u'\\1\u200b', n)
 	n = _zwsp_nr_re.sub(u'\u200b\\1\u200b', n)
@@ -68,10 +84,14 @@ def tagfmt(n, html_ok=True):
 	return escape(n)
 
 def tagname(guid):
+	"""Tag guid -> name"""
 	tag = client.get_tag(guid)
 	return tag.name
 
 def taglist(post, impl):
+	"""Get a list of either implied or non-implied tags of a post.
+	Returns (html formated name, tag, impl).
+	"""
 	if impl:
 		full, weak = post.impltags, post.implweaktags
 	else:
@@ -81,6 +101,9 @@ def taglist(post, impl):
 	return full + weak
 
 def tagcloud(guids):
+	"""Get "tag cloud" for the search specified by guids
+	Same return format as taglist, impl is always False.
+	"""
 	guids = set(guids)
 	posts = client.search_post(guids=guids, wanted=["tagname", "tagguid", "tagdata"])[0]
 	tags = {}
@@ -94,11 +117,13 @@ def tagcloud(guids):
 	return [(tagfmt(tags[g].name), tags[g], False) for g in show]
 
 def tagtypes():
+	"""List of tag types. (Faked, currently.)"""
 	# The server doesn't support this yet, so fake it for now
 	return [u'unspecified', u'ambiguous', u'meta', u'inimage',
 	        u'photographer', u'person', u'location', u'text', u'group']
 
 def tag_post(p, full, weak, remove):
+	"""Apply tag changes to a post"""
 	post_full = set([t.guid for t in p.tags])
 	post_weak = set([t.guid for t in p.weaktags])
 	set_full = full.difference(post_full)
@@ -111,6 +136,7 @@ def tag_post(p, full, weak, remove):
 		return True
 
 def prt_tags(tags):
+	"""Print #tags list"""
 	if not tags: return
 	prt(u'<ul id="tags">')
 	for n, t, impl in tags:
@@ -120,6 +146,7 @@ def prt_tags(tags):
 	prt(u'</ul>')
 
 def prt_posts(posts):
+	"""Print #thumbs view"""
 	prt(u'<div id="thumbs">\n')
 	for post in posts:
 		m = post.md5
@@ -133,11 +160,13 @@ def prt_posts(posts):
 	prt(u'</div>\n')
 
 def tags_as_html(post):
+	"""Returns single string of HTML escaped tag names for post"""
 	names = sorted([t.name for t in post.tags or []])
 	names += sorted([u'~' + t.name for t in post.weaktags or []])
 	return u' '.join([tagfmt(n, False) for n in names])
 
 def prt_search_form(q=u''):
+	"""Print search form"""
 	prt(u'<form action="', base, u'search" method="get">\n',
 	    u'<div id="search-box">\n',
 	    u'<input type="text" name="q" id="search-q" value="', escape(q, True),
@@ -147,6 +176,7 @@ def prt_search_form(q=u''):
 	    u'</form>\n')
 
 def makelink(fn, *args):
+	"""Make a html link to fn with (field, value) pairs as arguments"""
 	fn = base + fn
 	if not args: return fn
 	if u'?' in fn:
@@ -157,6 +187,11 @@ def makelink(fn, *args):
 	return fn + middle + escape(args)
 
 def pagelinks(link, page, result_count):
+	"""Returns a string with the pagelinks suitable for this search
+	link is the base-link, page is current page, result_count is number
+	of results we can display (not pages).
+	Also puts rel-links in <head>
+	"""
 	global outdata
 	pages = range(result_count // per_page + 1)
 	if len(pages) == 1:
@@ -207,6 +242,7 @@ def pagelinks(link, page, result_count):
 	return res
 
 def prt_tagform(m):
+	"""Print form for tagging single image (m)"""
 	prt(u'<form action="' + base + u'post-tag" method="post">\n',
 	    u'<div id="tag-form">\n',
 	    u'<input type="hidden" name="post" value="' + m + u'" />\n',
@@ -217,19 +253,24 @@ def prt_tagform(m):
 	    u'</form>\n')
 
 def prt_script(script, suffix=u'\n'):
+	"""Print a script tag"""
 	prt('<script src="', base, u'static/', script,
 	    u'" type="text/javascript"></script>', suffix)
 
 def prt_left_head():
+	"""Print head of #left div"""
 	prt(u'<div id="left">\n')
 
 def prt_left_foot():
+	"""Print foot of #left div"""
 	prt(u'<div id="help"><a href="',
 	    base, u'static/help.html',
 	    u'">Help</a></div>\n',
 	    u'</div>\n')
 
 def prt_head(extra_script=None):
+	"""Print page head
+	Call before any other output"""
 	global outdata
 	outdata = outdata_head
 	prt(u"""<?xml version="1.0" encoding="utf-8"?>
@@ -247,13 +288,14 @@ def prt_head(extra_script=None):
 	<link rel="help" href="%(base)sstatic/help.html" />""" % {"base": base})
 	if extra_script:
 		prt(u'\n\t')
-		prt_script(extra_script, u'');
+		prt_script(extra_script, u'')
 	outdata = []
 	prt(u'\n</head>\n<body>\n')
 	if user:
 		prt(u'<div id="tagbar"></div>\n')
 
 def prt_rel(href, rel):
+	"""Add a rel link to head (if appropriate)"""
 	if "ALL" in fs: return
 	global outdata
 	real_outdata = outdata
@@ -262,11 +304,13 @@ def prt_rel(href, rel):
 	outdata = real_outdata
 
 def prt_foot():
+	"""Print page foot"""
 	prt_script(u'complete.js')
 	if user: prt_script(u'tagmode.js')
 	prt(u'</body></html>')
 
 def finish(ctype = "text/html"):
+	"""Finish up, actually sending page to client."""
 	data = u''.join(outdata_head + outdata).encode("utf-8")
 	ctype = str(ctype)
 	if (ctype[:5] == "text/" or ctype == "application/json") and "charset" not in ctype:
