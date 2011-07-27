@@ -47,13 +47,13 @@ dirs.sort()
 if pathpart != "/": dirs = [".."] + dirs
 
 prt_head()
-prt(u'<div id="left">\n',
-    u'<ul id="dirs">\n')
+prt_left_head()
+prt(u'<ul id="dirs">\n')
 for d in dirs:
 	prt(u'<li><a href="', d, u'/">', d, u'</a></li>\n')
-prt(u'</ul>\n',
-    u'</div>\n',
-    u'<div id="main">\n',
+prt(u'</ul>\n')
+prt_left_foot()
+prt(u'<div id="main">\n',
     u'<h1>', pathpart, u'</h1>\n',
     pagelinks(u'', 0, 0))
 prt_posts([p[1] for p in sorted(posts)])
