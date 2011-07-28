@@ -105,16 +105,9 @@ def tagcloud(guids):
 	Same return format as taglist, impl is always False.
 	"""
 	guids = set(guids)
-	posts = client.search_post(guids=guids, wanted=["tagname", "tagguid", "tagdata"])[0]
-	tags = {}
-	guid = {}
-	for p in posts:
-		for t in p.tags:
-			tags[t.guid] = t
-			guid[t.guid] = guid.get(t.guid, 0) + 1
-	show = sorted(guid, lambda x, y: cmp(guid[y], guid[x]))
-	show = [g for g in show[:20 + len(guids)] if g not in guids]
-	return [(tagfmt(tags[g].name), tags[g], False) for g in show]
+	range = (0, 19 + len(guids))
+	tags = client.find_tags("EI", "", range=range, guids=guids, order="-post")
+	return [(tagfmt(t.name), t, False) for t in tags if t.guid not in guids]
 
 def tagtypes():
 	"""List of tag types. (Faked, currently.)"""

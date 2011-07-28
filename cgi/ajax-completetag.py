@@ -14,7 +14,7 @@ def _completefuzz(word):
 def complete(word):
 	for t, get in ("EI", lambda t: t.name), ("EAI", lambda t: t.alias[0]), \
 	              ("FI", lambda t: t.name), ("FAI", lambda t: t.alias[0]):
-		tags = client.find_tags(t, word).values()
+		tags = client.find_tags(t, word)
 		if len(tags) == 1:
 			t = tags[0]
 			return (get(t), t.type), []
