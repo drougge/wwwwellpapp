@@ -110,10 +110,8 @@ def tagcloud(guids):
 	return [(tagfmt(t.name), t, False) for t in tags if t.guid not in guids]
 
 def tagtypes():
-	"""List of tag types. (Faked, currently.)"""
-	# The server doesn't support this yet, so fake it for now
-	return [u'unspecified', u'ambiguous', u'meta', u'inimage',
-	        u'photographer', u'person', u'location', u'text', u'group']
+	"""List of tag types."""
+	return client.metalist("tagtypes")
 
 def tag_post(p, full, weak, remove):
 	"""Apply tag changes to a post"""
