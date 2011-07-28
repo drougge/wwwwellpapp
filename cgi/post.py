@@ -16,6 +16,7 @@ if not post: notfound()
 
 tags = taglist(post, False) + taglist(post, True)
 rels = client.post_rels(m)
+ordered_tags = [t for t in post.tags if t.ordered]
 
 prt_head(u'resize.js')
 prt(u'<div id="main">\n',
@@ -50,9 +51,18 @@ WP.size.toggle(true);
 --></script>
 """)
 if rels:
-	prt(u'<div id="related">',
-	    u'Related posts:')
+	prt(u'<div id="related" class="underimg">\n',
+	    u'<div>Related posts</div>\n')
 	prt_posts([Post(md5=md5) for md5 in rels])
+	prt(u'</div>\n')
+if ordered_tags:
+	prt(u'<div id="ordered" class="underimg">\n')
+	for t in ordered_tags:
+		prt(u'<div class="tt-', t.type , u'">', tagfmt(t.name), u'</div>\n')
+		posts = client.search_post(guids=[t.guid], order="group")[0]
+		pos = [p.md5 for p in posts].index(m)
+		for p in posts[pos - 1:pos + 2]:
+			prt_thumb(p, p.md5 != m)
 	prt(u'</div>\n')
 prt(u'</div>\n')
 prt_left_head()

@@ -136,18 +136,32 @@ def prt_tags(tags):
 		    base, u'tag/', t.guid, u'">', n, u'</a></li>\n')
 	prt(u'</ul>')
 
+def prt_thumb(post, link=True):
+	"""Print a single post in #thumbs view (or similar)"""
+	m = post.md5
+	prt(u'<span class="thumb"')
+	if user:
+		prt(u' id="p', m, u'"')
+	prt(u'>')
+	if link:
+		prt(u'<a href="', base, u'post/', m, u'">')
+	else:
+		prt(u'<div>')
+	prt(u'<img ')
+	prtfields((u'src', base + u'image/' + thumbsize + u'/' + m), (u'alt', m))
+	prtfields((u'title', tags_as_html(post)))
+	prt(u'/>')
+	if link:
+		prt(u'</a>')
+	else:
+		prt(u'</div>')
+	prt(u'</span>\n')
+
 def prt_posts(posts):
 	"""Print #thumbs view"""
 	prt(u'<div id="thumbs">\n')
 	for post in posts:
-		m = post.md5
-		prt(u'<span class="thumb"')
-		if user:
-			prt(u' id="p', m, u'"')
-		prt(u'><a href="', base, u'post/', m, u'"><img ')
-		prtfields((u'src', base + u'image/' + thumbsize + u'/' + m), (u'alt', m))
-		prtfields((u'title', tags_as_html(post)))
-		prt(u'/></a></span>\n')
+		prt_thumb(post)
 	prt(u'</div>\n')
 
 def tags_as_html(post):

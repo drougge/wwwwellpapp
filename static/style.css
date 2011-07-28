@@ -103,13 +103,16 @@ h3 {
 .thumb:first-child {
 	clear: left;
 }
-.thumb > a {
+.thumb > a, .thumb > div {
 	display: table-cell;
 	height: 214px;
 	width: 214px;
 	text-align: center;
 	vertical-align: middle;
 	margin: 3px;
+}
+.thumb > div {
+	background-color: #ccc;
 }
 .thumb > span {
 	z-index: 3;
@@ -298,4 +301,21 @@ input[type=text] {
 
 p {
 	margin-left: 12px;
+}
+
+.underimg {
+	margin: 10px 0 8px 0;
+	border-top: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	display: table;
+	clear: both;
+}
+.underimg > div:first-child {
+	margin: 4px 0 2px 4px;
+}
+#ordered > div:first-child:after {
+	content: " (ordered tag)";
+	color: #444;
 }
