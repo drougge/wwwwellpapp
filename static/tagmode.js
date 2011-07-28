@@ -286,8 +286,8 @@
 		WP.tm.tagbar = document.getElementById("tagbar");
 		if (!WP.tm.inited) {
 			WP.tm.loop(function (t) {
-				var span = document.createElement("span");
-				t.insertBefore(span, t.firstChild);
+				var div = document.createElement("div");
+				t.insertBefore(div, t.firstChild);
 				t.onclick = WP.tm.toggle_ev;
 				WP.foreach(t.getElementsByTagName("a"), function (a) {
 					a.id = "a" + t.id.substr(1);

@@ -136,17 +136,17 @@ def prt_tags(tags):
 		    base, u'tag/', t.guid, u'">', n, u'</a></li>\n')
 	prt(u'</ul>')
 
-def prt_thumb(post, link=True):
+def prt_thumb(post, link=True, classname=u'thumb'):
 	"""Print a single post in #thumbs view (or similar)"""
 	m = post.md5
-	prt(u'<span class="thumb"')
+	prt(u'<span class="', classname, u'"')
 	if user:
 		prt(u' id="p', m, u'"')
 	prt(u'>')
 	if link:
 		prt(u'<a href="', base, u'post/', m, u'">')
 	else:
-		prt(u'<div>')
+		prt(u'<span>')
 	prt(u'<img ')
 	prtfields((u'src', base + u'image/' + thumbsize + u'/' + m), (u'alt', m))
 	prtfields((u'title', tags_as_html(post)))
@@ -154,7 +154,7 @@ def prt_thumb(post, link=True):
 	if link:
 		prt(u'</a>')
 	else:
-		prt(u'</div>')
+		prt(u'</span>')
 	prt(u'</span>\n')
 
 def prt_posts(posts):

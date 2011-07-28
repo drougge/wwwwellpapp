@@ -103,7 +103,7 @@ h3 {
 .thumb:first-child {
 	clear: left;
 }
-.thumb > a, .thumb > div {
+.thumb > a, .thumb > span {
 	display: table-cell;
 	height: 214px;
 	width: 214px;
@@ -112,9 +112,6 @@ h3 {
 	margin: 3px;
 }
 .thumb > div {
-	background-color: #ccc;
-}
-.thumb > span {
 	z-index: 3;
 	position: absolute;
 	left: 5px;
@@ -122,7 +119,7 @@ h3 {
 	width: 32px;
 	height: 32px;
 }
-.selected > span {
+.selected > div {
 	background: url("selected.png");
 }
 .selected > a {
@@ -315,7 +312,37 @@ p {
 .underimg > div:first-child {
 	margin: 4px 0 2px 4px;
 }
+#ordered {
+	padding: 0 8px 0 8px;
+}
 #ordered > div:first-child:after {
 	content: " (ordered tag)";
 	color: #444;
+}
+
+.dist0 {
+	margin: -27px -35px -27px -35px;
+	-o-transform: scale(0.75);
+	-moz-transform: scale(0.75);
+	-webkit-transform: scale(0.75);
+	transform: scale(0.75);
+	z-index: 2;
+}
+
+.dist1 {
+	margin: 0 -40px -44px -40px;
+	-o-transform: scale(0.60);
+	-moz-transform: scale(0.60);
+	-webkit-transform: scale(0.60);
+	transform: scale(0.60);
+	z-index: 1;
+}
+
+.dist2 {
+	margin: 30px -80px -73px -80px;
+	-o-transform: scale(0.33);
+	-moz-transform: scale(0.33);
+	-webkit-transform: scale(0.33);
+	transform: scale(0.33);
+	z-index: 0;
 }

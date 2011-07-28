@@ -56,14 +56,19 @@ if rels:
 	prt_posts([Post(md5=md5) for md5 in rels])
 	prt(u'</div>\n')
 if ordered_tags:
-	prt(u'<div id="ordered" class="underimg">\n')
 	for t in ordered_tags:
+		prt(u'<div id="ordered" class="underimg">\n')
 		prt(u'<div class="tt-', t.type , u'">', tagfmt(t.name), u'</div>\n')
 		posts = client.search_post(guids=[t.guid], order="group")[0]
 		pos = [p.md5 for p in posts].index(m)
-		for p in posts[pos - 1:pos + 2]:
-			prt_thumb(p, p.md5 != m)
-	prt(u'</div>\n')
+		classes = [u'dist2', u'dist1', u'dist0', u'dist1', u'dist2']
+		start, end = pos - 2, pos + 3
+		if start < 0:
+			classes = classes[-start:]
+			start = 0
+		for p, c in zip(posts[start:end], classes):
+			prt_thumb(p, p.md5 != m, u'thumb ' + c)
+		prt(u'</div>\n')
 prt(u'</div>\n')
 prt_left_head()
 prt_search_form()
