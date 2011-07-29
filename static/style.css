@@ -43,6 +43,28 @@ li:nth-child(even).tag {
 li:nth-child(even).implied {
 	background-color: #ecccd5;
 }
+.ordered {
+	background-image: url(ordered.png);
+	background-repeat: no-repeat;
+	background-position: right top;
+}
+.tag > ul {
+	display: inline-block;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+.tag li {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
+.tag li > a {
+	display: block;
+	width: 1.1em;
+	text-align: center;
+	margin: 0;
+}
 
 .msgbox {
 	border: 2px outset #888;

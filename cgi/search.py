@@ -66,7 +66,7 @@ prt(u'</div>\n')
 
 prt_left_head()
 prt_search_form(q)
-prt_tags(tags)
+prt_tags(tags, pq, q)
 prt_left_foot()
 
 prt_foot()

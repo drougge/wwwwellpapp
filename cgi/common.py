@@ -126,14 +126,24 @@ def tag_post(p, full, weak, remove):
 		client.tag_post(p.md5, full_tags=set_full, weak_tags=set_weak, remove_tags=set_remove)
 		return True
 
-def prt_tags(tags):
+def prt_tags(tags, pq=None, q=None):
 	"""Print #tags list"""
 	if not tags: return
 	prt(u'<ul id="tags">')
 	for n, t, impl in tags:
 		c = u'tag implied' if impl else u'tag'
+		if t.ordered: c += u' ordered'
 		prt(u'<li class="', c, u'"><a class="tt-', t.type, u'" href="',
-		    base, u'tag/', t.guid, u'">', n, u'</a></li>\n')
+		    base, u'tag/', t.guid, u'">', n, u'</a>')
+		if pq:
+			prt(u'\n<ul>')
+			for prefix, caption in (u' ', u'+'), (u' -', u'-'):
+				pqa = prefix + t.guid
+				qa = prefix + t.name
+				link = makelink(u'search', (u'pq', pq + pqa), (u'q', q + qa))
+				prt(u'<li><a href="', link, u'">', caption, u'</a></li>')
+			prt(u'</ul>\n')
+		prt(u'</li>\n')
 	prt(u'</ul>')
 
 def prt_thumb(post, link=True, classname=u'thumb'):
