@@ -327,7 +327,8 @@ def prt_head(extra_script=None):
 	<script type="text/javascript"><!--
 		WP.uribase = "%(base)s";
 	--></script>
-	<link rel="help" href="%(base)sstatic/help.html" />""" % {"base": base})
+	<link rel="help" href="%(base)sstatic/help.html" />
+	<link rel="home" href="%(base)s" />""" % {"base": base})
 	if extra_script:
 		prt(u'\n\t')
 		prt_script(extra_script, u'')
