@@ -6,53 +6,43 @@ from os import environ
 from sys import exit
 from common import *
 from cgi import escape
+from dbclient import Tag
 
 def parse_tag(name):
-	return client.find_tag(name, with_prefix=True)
+	tag = Tag()
+	guid = client.find_tag(name, resdata=tag, with_prefix=True)
+	if guid: return tag
 
-pq = None
-qa = []
-tags = []
 try:
 	page = max(0, int(getarg("page")))
 except Exception:
 	page = 0
 q = getarg("q", u'').strip()
-if q:
-	qa = q.split()
-	if "pq" in fs:
-		pq = getarg("pq")
-		pqa = pq.split()
-	else:
-		pqa = map(parse_tag, qa)
-		pq = u' '.join(filter(None, pqa))
-elif getarg("pq", u'') == u'ALL':
-	pq = u'ALL'
-	pqa = []
+qa = q.split()
+q = u' '.join(qa)
+ta = map(parse_tag, qa)
+cloud = []
 
 prt_head()
 
 prt(u'<div id="main">\n')
 
-if qa: prt_qs(qa, pqa)
+if q: prt_qs(qa, ta)
 
-if None in pqa:
-	q = u' '.join([qw for qw, pqw in zip(qa, pqa) if pqw])
-	pqa = filter(None, pqa)
-
-if pq:
+ga = [tag_prefix(qw) + t.guid for qw, t in zip(qa, ta) if t]
+if ga or not q:
 	if user and "ALL" in fs:
 		range = [0, 1 << 31 - 1]
 		page = -1
 	else:
 		range = [per_page * page, per_page * page + per_page - 1]
-	posts, props = client.search_post(guids=pqa, order="created", range=range, wanted=["tagname", "implied"])
+	posts, props = client.search_post(guids=ga, order="created", range=range, wanted=["tagname", "implied"])
 	if posts:
-		pl = pagelinks(makelink(u'search', (u'pq', pq), (u'q', q)), page, props.result_count)
+		pl = pagelinks(makelink(u'search', (u'q', q)), page, props.result_count)
 		prt(pl)
 		prt_posts(posts)
 		prt(pl)
-		tags = tagcloud(pqa)
+		cloud = tagcloud(ga)
 	else:
 		prt(u'<p>No results.</p>')
 else:
@@ -61,7 +51,7 @@ prt(u'</div>\n')
 
 prt_left_head()
 prt_search_form(q)
-prt_tags(tags, pq, q)
+prt_tags(cloud, q)
 prt_left_foot()
 
 prt_foot()

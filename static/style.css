@@ -59,7 +59,7 @@ li:nth-child(even).implied {
 	margin: 0;
 	padding: 0;
 }
-.tag li > a, #query-string li > a {
+.tag li > a, #query-string li li > a {
 	display: block;
 	width: 1.1em;
 	text-align: center;

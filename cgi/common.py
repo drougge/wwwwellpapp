@@ -126,7 +126,7 @@ def tag_post(p, full, weak, remove):
 		client.tag_post(p.md5, full_tags=set_full, weak_tags=set_weak, remove_tags=set_remove)
 		return True
 
-def prt_tags(tags, pq=None, q=None):
+def prt_tags(tags, q=None):
 	"""Print #tags list"""
 	if not tags: return
 	prt(u'<ul id="tags">')
@@ -135,48 +135,42 @@ def prt_tags(tags, pq=None, q=None):
 		if t.ordered: c += u' ordered'
 		prt(u'<li class="', c, u'"><a class="tt-', t.type, u'" href="',
 		    base, u'tag/', t.guid, u'">', n, u'</a>')
-		if pq:
+		if q:
 			prt(u'\n<ul>')
 			for prefix, caption in (u' ', u'+'), (u' -', u'-'):
-				pqa = prefix + t.guid
 				qa = prefix + t.name
-				link = makelink(u'search', (u'pq', pq + pqa), (u'q', q + qa))
+				link = makelink(u'search', (u'q', q + qa))
 				prt(u'<li><a href="', link, u'">', caption, u'</a></li>')
 			prt(u'</ul>\n')
 		prt(u'</li>\n')
 	prt(u'</ul>')
 
-def prt_qs(qa, pqa, tagaround=None):
-	def prt_mod(q, pq, caption):
-		q = u' '.join([qw for qw, pqw in zip(q, pq) if pqw])
-		pq = u' '.join(filter(None, pq))
-		link = makelink(u'search', (u'pq', pq), (u'q', q))
+def prt_qs(names, tags, tagaround=None):
+	"""Print #query-string list"""
+	def prt_mod(q, tags, caption):
+		q = u' '.join([q for q, t in zip(q, tags) if t])
+		link = makelink(u'search', (u'q', q))
 		prt(u'<li><a href="', link, u'">', caption, u'</a></li>')
 	prt(u'<ul id="query-string">\n')
-	for qn, pn, i in zip(qa, pqa, range(len(pqa))):
-		c = u'' if pn else ' class="unknown"'
-		prt(u'<li', c, u'>')
+	for name, tag, i in zip(names, tags, range(len(tags))):
+		if not tag:
+			prt(u' <li class="unknown">', tagfmt(name), u'</li>\n')
+			continue
+		c = u' class="tt-' + tag.type + u'"'
+		prefix = tag_prefix(name)
+		clean = tag_clean(name)
 		if tagaround:
-			prt(u'<', tagaround, u'>', escape(qn), u'</', tagaround, u'>')
+			prt(u' <li><', tagaround, c, u'>', tagfmt(name), u'</', tagaround, u'>')
 		else:
-			prt(escape(qn))
-		if pn:
-			prefix = tag_prefix(pn)
-			cqn = tag_clean(qn)
-			cpn = tag_clean(pn)
-			qc = qa[:]
-			pqc = pqa[:]
-			prt(u'\n <ul>\n')
-			for pre in [pre for pre in (u'', u'!', u'~', u'-') if pre != prefix]:
-				qc[i] = pre + cqn
-				pqc[i] = pre + cpn
-				prt_mod(qc, pqc, pre or u'+')
-			xqa = qa[:i] + qa[i + 1:]
-			xpqa = pqa[:i] + pqa[i + 1:]
-			if not xpqa: xpqa = [u'ALL']
-			prt_mod(xqa, xpqa, u'X')
-			prt(u'</ul>')
-		prt(u'</li>\n')
+			prt(u' <li>', prefix, u'<a href="', base, u'tag/', tag.guid, u'"',
+			    c, u'>', tagfmt(clean), u'</a>')
+		prt(u'<ul>')
+		qc = names[:]
+		for pre in [pre for pre in (u'', u'!', u'~', u'-') if pre != prefix]:
+			qc[i] = pre + clean
+			prt_mod(qc, tags, pre or u'+')
+		prt_mod(qc[:i] + qc[i + 1:], tags[:i] + tags[i + 1:], u'X')
+		prt(u'</ul></li>\n')
 	prt(u'</ul>\n')
 
 def prt_thumb(post, link=True, classname=u'thumb'):
