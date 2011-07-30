@@ -48,7 +48,7 @@ li:nth-child(even).implied {
 	background-repeat: no-repeat;
 	background-position: right top;
 }
-.tag > ul {
+.tag ul {
 	display: inline-block;
 	list-style-type: none;
 	padding: 0;
@@ -59,7 +59,7 @@ li:nth-child(even).implied {
 	margin: 0;
 	padding: 0;
 }
-.tag li > a, #query-string li li > a {
+.tag li a, #query-string li li a {
 	display: block;
 	width: 1.1em;
 	text-align: center;
@@ -80,9 +80,9 @@ li:nth-child(even).implied {
 	margin: 0;
 }
 #query-string li {
-	display: inline-block;
+	float: left;
 	margin: 0;
-	padding: 0;
+	padding: 0 0.3em 0 0;
 	vertical-align: top;
 }
 #query-string li li {
@@ -92,6 +92,10 @@ li:nth-child(even).implied {
 }
 #query-string li:hover li {
 	visibility: visible;
+}
+
+#tagdata {
+	clear: left;
 }
 
 .msgbox {
@@ -160,7 +164,7 @@ h3 {
 .thumb:first-child {
 	clear: left;
 }
-.thumb > a, .thumb > span {
+.thumb a, .thumb span {
 	display: table-cell;
 	height: 214px;
 	width: 214px;
@@ -168,7 +172,7 @@ h3 {
 	vertical-align: middle;
 	margin: 3px;
 }
-.thumb > div {
+.thumb div {
 	z-index: 3;
 	position: absolute;
 	left: 5px;
@@ -176,10 +180,10 @@ h3 {
 	width: 32px;
 	height: 32px;
 }
-.selected > div {
+.selected div {
 	background: url("selected.png");
 }
-.selected > a {
+.selected a {
 	background-color: #ccc;
 }
 
@@ -292,7 +296,7 @@ input[type=text] {
 	margin-bottom: 2px;
 	vertical-align: middle;
 }
-.createtag > input {
+.createtag input {
 	display: inline;
 	margin-left: 7px;
 }

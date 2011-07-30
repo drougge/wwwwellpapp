@@ -21,7 +21,7 @@ prt_tags(tags, tag.name)
 prt_left_foot()
 prt(u'<div id="main">\n')
 prt_qs([tag.name], [tag], u'h1')
-prt(u'<ul>\n')
+prt(u'<ul id="tagdata">\n')
 if "alias" in tag and tag.alias:
 	prt(u'<li>Aliases:\n  <ul>\n')
 	for alias in sorted(tag.alias):
