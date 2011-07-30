@@ -323,8 +323,7 @@ def prt_head(extra_script=None):
 	Call before any other output"""
 	global outdata
 	outdata = outdata_head
-	prt(u"""<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	prt(u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>WWWwellpapp</title>
@@ -378,6 +377,7 @@ def finish(ctype = "text/html"):
 		ctype += "; charset=UTF-8"
 	if ctype == "text/html; charset=UTF-8" and browser_wants_xhtml():
 		ctype = "application/xhtml+xml; charset=UTF-8"
+		data = '<?xml version="1.0" encoding="utf-8"?>\n' + data
 	print "Content-Type: " + ctype
 	print "Content-Length: " + str(len(data) + 1)
 	print
