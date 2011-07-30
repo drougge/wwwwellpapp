@@ -48,5 +48,5 @@ if not res and not msg and not failed and not (name and name[0] == '-'):
 res = dict(failed=u' '.join(failed), m=res, msg=msg)
 if failed:
 	res["types"] = tagtypes()
-prt(json.dumps(res))
+prt(json.dumps(res, ensure_ascii=False))
 finish("application/json")

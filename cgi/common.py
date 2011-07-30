@@ -57,7 +57,7 @@ def tag_clean(n):
 def tag_prefix(n):
 	"""Get prefix of tagname (if any)"""
 	if n[0] in u"-~": return n[0]
-	return ""
+	return u''
 
 def prt(*a):
 	"""Print (unicode) to client.
@@ -265,16 +265,16 @@ def pagelinks(link, page, result_count):
 			prt(u'</a>')
 		prt(u'</span>\n')
 		if p == 0:
-			prt_rel(plink, "first")
+			prt_rel(plink, u'first')
 		if p == page - 1:
-			prt_rel(plink, "prev")
+			prt_rel(plink, u'prev')
 		elif p == page + 1:
-			prt_rel(plink, "next")
-	if pages: prt_rel(plink, "last")
+			prt_rel(plink, u'next')
+	if pages: prt_rel(plink, u'last')
 	if user:
 		if pages:
 			prt(u'<span class="pagelink"><a href="', link,
-			     '&amp;ALL=1">ALL</a></span>\n')
+			    u'&amp;ALL=1">ALL</a></span>\n')
 		prt(u'<span class="pagelink"><a href="' + base,
 		    u'static/jserror.html" onclick="return WP.tm_init();">',
 		    u'Tagmode</a></span>\n')
@@ -296,7 +296,7 @@ def prt_tagform(m):
 
 def prt_script(script, suffix=u'\n'):
 	"""Print a script tag"""
-	prt('<script src="', base, u'static/', script,
+	prt(u'<script src="', base, u'static/', script,
 	    u'" type="text/javascript"></script>', suffix)
 
 def prt_left_head():
