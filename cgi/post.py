@@ -45,11 +45,7 @@ if post.rotate > 0:
 	prt(u'</object>\n')
 else:
 	prt_img(m, post)
-prt(u"""<script type="text/javascript">
-<!--
-WP.size.toggle(true);
---></script>
-""")
+prt_inline_script(u'', u'WP.size.toggle(true);')
 if rels:
 	prt(u'<div id="related" class="underimg">\n',
 	    u'<div>Related posts</div>\n')

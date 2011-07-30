@@ -45,7 +45,7 @@ def _argdec(v):
 def notfound():
 	"""Return a 404 error"""
 	print "Status: 404 Not Found"
-	print "Content-Type: text/html; charset=UTF-8"
+	print "Content-Type: text/plain; charset=UTF-8"
 	print
 	print "404 Not Found"
 	exit()
@@ -299,6 +299,14 @@ def prt_script(script, suffix=u'\n'):
 	prt(u'<script src="', base, u'static/', script,
 	    u'" type="text/javascript"></script>', suffix)
 
+def prt_inline_script(pre, *a):
+	"""Print an inline script in a both HTML and XHTML compatible manner. (The horror!)
+	pre gets printed before each line, so you can indent.
+	"""
+	prt(pre, u'<script type="text/javascript"><!--//--><![CDATA[//><!--\n')
+	prt(pre, *a)
+	prt(u'\n', pre, u'//--><!]]></script>\n')
+
 def prt_left_head():
 	"""Print head of #left div"""
 	prt(u'<div id="left">\n')
@@ -320,20 +328,18 @@ def prt_head(extra_script=None):
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>WWWwellpapp</title>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 	<link rel="stylesheet" href="%(base)sstatic/style.css" />
 	<link rel="stylesheet" href="%(base)sstatic/tagstyle.css" />
 	<script src="%(base)sstatic/common.js" type="text/javascript"></script>
-	<script type="text/javascript"><!--
-		WP.uribase = "%(base)s";
-	--></script>
 	<link rel="help" href="%(base)sstatic/help.html" />
-	<link rel="home" href="%(base)s" />""" % {"base": base})
+	<link rel="home" href="%(base)s" />\n""" % {"base": base})
 	if extra_script:
-		prt(u'\n\t')
-		prt_script(extra_script, u'')
+		prt(u'\t')
+		prt_script(extra_script)
+	prt_inline_script(u'\t', u'WP.uribase = "', base, u'";')
 	outdata = []
-	prt(u'\n</head>\n<body>\n')
+	prt(u'</head>\n<body>\n')
 	if user:
 		prt(u'<div id="tagbar"></div>\n')
 
@@ -343,7 +349,7 @@ def prt_rel(href, rel):
 	global outdata
 	real_outdata = outdata
 	outdata = outdata_head
-	prt(u'\n\t<link rel="', rel, u'" href="', href, u'" />')
+	prt(u'\t<link rel="', rel, u'" href="', href, u'" />\n')
 	outdata = real_outdata
 
 def prt_foot():
@@ -352,12 +358,26 @@ def prt_foot():
 	if user: prt_script(u'tagmode.js')
 	prt(u'</body></html>')
 
+def browser_wants_xhtml():
+	"""Isn't there a library function for this?"""
+	from os import environ
+	if "HTTP_ACCEPT" not in environ: return False
+	for a in environ["HTTP_ACCEPT"].split(","):
+		a = [s.strip().lower() for s in a.split(";")]
+		if a[0] == "application/xhtml+xml":
+			for q in a[1:]:
+				if q[:3] == "q=0": return False
+			return True
+	return False
+
 def finish(ctype = "text/html"):
 	"""Finish up, actually sending page to client."""
 	data = u''.join(outdata_head + outdata).encode("utf-8")
 	ctype = str(ctype)
 	if (ctype[:5] == "text/" or ctype == "application/json") and "charset" not in ctype:
 		ctype += "; charset=UTF-8"
+	if ctype == "text/html; charset=UTF-8" and browser_wants_xhtml():
+		ctype = "application/xhtml+xml; charset=UTF-8"
 	print "Content-Type: " + ctype
 	print "Content-Length: " + str(len(data) + 1)
 	print
