@@ -59,11 +59,39 @@ li:nth-child(even).implied {
 	margin: 0;
 	padding: 0;
 }
-.tag li > a {
+.tag li > a, #query-string li > a {
 	display: block;
 	width: 1.1em;
 	text-align: center;
 	margin: 0;
+}
+#query-string {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	font-size: 120%;
+}
+#query-string li.unknown {
+	text-decoration: line-through;
+}
+#query-string li ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+#query-string li {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+}
+#query-string li li {
+	font-size: 80%;
+	padding: 0;
+	visibility: hidden;
+}
+#query-string li:hover li {
+	visibility: visible;
 }
 
 .msgbox {
@@ -94,6 +122,9 @@ h1 {
 	font-size: 150%;
 	font-weight: bold;
 	font-style: normal;
+}
+ul h1 {
+	margin: 0 0 0.2em 0;
 }
 
 h2 {
@@ -180,16 +211,6 @@ img {
 }
 .pagelink:first-child {
 	clear: left;
-}
-
-#query-string {
-	font-size: 120%;
-}
-.qword {
-	
-}
-.unknowntag {
-	text-decoration: line-through;
 }
 
 form {

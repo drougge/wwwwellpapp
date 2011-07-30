@@ -20,7 +20,7 @@ tags = tagcloud([guid])
 prt_tags(tags, guid, tag.name)
 prt_left_foot()
 prt(u'<div id="main">\n')
-prt(u'<h1>' + tagfmt(tag.name) + u'</h1>\n')
+prt_qs([tag.name], [tag.guid], u'h1')
 prt(u'<ul>\n')
 if "alias" in tag and tag.alias:
 	prt(u'<li>Aliases:\n  <ul>\n')

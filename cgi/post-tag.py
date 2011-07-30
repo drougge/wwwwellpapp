@@ -17,12 +17,12 @@ failed = []
 
 for n, t in zip(create, ctype):
 	if t:
-		client.add_tag(clean(n), t)
+		client.add_tag(tag_clean(n), t)
 		tags += u' ' + n
 for t in tags.split():
-	tag = client.find_tag(clean(t))
+	tag = client.find_tag(tag_clean(t))
 	if tag:
-		p = prefix(t)
+		p = tag_prefix(t)
 		if p == "~":
 			weak.add(tag)
 		elif p == "-":

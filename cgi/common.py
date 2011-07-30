@@ -50,11 +50,11 @@ def notfound():
 	print "404 Not Found"
 	exit()
 
-def clean(n):
+def tag_clean(n):
 	"""Get tagname without prefix"""
 	if n[0] in u"-~": return n[1:]
 	return n
-def prefix(n):
+def tag_prefix(n):
 	"""Get prefix of tagname (if any)"""
 	if n[0] in u"-~": return n[0]
 	return ""
@@ -145,6 +145,39 @@ def prt_tags(tags, pq=None, q=None):
 			prt(u'</ul>\n')
 		prt(u'</li>\n')
 	prt(u'</ul>')
+
+def prt_qs(qa, pqa, tagaround=None):
+	def prt_mod(q, pq, caption):
+		q = u' '.join([qw for qw, pqw in zip(q, pq) if pqw])
+		pq = u' '.join(filter(None, pq))
+		link = makelink(u'search', (u'pq', pq), (u'q', q))
+		prt(u'<li><a href="', link, u'">', caption, u'</a></li>')
+	prt(u'<ul id="query-string">\n')
+	for qn, pn, i in zip(qa, pqa, range(len(pqa))):
+		c = u'' if pn else ' class="unknown"'
+		prt(u'<li', c, u'>')
+		if tagaround:
+			prt(u'<', tagaround, u'>', escape(qn), u'</', tagaround, u'>')
+		else:
+			prt(escape(qn))
+		if pn:
+			prefix = tag_prefix(pn)
+			cqn = tag_clean(qn)
+			cpn = tag_clean(pn)
+			qc = qa[:]
+			pqc = pqa[:]
+			prt(u'\n <ul>\n')
+			for pre in [pre for pre in (u'', u'!', u'~', u'-') if pre != prefix]:
+				qc[i] = pre + cqn
+				pqc[i] = pre + cpn
+				prt_mod(qc, pqc, pre or u'+')
+			xqa = qa[:i] + qa[i + 1:]
+			xpqa = pqa[:i] + pqa[i + 1:]
+			if not xpqa: xpqa = [u'ALL']
+			prt_mod(xqa, xpqa, u'X')
+			prt(u'</ul>')
+		prt(u'</li>\n')
+	prt(u'</ul>\n')
 
 def prt_thumb(post, link=True, classname=u'thumb'):
 	"""Print a single post in #thumbs view (or similar)"""

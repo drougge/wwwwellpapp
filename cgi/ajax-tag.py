@@ -10,7 +10,7 @@ name = getarg("name", u'')
 if name:
 	try:
 		type = getarg("type")
-		client.add_tag(clean(name), type)
+		client.add_tag(tag_clean(name), type)
 		tags = name
 	except Exception:
 		msg = u'Failed to create'
@@ -20,9 +20,9 @@ weak = set()
 remove = set()
 failed = []
 for t in tags.split():
-	tag = client.find_tag(clean(t))
+	tag = client.find_tag(tag_clean(t))
 	if tag:
-		p = prefix(t)
+		p = tag_prefix(t)
 		if p == "~":
 			weak.add(tag)
 		elif p == "-":
