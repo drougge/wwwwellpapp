@@ -360,6 +360,7 @@ def prt_foot():
 def browser_wants_xhtml():
 	"""Isn't there a library function for this?"""
 	from os import environ
+	if "xhtml" in fs: return True
 	if "HTTP_ACCEPT" not in environ: return False
 	for a in environ["HTTP_ACCEPT"].split(","):
 		a = [s.strip().lower() for s in a.split(";")]
