@@ -28,7 +28,6 @@ a:hover {
 	padding: 0;
 	margin: 0;
 	width: 150px;
-	clear: left;
 }
 .tag {
 	background-color: #f3fff7;
@@ -236,7 +235,6 @@ input[type=text] {
 	width: 140px;
 }
 #search-box {
-	float: left;
 	margin-right: 15px;
 	padding-bottom: 5px;
 	position: relative;
