@@ -240,6 +240,10 @@ input[type=text] {
 	position: relative;
 }
 
+#rotate-form input {
+	display: inline-block;
+}
+
 #tagbar {
 	z-index: 5;
 	position: fixed;

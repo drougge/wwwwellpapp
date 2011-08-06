@@ -293,6 +293,19 @@ def prt_tagform(m):
 	    u'<input type="submit" value="Tag" />\n',
 	    u'</div>\n',
 	    u'</form>\n')
+	if client.cfg.thumbs_writeable:
+		prt(u'<form action="' + base + u'post-rotate" method="post">\n',
+		    u'<div id="rotate-form">\n',
+		    u'<input type="hidden" name="post" value="' + m + u'" />\n',
+		    u'<select name="rot">\n',
+		    u'<option value="0"></option>\n',
+		    u'<option value="90">Right</option>\n',
+		    u'<option value="180">180°</option>\n',
+		    u'<option value="270">Left</option>\n',
+		    u'</select>\n',
+		    u'<input type="submit" value="Rotate" />\n',
+		    u'</div>\n',
+		    u'</form>\n')
 
 def prt_script(script, suffix=u'\n'):
 	"""Print a script tag"""
