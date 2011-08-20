@@ -38,6 +38,24 @@ if user:
 		except Exception:
 			pass
 		set_prio = 0
+	update = False
+	add_alias = getarg("alias", u'').strip()
+	if add_alias:
+		try:
+			client.add_alias(add_alias, guid)
+			add_alias = u''
+			update = True
+		except Exception:
+			pass
+	rem_alias = getarg("unalias", u'')
+	if rem_alias:
+		try:
+			client.remove_alias(rem_alias)
+			update = True
+		except Exception:
+			pass
+	if update:
+		tag = client.get_tag(guid)
 
 prt_head()
 prt_left_head()
@@ -48,10 +66,21 @@ prt_left_foot()
 prt(u'<div id="main">\n')
 prt_qs([tag.name], [tag], u'h1')
 prt(u'<ul id="tagdata">\n')
-if "alias" in tag and tag.alias:
+if tag.alias or user:
 	prt(u'<li>Aliases:\n  <ul>\n')
-	for alias in sorted(tag.alias):
-		prt(u'  <li>' + tagfmt(alias) + u'</li>\n')
+	for alias in sorted(tag.alias or []):
+		prt(u'  <li>', tagfmt(alias))
+		if user:
+			prt(u'<form action="', tag.guid, u'" method="post">\n',
+			    u'<input type="hidden" name="unalias" value="', escape(alias) ,'" />\n',
+			    u'<input type="submit" value="Remove" />\n',
+			    u'</form>\n')
+		prt(u'</li>\n')
+	if user:
+		prt(u'<form action="', tag.guid, u'" method="post">\n',
+		    u'<input type="text" name="alias" value="', escape(add_alias) ,'" />\n',
+		    u'<input type="submit" value="Add" />\n',
+		    u'</form>\n')
 	prt(u'  </ul>\n</li>\n')
 prt(u'<li>Type: ' + tag.type + u'</li>\n')
 prt(u'<li>Posts: ' + unicode(tag.posts) + u'</li>\n')
