@@ -13,6 +13,32 @@ if not re.match(r"^(?:\w{6}-){3}\w{6}$", guid):
 tag = client.get_tag(guid)
 if not tag: notfound()
 
+if user:
+	try:
+		set_prio = int(getarg("prio"))
+	except Exception:
+		set_prio = 0
+	implies = getarg("implies", u'').strip()
+	if implies and u' ' not in implies:
+		implguid = client.find_tag(implies, with_prefix=True)
+		if implguid:
+			try:
+				client.add_implies(guid, implguid, set_prio)
+				implies = u''
+				set_prio = 0
+			except Exception:
+				pass
+	mod_guid = getarg("guid", u'')
+	if mod_guid:
+		try:
+			if getarg("delete", u''):
+				client.remove_implies(guid, mod_guid)
+			else:
+				client.add_implies(guid, mod_guid, set_prio)
+		except Exception:
+			pass
+		set_prio = 0
+
 prt_head()
 prt_left_head()
 prt_search_form()
@@ -31,16 +57,31 @@ prt(u'<li>Type: ' + tag.type + u'</li>\n')
 prt(u'<li>Posts: ' + unicode(tag.posts) + u'</li>\n')
 prt(u'<li>Weak posts: ' + unicode(tag.weak_posts) + u'</li>\n')
 for txt, rev in ((u'Implies', False), (u'Implied by', True)):
-	tags = client.tag_implies(guid, reverse=rev)
-	if tags:
+	tags = client.tag_implies(guid, reverse=rev) or []
+	if tags or (user and not rev):
 		prt(u'<li>' + txt)
 		prt(u'<ul>')
 		for n, t, prio in sorted([(tagname(t), t, prio) for t, prio in tags]):
 			prt(u'<li><a href="' + base + u'tag/' + t + u'">')
 			prt(tagfmt(n))
 			prt(u'</a>')
-			if prio: prt(u'<span class="prio">(' + unicode(prio) + u')</span>')
+			if user and not rev:
+				prt(u'<form action="', tag.guid, u'" method="post">\n',
+				    u'<input type="hidden" name="guid" value="', t, u'" />\n',
+				    u'<input type="text" name="prio" class="prio" value="',
+				    unicode(prio) ,u'" />\n',
+				    u'<input type="submit" value="Update" name="update" />\n',
+				    u'<input type="submit" value="Remove" name="delete" />\n',
+				    u'</form>\n')
+			elif prio:
+				prt(u'<span class="prio">(' + unicode(prio) + u')</span>')
 			prt(u'</li>')
+		if user and not rev:
+			prt(u'<li><form action="', tag.guid, u'" method="post">\n',
+			    u'<input type="text" name="implies" onfocus="WP.comp_init(this);" value="', escape(implies) ,'" />\n',
+			    u'<input type="text" name="prio" class="prio" value="', unicode(set_prio) ,u'" />\n',
+			    u'<input type="submit" value="Add" />\n',
+			    u'</form></li>\n')
 		prt(u'</ul></li>\n')
 prt(u'</ul>\n')
 posts, props = client.search_post(guids=[guid], order="created", range=[0, per_page - 1], wanted=["tagname", "implied"])
