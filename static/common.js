@@ -10,8 +10,8 @@ var WP = {"comp": {}, "tm": {}};
 		}
 	} catch (e) {}
 
-	WP.comp_init = function (el) {
-		if (WP.ajax_ok && WP.comp.init) { WP.comp.init(el); }
+	WP.comp_init = function (el, multi) {
+		if (WP.ajax_ok && WP.comp.init) { WP.comp.init(el, multi); }
 	};
 
 	WP.tm_init = function () {

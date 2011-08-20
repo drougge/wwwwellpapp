@@ -213,7 +213,7 @@ def prt_search_form(q=u''):
 	prt(u'<form action="', base, u'search" method="get">\n',
 	    u'<div id="search-box">\n',
 	    u'<input type="text" name="q" id="search-q" value="', escape(q, True),
-	    u'" onfocus="WP.comp_init(this);" />\n',
+	    u'" onfocus="WP.comp_init(this, true);" />\n',
 	    u'<input type="submit" value="Search" />\n',
 	    u'</div>\n',
 	    u'</form>\n')
@@ -290,7 +290,7 @@ def prt_tagform(m):
 	    u'<div id="tag-form">\n',
 	    u'<input type="hidden" name="post" value="' + m + u'" />\n',
 	    u'<input type="text" name="tags" id="tag-q" ',
-	    u' onfocus="WP.comp_init(this);" />\n',
+	    u' onfocus="WP.comp_init(this, true);" />\n',
 	    u'<input type="submit" value="Tag" />\n',
 	    u'</div>\n',
 	    u'</form>\n')

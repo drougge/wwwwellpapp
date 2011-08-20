@@ -128,7 +128,7 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 			prt(u'</li>')
 		if user and not rev:
 			prt(u'<li><form action="', tag.guid, u'" method="post"><div>\n',
-			    u'<input type="text" name="implies" onfocus="WP.comp_init(this);" value="', escape(implies) ,'" />\n',
+			    u'<input type="text" name="implies" onfocus="WP.comp_init(this, false);" value="', escape(implies) ,'" />\n',
 			    u'<input type="text" name="prio" class="prio" value="', unicode(set_prio) ,u'" />\n',
 			    u'<input type="submit" value="Add" />\n',
 			    u'</div></form></li>\n')

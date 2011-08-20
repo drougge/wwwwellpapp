@@ -127,6 +127,7 @@
 		c = WP.comp[el.id];
 		if (!c) { return; }
 		if (c.value === el.value) { return; }
+		if (!c.multi && el.value.indexOf(" ") >= 0) { return; }
 		c.value = el.value;
 		word = WP.find_word(el);
 		word = WP.tag_clean(word);
@@ -225,7 +226,7 @@
 			end = txt.substr(end);
 			if (end.length) { end = " " + end; }
 			txt = txt.substr(0, start) + prefix + comp;
-			if (full) { txt += " "; }
+			if (full && c.multi) { txt += " "; }
 			pos = txt.length;
 			txt = txt + end;
 			el.value = txt;
@@ -238,7 +239,7 @@
 		return false;
 	};
 
-	WP.comp.init = function (el) {
+	WP.comp.init = function (el, multi) {
 		var pos, load;
 		if (WP.comp[el.id]) { return; }
 		try {
@@ -255,7 +256,8 @@
 		document.getElementsByTagName("body")[0].appendChild(load);
 		WP.comp[el.id] = {"value": el.value, "x": null, "skip": false,
 		                  "load": load, "abort": false, "tO": false,
-		                  "r": null, "list": null, "complete": ""};
+		                  "r": null, "list": null, "complete": "",
+		                  "multi": multi};
 		el.onfocus = null;
 		el.onkeypress = WP.comp.soon_ev;
 		/* We don't want to remove it before the element that was clicked   *
