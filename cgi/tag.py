@@ -78,20 +78,20 @@ if tag.alias or user:
 	for alias in sorted(tag.alias or []):
 		prt(u'  <li>', tagfmt(alias))
 		if user:
-			prt(u'<form action="', tag.guid, u'" method="post">\n',
+			prt(u'<form action="', tag.guid, u'" method="post"><div>\n',
 			    u'<input type="hidden" name="unalias" value="', escape(alias) ,'" />\n',
 			    u'<input type="submit" value="Remove" />\n',
-			    u'</form>\n')
+			    u'</div></form>\n')
 		prt(u'</li>\n')
 	if user:
-		prt(u'<form action="', tag.guid, u'" method="post">\n',
+		prt(u'<li><form action="', tag.guid, u'" method="post"><div>\n',
 		    u'<input type="text" name="alias" value="', escape(add_alias) ,'" />\n',
 		    u'<input type="submit" value="Add" />\n',
-		    u'</form>\n')
+		    u'</div></form></li>\n')
 	prt(u'  </ul>\n</li>\n')
 prt(u'<li>Type: ')
 if user:
-	prt(u'<form action="', guid, u'" method="post">\n',
+	prt(u'<form action="', guid, u'" method="post"><div>\n',
 	    u'<select name="type">\n')
 	for tt in client.metalist(u'tagtypes'):
 		prt(u'<option value="', escape(tt, True))
@@ -100,7 +100,7 @@ if user:
 		prt(u'">', escape(tt), u'</option>\n')
 	prt(u'</select>\n',
 	    u'<input type="submit" value="Update" />\n',
-	    u'</form>\n')
+	    u'</div></form>\n')
 else:
 	prt(tag.type)
 prt(u'</li>\n')
@@ -116,22 +116,22 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 			prt(tagfmt(n))
 			prt(u'</a>')
 			if user and not rev:
-				prt(u'<form action="', tag.guid, u'" method="post">\n',
+				prt(u'<form action="', tag.guid, u'" method="post"><div>\n',
 				    u'<input type="hidden" name="guid" value="', t, u'" />\n',
 				    u'<input type="text" name="prio" class="prio" value="',
 				    unicode(prio) ,u'" />\n',
 				    u'<input type="submit" value="Update" name="update" />\n',
 				    u'<input type="submit" value="Remove" name="delete" />\n',
-				    u'</form>\n')
+				    u'</div></form>\n')
 			elif prio:
 				prt(u'<span class="prio">(' + unicode(prio) + u')</span>')
 			prt(u'</li>')
 		if user and not rev:
-			prt(u'<li><form action="', tag.guid, u'" method="post">\n',
+			prt(u'<li><form action="', tag.guid, u'" method="post"><div>\n',
 			    u'<input type="text" name="implies" onfocus="WP.comp_init(this);" value="', escape(implies) ,'" />\n',
 			    u'<input type="text" name="prio" class="prio" value="', unicode(set_prio) ,u'" />\n',
 			    u'<input type="submit" value="Add" />\n',
-			    u'</form></li>\n')
+			    u'</div></form></li>\n')
 		prt(u'</ul></li>\n')
 prt(u'</ul>\n')
 posts, props = client.search_post(guids=[guid], order="created", range=[0, per_page - 1], wanted=["tagname", "implied"])
