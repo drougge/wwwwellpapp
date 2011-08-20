@@ -8,6 +8,7 @@ Quick start (with an Apache-like webserver):
 
 Set AllowOverride All on the directory where you placed wwwwellpapp.
 Optionally configure mod_python if you don't like CGIs.
+Copy (or symlink) dbclient.py from wellpapp-pyclient into cgi/.
 Create a .wellpapprc in the cgi directory with at least the following:
 
 thumb_sizes=200 # you can use something else, but it might look bad
@@ -17,3 +18,12 @@ server, port, image_base, thumb_base as in your normal rc.
 If you want to browse the filesystem, also set browsebase to the directory
 you want to browse under. Assuming webbase=/foo/ and browsebase=/test/ you
 would go to /foo/browse/bar/ to view files in /test/bar/.
+
+If you worry about efficiency, you can replace the RewriteRule for image.py
+in .htaccess with something like this in your apache config:
+
+RewriteRule ^/image/(\d+)/([0-9a-f])([0-9a-f]{2})([0-9a-f]{29})$ /thumb_base/$1/$2/$3/$2$3$4 [T=image/jpeg,L]
+RewriteRule ^/image/([0-9a-f])([0-9a-f]{2})([0-9a-f]{29})\.([a-z]{3,4})$ /image_base/$1/$2/$1$2$3 [T=image/$4,L]
+
+(RewriteRule doesn't work completely in .htaccess, so you have to put it in
+the main configuration.)
