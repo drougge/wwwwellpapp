@@ -85,8 +85,9 @@ def tagfmt(n, html_ok=True):
 
 def tagname(guid):
 	"""Tag guid -> name"""
-	tag = client.get_tag(guid)
-	return tag.name
+	pre = tag_prefix(guid)
+	tag = client.get_tag(tag_clean(guid))
+	return pre + tag.name
 
 def taglist(post, impl):
 	"""Get a list of either implied or non-implied tags of a post.
