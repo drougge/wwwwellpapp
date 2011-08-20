@@ -54,6 +54,13 @@ if user:
 			update = True
 		except Exception:
 			pass
+	new_type = getarg("type", u'')
+	if new_type:
+		try:
+			client.mod_tag(guid, type=new_type)
+			tag.type = new_type
+		except Exception:
+			pass
 	if update:
 		tag = client.get_tag(guid)
 
@@ -82,7 +89,21 @@ if tag.alias or user:
 		    u'<input type="submit" value="Add" />\n',
 		    u'</form>\n')
 	prt(u'  </ul>\n</li>\n')
-prt(u'<li>Type: ' + tag.type + u'</li>\n')
+prt(u'<li>Type: ')
+if user:
+	prt(u'<form action="', guid, u'" method="post">\n',
+	    u'<select name="type">\n')
+	for tt in client.metalist(u'tagtypes'):
+		prt(u'<option value="', escape(tt, True))
+		if tt == tag.type:
+			prt(u'" selected="selected')
+		prt(u'">', escape(tt), u'</option>\n')
+	prt(u'</select>\n',
+	    u'<input type="submit" value="Update" />\n',
+	    u'</form>\n')
+else:
+	prt(tag.type)
+prt(u'</li>\n')
 prt(u'<li>Posts: ' + unicode(tag.posts) + u'</li>\n')
 prt(u'<li>Weak posts: ' + unicode(tag.weak_posts) + u'</li>\n')
 for txt, rev in ((u'Implies', False), (u'Implied by', True)):
