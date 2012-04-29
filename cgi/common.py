@@ -52,11 +52,11 @@ def notfound():
 
 def tag_clean(n):
 	"""Get tagname without prefix"""
-	if n[0] in u"-~": return n[1:]
+	if n[0] in u"-~!": return n[1:]
 	return n
 def tag_prefix(n):
 	"""Get prefix of tagname (if any)"""
-	if n[0] in u"-~": return n[0]
+	if n[0] in u"-~!": return n[0]
 	return u''
 
 def prt(*a):
