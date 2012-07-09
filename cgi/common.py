@@ -5,6 +5,7 @@ import cgitb
 from dbclient import dbclient, dbcfg
 from urllib import urlencode
 import re
+from math import ceil
 
 cgitb.enable()
 
@@ -236,7 +237,7 @@ def pagelinks(link, page, result_count):
 	Also puts rel-links in <head>
 	"""
 	global outdata
-	pages = range(result_count // per_page + 1)
+	pages = range(int(ceil(float(result_count) / per_page)))
 	if len(pages) == 1:
 		if not user: return u''
 		pages = []
