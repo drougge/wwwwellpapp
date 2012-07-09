@@ -36,7 +36,11 @@ if ga or not q:
 		page = -1
 	else:
 		range = [per_page * page, per_page * page + per_page - 1]
-	posts, props = client.search_post(guids=ga, order="created", range=range, wanted=["tagname", "implied"])
+	order = "created"
+	if ga:
+		if client.get_tag(tag_clean(ga[0])).ordered:
+			order = "group"
+	posts, props = client.search_post(guids=ga, order=order, range=range, wanted=["tagname", "implied"])
 	if posts:
 		pl = pagelinks(makelink(u'search', (u'q', q)), page, props.result_count)
 		prt(pl)
