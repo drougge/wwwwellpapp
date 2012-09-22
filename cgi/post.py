@@ -5,7 +5,7 @@ import re
 from os import environ
 from sys import exit
 from common import *
-from dbclient import Post
+from wellpapp import Post
 
 m = environ["PATH_INFO"][1:]
 if not re.match(r"^[0-9a-f]{32}$", m):

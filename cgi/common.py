@@ -2,7 +2,7 @@
 
 from cgi import escape, FieldStorage
 import cgitb
-from dbclient import dbclient, dbcfg
+from wellpapp import Client, Config
 from urllib import urlencode
 import re
 from math import ceil
@@ -12,7 +12,7 @@ cgitb.enable()
 per_page = 32
 outdata_head = []
 outdata = []
-client = dbclient(dbcfg(None, [".wellpapprc"]))
+client = Client(Config(local_rc=True))
 fs = FieldStorage(keep_blank_values=True)
 user = "fake"
 base = unicode(client.cfg.webbase)

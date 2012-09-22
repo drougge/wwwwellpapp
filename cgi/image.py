@@ -4,7 +4,7 @@ import cgitb
 import re
 from os import environ
 from sys import exit
-from dbclient import dbclient, dbcfg
+from wellpapp import Client, Config
 from os.path import exists
 from os import stat
 from sys import stdout
@@ -40,8 +40,8 @@ def check_m(m):
 	if not re.match(r"^[0-9a-f]{32}$", m):
 		notfound()
 
-cfg = dbcfg(None, [".wellpapprc"])
-client = dbclient(cfg)
+cfg = Config(local_rc=True)
+client = Client(cfg)
 
 args = environ["PATH_INFO"][1:]
 if "." in args: # this is a full size image

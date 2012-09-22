@@ -6,7 +6,7 @@ from os import environ
 from sys import exit
 from common import *
 from cgi import escape
-from dbclient import Tag
+from wellpapp import Tag
 
 def parse_tag(name):
 	tag = Tag()

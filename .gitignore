@@ -1,6 +1,5 @@
 *.pyc
 .wellpapprc
-dbclient.py
 images
 thumbs
 *.swp
