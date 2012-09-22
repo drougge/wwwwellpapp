@@ -134,7 +134,7 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 			    u'</div></form></li>\n')
 		prt(u'</ul></li>\n')
 prt(u'</ul>\n')
-order = "group" if tag.ordered else "created"
+order = "group" if tag.ordered else "aaaaaa-aaaads-faketg-create"
 posts, props = client.search_post(guids=[guid], order=order, range=[0, per_page - 1], wanted=["tagname", "implied"])
 if posts:
 	pl = pagelinks(makelink(u'search', (u'q', tag.name)), 0, props.result_count)

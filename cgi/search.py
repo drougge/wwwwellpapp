@@ -36,7 +36,7 @@ if ga or not q:
 		page = -1
 	else:
 		range = [per_page * page, per_page * page + per_page - 1]
-	order = "created"
+	order = "aaaaaa-aaaads-faketg-create"
 	if ga:
 		if client.get_tag(tag_clean(ga[0])).ordered:
 			order = "group"
