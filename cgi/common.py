@@ -108,7 +108,7 @@ def tagcloud(guids):
 	"""
 	guids = set(guids)
 	range = (0, 19 + len(guids))
-	tags = client.find_tags("EI", "", range=range, guids=guids, order="-post")
+	tags = client.find_tags("EI", "", range=range, guids=guids, order="-post", flags="-datatag")
 	return [(tagfmt(t.name), t, False) for t in tags if t.guid not in guids]
 
 def tagtypes():
