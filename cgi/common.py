@@ -95,12 +95,10 @@ def taglist(post, impl):
 	Returns (html formated name, tag, impl).
 	"""
 	if impl:
-		full, weak = post.impltags, post.implweaktags
+		l = post.impltags
 	else:
-		full, weak = post.tags, post.weaktags
-	full = [(tagfmt(t.name), t, impl) for t in full]
-	weak = [(tagfmt(u'~' + t.name), t, impl) for t in weak]
-	return full + weak
+		l = post.settags
+	return [(tagfmt(t.pname), t, impl) for t in l]
 
 def tagcloud(guids):
 	"""Get "tag cloud" for the search specified by guids
@@ -205,8 +203,7 @@ def prt_posts(posts):
 
 def tags_as_html(post):
 	"""Returns single string of HTML escaped tag names for post"""
-	names = sorted([t.name for t in post.tags or []])
-	names += sorted([u'~' + t.name for t in post.weaktags or []])
+	names = sorted([t.pname for t in post.tags or []])
 	return u' '.join([tagfmt(n, False) for n in names])
 
 def prt_search_form(q=u''):

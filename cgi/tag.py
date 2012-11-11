@@ -5,6 +5,7 @@ import re
 from os import environ
 from sys import exit
 from common import *
+from wellpapp import DotDict
 
 guid = environ["PATH_INFO"][1:]
 if not re.match(r"^(?:\w{6}-){3}\w{6}$", guid):
@@ -111,7 +112,7 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 	if tags or (user and not rev):
 		prt(u'<li>' + txt)
 		prt(u'<ul>')
-		for n, t, prio in sorted([(tagname(t), t, prio) for t, prio in tags]):
+		for n, t, prio in sorted([(tagname(t.guid), t.guid, t.prio) for t in tags]):
 			prt(u'<li><a href="' + base + u'tag/' + t + u'">')
 			prt(tagfmt(n))
 			prt(u'</a>')
@@ -135,7 +136,8 @@ for txt, rev in ((u'Implies', False), (u'Implied by', True)):
 		prt(u'</ul></li>\n')
 prt(u'</ul>\n')
 order = "group" if tag.ordered else "aaaaaa-aaaads-faketg-create"
-posts, props = client.search_post(guids=[guid], order=order, range=[0, per_page - 1], wanted=["tagname", "implied"])
+props = DotDict()
+posts = client.search_post(guids=[guid], order=order, range=[0, per_page - 1], wanted=["tagname", "implied"], props=props)
 if posts:
 	pl = pagelinks(makelink(u'search', (u'q', tag.name)), 0, props.result_count)
 	prt(pl)

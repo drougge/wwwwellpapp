@@ -6,7 +6,7 @@ from os import environ
 from sys import exit
 from common import *
 from cgi import escape
-from wellpapp import Tag
+from wellpapp import Tag, DotDict
 
 def parse_tag(name):
 	tag = Tag()
@@ -40,7 +40,8 @@ if ga or not q:
 	if ga:
 		if client.get_tag(tag_clean(ga[0])).ordered:
 			order = "group"
-	posts, props = client.search_post(guids=ga, order=order, range=range, wanted=["tagname", "implied"])
+	props = DotDict()
+	posts = client.search_post(guids=ga, order=order, range=range, wanted=["tagname", "implied"], props=props)
 	if posts:
 		pl = pagelinks(makelink(u'search', (u'q', q)), page, props.result_count)
 		prt(pl)

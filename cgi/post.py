@@ -56,7 +56,7 @@ if ordered_tags:
 	for t in ordered_tags:
 		prt(u'<div id="ordered" class="underimg">\n')
 		prt(u'<div class="tt-', t.type , u'">', tagfmt(t.name), u'</div>\n')
-		posts = client.search_post(guids=[t.guid], order="group")[0]
+		posts = client.search_post(guids=[t.guid], order="group")
 		pos = [p.md5 for p in posts].index(m)
 		data = [(u'dist2', None), (u'dist1', u'prev'), (u'dist0', None),
 		        (u'dist1', u'next'), (u'dist2', None)]
