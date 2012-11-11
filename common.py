@@ -1,47 +1,27 @@
 # -*- coding: utf-8 -*-
 
 from cgi import escape, FieldStorage
-import cgitb
 from wellpapp import Client, Config
 from urllib import urlencode
 import re
 from math import ceil
 
-cgitb.enable()
+from bottle import request
 
+def init():
+	request.outdata_head = []
+	request.outdata = []
+	request.client = Client(cfg)
+	return request.client
+
+cfg = Config(local_rc=True)
 per_page = 32
-outdata_head = []
-outdata = []
-client = Client(Config(local_rc=True))
 fs = FieldStorage(keep_blank_values=True)
 user = "fake"
-base = unicode(client.cfg.webbase)
+base = unicode(cfg.webbase)
 assert base
-thumbsize = unicode(client.cfg.thumb_sizes.split()[0])
+thumbsize = unicode(cfg.thumb_sizes.split()[0])
 assert thumbsize
-
-def getarg(n, default=None, as_list=False):
-	"""Get a (cgi) argument as a unicode string.
-	Return the first occurance of the argument without as_list, and all
-	occurances in a list with.
-	If you don't pass a default you get an exception if the argument was
-	not provided.
-	"""
-	if default is not None and n not in fs: return default
-	a = fs[n]
-	if isinstance(a, list):
-		a = [_argdec(e.value) for e in a]
-		if not as_list: a = u' '.join(a)
-	else:
-		a = _argdec(a.value)
-		if as_list: a = a.split()
-	return a
-def _argdec(v):
-	try:
-		v = v.decode("utf-8")
-	except Exception:
-		v = v.decode("iso-8859-1")
-	return v
 
 def notfound():
 	"""Return a 404 error"""
@@ -64,7 +44,7 @@ def prt(*a):
 	"""Print (unicode) to client.
 	Conceptually at least, nothing is actually sent until finish is called.
 	"""
-	outdata.extend(a)
+	request.outdata.extend(a)
 
 def prtfields(*fields):
 	"""Print (fieldname, value) pairs as html attributes
@@ -87,7 +67,7 @@ def tagfmt(n, html_ok=True):
 def tagname(guid):
 	"""Tag guid -> name"""
 	pre = tag_prefix(guid)
-	tag = client.get_tag(tag_clean(guid))
+	tag = request.client.get_tag(tag_clean(guid))
 	return pre + tag.name
 
 def taglist(post, impl):
@@ -106,12 +86,12 @@ def tagcloud(guids):
 	"""
 	guids = set(guids)
 	range = (0, 19 + len(guids))
-	tags = client.find_tags("EI", "", range=range, guids=guids, order="-post", flags="-datatag")
+	tags = request.client.find_tags("EI", "", range=range, guids=guids, order="-post", flags="-datatag")
 	return [(tagfmt(t.name), t, False) for t in tags if t.guid not in guids]
 
 def tagtypes():
 	"""List of tag types."""
-	return client.metalist("tagtypes")
+	return request.client.metalist("tagtypes")
 
 def tag_post(p, full, weak, remove):
 	"""Apply tag changes to a post"""
@@ -123,7 +103,7 @@ def tag_post(p, full, weak, remove):
 	set_remove_weak = post_weak.intersection(remove)
 	set_remove = set_remove_full.union(set_remove_weak)
 	if set_full or set_weak or set_remove:
-		client.tag_post(p.md5, full_tags=set_full, weak_tags=set_weak, remove_tags=set_remove)
+		request.client.tag_post(p.md5, full_tags=set_full, weak_tags=set_weak, remove_tags=set_remove)
 		return True
 
 def prt_tags(tags, q=None):
@@ -233,13 +213,12 @@ def pagelinks(link, page, result_count):
 	of results we can display (not pages).
 	Also puts rel-links in <head>
 	"""
-	global outdata
 	pages = range(int(ceil(float(result_count) / per_page)))
 	if len(pages) == 1:
 		if not user: return u''
 		pages = []
-	real_outdata = outdata
-	outdata = []
+	real_outdata = request.outdata
+	request.outdata = []
 	if len(pages) > 16:
 		if page < 8:
 			pages = pages[:10] + pages[-6:]
@@ -278,8 +257,8 @@ def pagelinks(link, page, result_count):
 		    u'static/jserror.html" onclick="return WP.tm_init();">',
 		    u'Tagmode</a></span>\n')
 	prt(u'</div>\n')
-	res = u''.join(outdata)
-	outdata = real_outdata
+	res = u''.join(request.outdata)
+	request.outdata = real_outdata
 	return res
 
 def prt_tagform(m):
@@ -292,7 +271,7 @@ def prt_tagform(m):
 	    u'<input type="submit" value="Tag" />\n',
 	    u'</div>\n',
 	    u'</form>\n')
-	if client.cfg.thumbs_writeable:
+	if cfg.thumbs_writeable:
 		prt(u'<form action="' + base + u'post-rotate" method="post">\n',
 		    u'<div id="rotate-form">\n',
 		    u'<input type="hidden" name="post" value="' + m + u'" />\n',
@@ -333,8 +312,7 @@ def prt_left_foot():
 def prt_head(extra_script=None):
 	"""Print page head
 	Call before any other output"""
-	global outdata
-	outdata = outdata_head
+	request.outdata = request.outdata_head
 	prt(u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -349,7 +327,7 @@ def prt_head(extra_script=None):
 		prt(u'\t')
 		prt_script(extra_script)
 	prt_inline_script(u'\t', u'WP.uribase = "', base, u'";')
-	outdata = []
+	request.outdata = []
 	prt(u'</head>\n<body>\n')
 	if user:
 		prt(u'<div id="tagbar"></div>\n')
@@ -357,11 +335,10 @@ def prt_head(extra_script=None):
 def prt_rel(href, rel):
 	"""Add a rel link to head (if appropriate)"""
 	if "ALL" in fs: return
-	global outdata
-	real_outdata = outdata
-	outdata = outdata_head
+	real_outdata = request.outdata
+	request.outdata = request.outdata_head
 	prt(u'\t<link rel="', rel, u'" href="', href, u'" />\n')
-	outdata = real_outdata
+	request.outdata = real_outdata
 
 def prt_foot():
 	"""Print page foot"""
@@ -384,7 +361,7 @@ def browser_wants_xhtml():
 
 def finish(ctype = "text/html"):
 	"""Finish up, actually sending page to client."""
-	data = u''.join(outdata_head + outdata).encode("utf-8")
+	data = u''.join(request.outdata_head + request.outdata).encode("utf-8")
 	ctype = str(ctype)
 	if (ctype[:5] == "text/" or ctype == "application/json") and "charset" not in ctype:
 		ctype += "; charset=UTF-8"
@@ -394,4 +371,4 @@ def finish(ctype = "text/html"):
 	print "Content-Type: " + ctype
 	print "Content-Length: " + str(len(data) + 1)
 	print
-	print data
+	return data
