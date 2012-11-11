@@ -6,7 +6,7 @@ from urllib import urlencode
 import re
 from math import ceil
 
-from bottle import request
+from bottle import request, response
 
 def init():
 	request.outdata_head = []
@@ -22,14 +22,6 @@ base = unicode(cfg.webbase)
 assert base
 thumbsize = unicode(cfg.thumb_sizes.split()[0])
 assert thumbsize
-
-def notfound():
-	"""Return a 404 error"""
-	print "Status: 404 Not Found"
-	print "Content-Type: text/plain; charset=UTF-8"
-	print
-	print "404 Not Found"
-	exit()
 
 def tag_clean(n):
 	"""Get tagname without prefix"""
@@ -348,10 +340,8 @@ def prt_foot():
 
 def browser_wants_xhtml():
 	"""Isn't there a library function for this?"""
-	from os import environ
-	if "xhtml" in fs: return True
-	if "HTTP_ACCEPT" not in environ: return False
-	for a in environ["HTTP_ACCEPT"].split(","):
+	if request.query.xhtml: return True
+	for a in request.headers.get("Accept").split(","):
 		a = [s.strip().lower() for s in a.split(";")]
 		if a[0] == "application/xhtml+xml":
 			for q in a[1:]:
@@ -368,7 +358,5 @@ def finish(ctype = "text/html"):
 	if ctype == "text/html; charset=UTF-8" and browser_wants_xhtml():
 		ctype = "application/xhtml+xml; charset=UTF-8"
 		data = '<?xml version="1.0" encoding="utf-8"?>\n' + data
-	print "Content-Type: " + ctype
-	print "Content-Length: " + str(len(data) + 1)
-	print
+	response.content_type = ctype
 	return data
