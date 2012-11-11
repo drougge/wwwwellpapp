@@ -6,7 +6,7 @@ from wellpapp import Post
 from bottle import route, abort
 
 @route("/post/<m:re:[0-9a-f]{32}>")
-def post(m):
+def r_post(m):
 	client = init()
 	post = client.get_post(m, wanted=["width", "height", "ext", "tagname", "tagguid", "tagdata", "rotate"], separate_implied=True)
 	if not post: abort(404)

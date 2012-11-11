@@ -5,8 +5,8 @@ from common import *
 from bottle import route, request
 from wellpapp import Tag, DotDict
 
-@route(path=("/", "/search"))
-def search():
+@route(path=("/", "/search"), method=("GET", "POST"))
+def r_search():
 	client = init()
 	def parse_tag(name):
 		tag = Tag()
