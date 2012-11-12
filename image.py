@@ -15,7 +15,7 @@ def serve(fn, ext):
 		abort(404)
 	z = stat(fn).st_size
 	response.content_type = "image/" + ext
-	response.set_header("Content-Lenght", str(z))
+	response.set_header("Content-Length", str(z))
 	response.set_header("Expires", fmttime(time() + 60*60*24 * 10))
 	response.set_header("Date", fmttime(time()))
 	return open(fn, "rb")
