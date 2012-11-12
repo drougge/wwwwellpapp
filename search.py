@@ -8,6 +8,7 @@ from wellpapp import Tag, DotDict
 @get("/")
 @get("/search")
 @post("/search")
+@view("search")
 def r_search():
 	client = init()
 	def parse_tag(name):
@@ -61,4 +62,5 @@ def r_search():
 	prt_left_foot()
 	
 	prt_foot()
+	return dict(base=base, user=user, extra_script=None, h="<ostkaka>")
 	return finish()

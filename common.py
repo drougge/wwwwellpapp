@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from cgi import escape, FieldStorage
+from cgi import escape
 from wellpapp import Client, Config
 from urllib import urlencode
 import re
 from math import ceil
+from functools import partial
 
-from bottle import request, response
+from bottle import request, response, mako_view
+
+view = partial(mako_view, template_settings=dict(default_filters=["escape"], imports=["from markupsafe import escape"]))
 
 def init():
 	request.outdata_head = []
@@ -16,7 +19,6 @@ def init():
 
 cfg = Config(local_rc=True)
 per_page = 32
-fs = FieldStorage(keep_blank_values=True)
 user = "fake"
 base = unicode(cfg.webbase)
 assert base
@@ -326,7 +328,7 @@ def prt_head(extra_script=None):
 
 def prt_rel(href, rel):
 	"""Add a rel link to head (if appropriate)"""
-	if "ALL" in fs: return
+	if request.query.ALL: return
 	real_outdata = request.outdata
 	request.outdata = request.outdata_head
 	prt(u'\t<link rel="', rel, u'" href="', href, u'" />\n')
