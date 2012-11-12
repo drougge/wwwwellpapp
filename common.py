@@ -341,7 +341,7 @@ def prt_foot():
 def browser_wants_xhtml():
 	"""Isn't there a library function for this?"""
 	if request.query.xhtml: return True
-	for a in request.headers.get("Accept").split(","):
+	for a in request.headers.get("Accept", "").split(","):
 		a = [s.strip().lower() for s in a.split(";")]
 		if a[0] == "application/xhtml+xml":
 			for q in a[1:]:
