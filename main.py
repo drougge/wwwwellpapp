@@ -7,6 +7,7 @@ import search
 import image
 import post
 import tag
+import browse
 
 @route("/static/<fn>")
 def static(fn):
