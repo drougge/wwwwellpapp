@@ -4,7 +4,7 @@ from os.path import exists
 from os import stat
 from time import strftime, gmtime, time
 
-from bottle import route, abort, response
+from bottle import get, abort, response
 from common import init
 
 def fmttime(t):
@@ -20,7 +20,7 @@ def serve(fn, ext):
 	response.set_header("Date", fmttime(time()))
 	return open(fn, "rb")
 
-@route("/image/<z>/<m:re:[0-9a-z]{32}>")
+@get("/image/<z>/<m:re:[0-9a-z]{32}>")
 def thumb(m, z):
 	client = init()
 	if z in ("normal", "large"):
@@ -28,7 +28,7 @@ def thumb(m, z):
 	else:
 		return serve(client.thumb_path(m, z), "jpeg")
 
-@route("/image/<m:re:[0-9a-z]{32}>.<ext:re:[a-z]{3,4}>")
+@get("/image/<m:re:[0-9a-z]{32}>.<ext:re:[a-z]{3,4}>")
 def r_image(m, ext):
 	client = init()
 	return serve(client.image_path(m), ext)

@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from common import *
-from bottle import route, request
+from bottle import get, post, request
 from wellpapp import Tag, DotDict
 
-@route(path=("/", "/search"), method=("GET", "POST"))
+@get("/")
+@get("/search")
+@post("/search")
 def r_search():
 	client = init()
 	def parse_tag(name):

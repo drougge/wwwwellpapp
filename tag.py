@@ -3,9 +3,10 @@
 
 from common import *
 from wellpapp import DotDict
-from bottle import route, abort, request
+from bottle import get, post, abort, request
 
-@route("/tag/<guid:re:(?:\w{6}-){3}\w{6}>")
+@get("/tag/<guid:re:(?:\w{6}-){3}\w{6}>")
+@post("/tag/<guid:re:(?:\w{6}-){3}\w{6}>")
 def r_tag(guid):
 	client = init()
 	tag = client.get_tag(guid)

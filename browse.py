@@ -6,7 +6,7 @@ from os.path import normpath, exists, join as joinpath, isfile, isdir
 from hashlib import md5
 
 from common import *
-from bottle import route, abort
+from bottle import get, abort
 
 def md5file(fn):
 	m = md5()
@@ -15,7 +15,8 @@ def md5file(fn):
 			m.update(data)
 	return m.hexdigest()
 
-@route(("/browse/<path:path>", "/browse/"))
+@get("/browse/")
+@get("/browse/<path:path>")
 def r_browse(path=""):
 	if not cfg.browsebase:
 		abort(403)

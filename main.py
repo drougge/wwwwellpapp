@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bottle import run, route, static_file
+from bottle import run, get, static_file
 
 import search
 import image
@@ -9,11 +9,11 @@ import post
 import tag
 import browse
 
-@route("/static/<fn>")
+@get("/static/<fn>")
 def static(fn):
 	return static_file(fn, root="./static/")
 
-@route("/<fn:re:robots\.txt|favicon\.ico>")
+@get("/<fn:re:robots\.txt|favicon\.ico>")
 def rootstatic(fn):
 	return static_file(fn, root="./")
 
