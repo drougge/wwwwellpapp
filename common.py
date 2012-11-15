@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from cgi import escape
-from wellpapp import Client, Config
+from markupsafe import escape, Markup
+from wellpapp import Client, Config, DotDict
 from urllib import urlencode
 import re
 from math import ceil
-from functools import partial
 
-from bottle import request, response, mako_view
+from bottle import request, response, MakoTemplate
 
-view = partial(mako_view, template_settings=dict(default_filters=["escape"], imports=["from markupsafe import escape"]))
+MakoTemplate.global_config("imports", ["from markupsafe import escape"])
+MakoTemplate.global_config("default_filters", ["escape"])
 
 def init():
 	request.outdata_head = []
@@ -147,44 +147,16 @@ def prt_qs(names, tags, tagaround=None):
 		prt(u'</ul></li>\n')
 	prt(u'</ul>\n')
 
-def prt_thumb(post, link=True, classname=u'thumb'):
-	"""Print a single post in #thumbs view (or similar)"""
-	m = post.md5
-	prt(u'<span class="', classname, u'"')
-	if user:
-		prt(u' id="p', m, u'"')
-	prt(u'>')
-	if link:
-		prt(u'<a href="', base, u'post/', m, u'">')
-	else:
-		prt(u'<span>')
-	prt(u'<img ')
-	prtfields((u'src', base + u'image/' + thumbsize + u'/' + m), (u'alt', m))
-	prtfields((u'title', tags_as_html(post)))
-	prt(u'/>')
-	if link:
-		prt(u'</a>')
-	else:
-		prt(u'</span>')
-	prt(u'</span>\n')
-
-def prt_posts(posts):
-	"""Print #thumbs view"""
-	prt(u'<div id="thumbs">\n')
-	for post in posts:
-		prt_thumb(post)
-	prt(u'</div>\n')
-
 def tags_as_html(post):
 	"""Returns single string of HTML escaped tag names for post"""
 	names = sorted([t.pname for t in post.tags or []])
-	return u' '.join([tagfmt(n, False) for n in names])
+	return Markup(u' ').join([tagfmt(n, False) for n in names])
 
 def prt_search_form(q=u''):
 	"""Print search form"""
 	prt(u'<form action="', base, u'search" method="get">\n',
 	    u'<div id="search-box">\n',
-	    u'<input type="text" name="q" id="search-q" value="', escape(q, True),
+	    u'<input type="text" name="q" id="search-q" value="', escape(q),
 	    u'" onfocus="WP.comp_init(this, true);" />\n',
 	    u'<input type="submit" value="Search" />\n',
 	    u'</div>\n',
@@ -195,24 +167,22 @@ def makelink(fn, *args):
 	fn = base + fn
 	if not args: return fn
 	if u'?' in fn:
-		middle = u'&amp;'
+		middle = u'&'
 	else:
 		middle = u'?'
 	args = urlencode([(a, v.encode("utf-8")) for a, v in args])
-	return fn + middle + escape(args)
+	return fn + middle + args
 
 def pagelinks(link, page, result_count):
-	"""Returns a string with the pagelinks suitable for this search
+	"""Return (pages_to_link, rels).
+	pages_to_link is a list of integers, rels of (rel, href) pairs.
 	link is the base-link, page is current page, result_count is number
 	of results we can display (not pages).
-	Also puts rel-links in <head>
 	"""
 	pages = range(int(ceil(float(result_count) / per_page)))
 	if len(pages) == 1:
 		if not user: return u''
 		pages = []
-	real_outdata = request.outdata
-	request.outdata = []
 	if len(pages) > 16:
 		if page < 8:
 			pages = pages[:10] + pages[-6:]
@@ -220,40 +190,17 @@ def pagelinks(link, page, result_count):
 			pages = pages[:6] + pages[-10:]
 		else:
 			pages = pages[:6] + pages[page - 2:page + 3] + pages[-5:]
-	prt(u'<div class="pagelinks">')
-	prev = -1
-	for p in pages:
-		if p != prev + 1:
-			prt(u'<span class="pagelink linkspace">...</span>\n')
-		prev = p
-		prt(u'<span class="pagelink')
-		plink = link +  u'&amp;page=' + unicode(p)
-		if p == page:
-			prt(u' currentpage">')
-		else:
-			prt(u'"><a href="', plink, u'">')
-		prt(unicode(p))
-		if p != page:
-			prt(u'</a>')
-		prt(u'</span>\n')
-		if p == 0:
-			prt_rel(plink, u'first')
-		if p == page - 1:
-			prt_rel(plink, u'prev')
-		elif p == page + 1:
-			prt_rel(plink, u'next')
-	if pages: prt_rel(plink, u'last')
-	if user:
-		if pages:
-			prt(u'<span class="pagelink"><a href="', link,
-			    u'&amp;ALL=1">ALL</a></span>\n')
-		prt(u'<span class="pagelink"><a href="' + base,
-		    u'static/jserror.html" onclick="return WP.tm_init();">',
-		    u'Tagmode</a></span>\n')
-	prt(u'</div>\n')
-	res = u''.join(request.outdata)
-	request.outdata = real_outdata
-	return res
+	rels = []
+	if pages:
+		def add_rel(rel, p):
+			rels.append((rel, link + u"&page=" + unicode(p)))
+		if page > 0:
+			add_rel(u"first", 0)
+			add_rel(u"prev", page - 1)
+		if page < pages[-1]:
+			add_rel(u"next", page + 1)
+			add_rel(u"last", pages[-1])
+	return pages, rels
 
 def prt_tagform(m):
 	"""Print form for tagging single image (m)"""
@@ -362,3 +309,16 @@ def finish(ctype = "text/html"):
 		data = '<?xml version="1.0" encoding="utf-8"?>\n' + data
 	response.content_type = ctype
 	return data
+
+def makesearchlink(q, tags):
+	q = u' '.join([q for q, t in zip(q, tags) if t])
+	return makelink(u'search', (u'q', q))
+
+_globaldata = dict(user=user, tagfmt=tagfmt, tag_prefix=tag_prefix,
+                   tag_clean=tag_clean, makesearchlink=makesearchlink,
+                   makelink=makelink, thumbsize=thumbsize,
+                   tags_as_html=tags_as_html)
+def globaldata():
+	d = DotDict(_globaldata)
+	d.base = unicode(request.environ["SCRIPT_NAME"].rstrip("/") + "/")
+	return d

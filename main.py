@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bottle import run, get, static_file
+from bottle import get, static_file
 
 import search
 import image
@@ -17,4 +17,9 @@ def static(fn):
 def rootstatic(fn):
 	return static_file(fn, root="./")
 
-run(host="127.0.0.1", port=12222, debug=True, reloader=True)
+if __name__ == "__main__":
+	from bottle import run
+	run(host="127.0.0.1", port=12222, debug=True, reloader=True)
+else:
+	from bottle import default_app
+	application = default_app()

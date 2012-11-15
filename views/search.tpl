@@ -1,11 +1,15 @@
 <%inherit file="page.tpl"/>
 <%block name="main">
 <div id="main">
-	% if q:
-		## prt_qs
-	% endif
+	<%local:query_string />
 	% if posts:
-		gah
+		${ local.pagelinks() }
+		<div id="thumbs">
+			% for post in posts:
+				${ local.post_thumb(post) }
+			% endfor
+		</div>
+		${ local.pagelinks() }
 	% else:
 		<p>No results.</p>
 	% endif
