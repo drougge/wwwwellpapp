@@ -14,8 +14,12 @@
 		<p>No results.</p>
 	% endif
 </div>
-	##%include left_head
-	##%include search_form
-	##%include tags
-	##%include left_foot
+</%block>
+
+<%block name="left">
+<div id="left">
+	${ local.search_form(q) }
+	${ local.taglist(cloud, q) }
+	<div id="help"><a href="${ base }static/help.html">Help</a></div>
+</div>
 </%block>

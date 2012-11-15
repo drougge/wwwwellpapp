@@ -191,7 +191,7 @@ def pagelinks(link, page, result_count):
 		else:
 			pages = pages[:6] + pages[page - 2:page + 3] + pages[-5:]
 	rels = []
-	if pages:
+	if pages and not request.query.ALL:
 		def add_rel(rel, p):
 			rels.append((rel, link + u"&page=" + unicode(p)))
 		if page > 0:
@@ -225,67 +225,6 @@ def prt_tagform(m):
 		    u'<input type="submit" value="Rotate" />\n',
 		    u'</div>\n',
 		    u'</form>\n')
-
-def prt_script(script, suffix=u'\n'):
-	"""Print a script tag"""
-	prt(u'<script src="', base, u'static/', script,
-	    u'" type="text/javascript"></script>', suffix)
-
-def prt_inline_script(pre, *a):
-	"""Print an inline script in a both HTML and XHTML compatible manner. (The horror!)
-	pre gets printed before each line, so you can indent.
-	"""
-	prt(pre, u'<script type="text/javascript"><!--//--><![CDATA[//><!--\n')
-	prt(pre, *a)
-	prt(u'\n', pre, u'//--><!]]></script>\n')
-
-def prt_left_head():
-	"""Print head of #left div"""
-	prt(u'<div id="left">\n')
-
-def prt_left_foot():
-	"""Print foot of #left div"""
-	prt(u'<div id="help"><a href="',
-	    base, u'static/help.html',
-	    u'">Help</a></div>\n',
-	    u'</div>\n')
-
-def prt_head(extra_script=None):
-	"""Print page head
-	Call before any other output"""
-	request.outdata = request.outdata_head
-	prt(u"""<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<title>WWWwellpapp</title>
-	<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-	<link rel="stylesheet" href="%(base)sstatic/style.css" />
-	<link rel="stylesheet" href="%(base)sstatic/tagstyle.css" />
-	<script src="%(base)sstatic/common.js" type="text/javascript"></script>
-	<link rel="help" href="%(base)sstatic/help.html" />
-	<link rel="home" href="%(base)s" />\n""" % {"base": base})
-	if extra_script:
-		prt(u'\t')
-		prt_script(extra_script)
-	prt_inline_script(u'\t', u'WP.uribase = "', base, u'";')
-	request.outdata = []
-	prt(u'</head>\n<body>\n')
-	if user:
-		prt(u'<div id="tagbar"></div>\n')
-
-def prt_rel(href, rel):
-	"""Add a rel link to head (if appropriate)"""
-	if request.query.ALL: return
-	real_outdata = request.outdata
-	request.outdata = request.outdata_head
-	prt(u'\t<link rel="', rel, u'" href="', href, u'" />\n')
-	request.outdata = real_outdata
-
-def prt_foot():
-	"""Print page foot"""
-	prt_script(u'complete.js')
-	if user: prt_script(u'tagmode.js')
-	prt(u'</body></html>')
 
 def browser_wants_xhtml():
 	"""Isn't there a library function for this?"""

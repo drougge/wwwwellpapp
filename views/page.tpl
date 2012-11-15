@@ -22,6 +22,7 @@
 	% endif
 
 	<%block name="main"/>
+	<%block name="left"/>
 
 	${ script("complete.js") }
 	% if user:
@@ -107,4 +108,36 @@
 		</span>
 	% endif
 	</span>
+</%def>
+
+<%def name="taglist(tags, q=None)">
+	## print #tags list
+	<% if not tags: return '' %>
+	<ul id="tags">
+	% for n, t, impl in tags:
+		<%
+		c = u'tag implied' if impl else u'tag'
+		if t.ordered: c += u' ordered'
+		%>
+		<li class="${ c }"><a class="tt-${ t.type }" href="${ base }tag/${ t.guid }">${ n }</a>
+		% if q:
+			<ul>
+			% for prefix, caption in (u' ', u'+'), (u' -', u'-'):
+				<li><a href="${ makelink(u'search', (u'q', q + prefix + t.name)) }">${ caption }</a></li>
+			% endfor
+			</ul>
+		% endif
+		</li>
+	% endfor
+	</ul>
+</%def>
+
+<%def name="search_form(q)">
+	## Render search form
+	<form action="', base, u'search" method="get">
+		<div id="search-box">
+			<input type="text" name="q" id="search-q" value="${ q }" onfocus="WP.comp_init(this, true);" />
+			<input type="submit" value="Search" />
+		</div>
+	</form>
 </%def>
