@@ -23,9 +23,6 @@ def r_post(m):
 	if post.rotate > 0:
 		spec = u'%(width)dx%(height)d-%(rotate)d' % post
 		data.svg = data.base + u'rotate/' + spec + u'/' + m + u'.' + post.ext
-		data.svg_width, data.svg_height = post.height, post.width
-		if post.rotate in (90, 270):
-			post.width, post.height = post.height, post.width
 	
 	data.ordered_tags = [t for t in post.tags if t.ordered]
 	if data.ordered_tags:
