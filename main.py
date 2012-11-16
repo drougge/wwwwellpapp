@@ -9,6 +9,7 @@ import post
 import tag
 import browse
 import rotate
+import post_rotate
 
 @get("/static/<fn>")
 def static(fn):

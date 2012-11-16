@@ -67,9 +67,9 @@
 	</div>
 	</form>
 	% if cfg.thumbs_writeable:
-		<form action="' + base + u'post-rotate" method="post">
+		<form action="${ base }post-rotate" method="post">
 		<div id="rotate-form">
-			<input type="hidden" name="post" value="' + m + u'" />
+			<input type="hidden" name="post" value="${ post.md5 }" />
 			<select name="rot">
 				<option value="0"></option>
 				<option value="90">Right</option>
