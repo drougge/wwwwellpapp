@@ -6,6 +6,7 @@ from time import strftime, gmtime, time
 
 from bottle import get, abort, response
 from common import init
+from wellpapp import RawWrapper, raw_exts
 
 def fmttime(t):
 	return strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(t))
@@ -13,12 +14,20 @@ def fmttime(t):
 def serve(fn, ext):
 	if not exists(fn):
 		abort(404)
-	z = stat(fn).st_size
+	if ext in raw_exts:
+		fh = RawWrapper(open(fn, "rb"), True)
+		fh.seek(0, 2)
+		z = fh.tell()
+		fh.seek(0)
+		ext = "jpeg"
+	else:
+		z = stat(fn).st_size
+		fh = open(fn, "rb")
 	response.content_type = "image/" + ext
 	response.set_header("Content-Length", str(z))
 	response.set_header("Expires", fmttime(time() + 60*60*24 * 10))
 	response.set_header("Date", fmttime(time()))
-	return open(fn, "rb")
+	return fh
 
 @get("/image/<z>/<m:re:[0-9a-z]{32}>")
 def thumb(m, z):
