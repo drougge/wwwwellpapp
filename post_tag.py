@@ -11,8 +11,8 @@ def r_post_tag():
 	m = request.forms.post
 	post = client.get_post(m)
 	tags = request.forms.tags
-	create = request.forms.getall("create")
-	ctype  = request.forms.getall("ctype")
+	create = [a.decode("utf-8") for a in request.forms.getall("create")]
+	ctype  = [a.decode("utf-8") for a in request.forms.getall("ctype")]
 	full = set()
 	weak = set()
 	remove = set()
