@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from common import *
+from common import globaldata, init, per_page, makelink, pagelinks, tagcloud
 from bottle import get, post, request, mako_view as view
 from wellpapp import Tag, DotDict
 
@@ -28,7 +28,7 @@ def r_search():
 	data.result_count = 0
 	ta = filter(None, ta)
 	if ta or not q:
-		if user and request.query.ALL:
+		if data.user and request.query.ALL:
 			range = [0, 1 << 31 - 1]
 			page = -1
 		else:

@@ -1,7 +1,7 @@
 <%inherit file="page.tpl"/>
 <%block name="main">
 <div id="main">
-	<%local:query_string />
+	${ local.query_string(tagnames, tags) }
 	% if posts:
 		${ local.pagelinks() }
 		<div id="thumbs">

@@ -41,7 +41,7 @@
 	//--><!]]></script>
 </%def>
 
-<%def name="query_string(tagaround=None)">
+<%def name="query_string(tagnames, tags, tagaround=None)">
 	## Render the query string with modifying links at the top of the page
 	<%
 	if not tagnames:
