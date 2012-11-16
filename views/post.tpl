@@ -28,7 +28,7 @@
 		<div id="ordered" class="underimg">
 			<div class="tt-${ t.type }">${ tagfmt(t.name) }</div>
 			% for p in t.relposts:
-				${ local.post_thumb(p, p.md5 != post.md5, p.reldist) }
+				${ local.post_thumb(p, p.md5 != post.md5, u'thumb ' + p.reldist) }
 			% endfor
 		</div>
 	% endfor
