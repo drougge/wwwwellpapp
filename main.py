@@ -12,6 +12,7 @@ import rotate
 import post_rotate
 import ajax_completetag
 import ajax_tag
+import post_tag
 
 @get("/static/<fn>")
 def static(fn):

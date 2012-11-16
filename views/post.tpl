@@ -61,7 +61,7 @@
 	## Render form for tagging single image
 	<form action="${ base }post-tag" method="post">
 	<div id="tag-form">
-		<input type="hidden" name="post" value="{ post.md5 }" />
+		<input type="hidden" name="post" value="${ post.md5 }" />
 		<input type="text" name="tags" id="tag-q" onfocus="WP.comp_init(this, true);" />
 		<input type="submit" value="Tag" />
 	</div>
