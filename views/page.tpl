@@ -8,7 +8,7 @@
 	${ script("common.js") }
 	<link rel="help" href="${ base }static/help.html" />
 	<link rel="home" href="${ base }" />
-	% for rel, href in rels:
+	% for rel, href in rels or []:
 		<link rel="${ rel }" href="${ href }" />
 	% endfor
 	% if extra_script:

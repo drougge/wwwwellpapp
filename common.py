@@ -202,30 +202,6 @@ def pagelinks(link, page, result_count):
 			add_rel(u"last", pages[-1])
 	return pages, rels
 
-def prt_tagform(m):
-	"""Print form for tagging single image (m)"""
-	prt(u'<form action="' + base + u'post-tag" method="post">\n',
-	    u'<div id="tag-form">\n',
-	    u'<input type="hidden" name="post" value="' + m + u'" />\n',
-	    u'<input type="text" name="tags" id="tag-q" ',
-	    u' onfocus="WP.comp_init(this, true);" />\n',
-	    u'<input type="submit" value="Tag" />\n',
-	    u'</div>\n',
-	    u'</form>\n')
-	if cfg.thumbs_writeable:
-		prt(u'<form action="' + base + u'post-rotate" method="post">\n',
-		    u'<div id="rotate-form">\n',
-		    u'<input type="hidden" name="post" value="' + m + u'" />\n',
-		    u'<select name="rot">\n',
-		    u'<option value="0"></option>\n',
-		    u'<option value="90">Right</option>\n',
-		    u'<option value="180">180°</option>\n',
-		    u'<option value="270">Left</option>\n',
-		    u'</select>\n',
-		    u'<input type="submit" value="Rotate" />\n',
-		    u'</div>\n',
-		    u'</form>\n')
-
 def browser_wants_xhtml():
 	"""Isn't there a library function for this?"""
 	if request.query.xhtml: return True
@@ -256,7 +232,7 @@ def makesearchlink(q, tags):
 _globaldata = dict(user=user, tagfmt=tagfmt, tag_prefix=tag_prefix,
                    tag_clean=tag_clean, makesearchlink=makesearchlink,
                    makelink=makelink, thumbsize=thumbsize,
-                   tags_as_html=tags_as_html)
+                   tags_as_html=tags_as_html, cfg=cfg)
 def globaldata():
 	d = DotDict(_globaldata)
 	d.base = unicode(request.environ["SCRIPT_NAME"].rstrip("/") + "/")
