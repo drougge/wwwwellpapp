@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from sys import exit
-from common import *
 from itertools import chain
 from os.path import commonprefix
-import json
+
+from common import init
+from bottle import get, request
 
 _fuzz_ignore = u"".join(map(unichr, range(33))) + u"-_()[]{}.,!/\"'?<>@=+%$#|\\"
 def _completefuzz(word):
 	return filter(lambda c: c not in _fuzz_ignore, word.lower())
 
-def complete(word):
+def complete(client, word):
 	for t, get in ("EI", lambda t: t.name), ("EAI", lambda t: t.alias[0]), \
 	              ("FI", lambda t: t.name), ("FAI", lambda t: t.alias[0]):
 		tags = client.find_tags(t, word)
@@ -30,14 +30,15 @@ def complete(word):
 		candidates = filter(inc, tags) + filter(inc, aliases)
 	return (commonprefix([n for n, t in candidates]), ""), candidates
 
-tag = getarg("q")
-full_tag, alts = complete(tag)
-res = {}
-if full_tag[0] or alts:
-	res["complete"] = full_tag[0]
-	res["type"] = full_tag[1]
-	if len(alts) > 20: alts = []
-	res["alts"] = alts
-prt(json.dumps(res, ensure_ascii=False))
-
-finish("application/json")
+@get("/ajax-completetag")
+def ajax_completetag():
+	tag = request.query.q
+	client = init()
+	full_tag, alts = complete(client, tag)
+	res = {}
+	if full_tag[0] or alts:
+		res["complete"] = full_tag[0]
+		res["type"] = full_tag[1]
+		if len(alts) > 20: alts = []
+		res["alts"] = alts
+	return res
