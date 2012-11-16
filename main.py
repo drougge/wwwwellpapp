@@ -24,7 +24,8 @@ def rootstatic(fn):
 
 if __name__ == "__main__":
 	from bottle import run
-	run(host="127.0.0.1", port=12222, debug=True, reloader=True)
+	from sys import argv
+	run(host=argv[1], port=int(argv[2]), debug=True, reloader=True)
 else:
 	from bottle import default_app
 	application = default_app()
