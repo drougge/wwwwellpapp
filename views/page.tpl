@@ -134,7 +134,7 @@
 
 <%def name="search_form(q)">
 	## Render search form
-	<form action="', base, u'search" method="get">
+	<form action="${ base }search" method="get">
 		<div id="search-box">
 			<input type="text" name="q" id="search-q" value="${ q }" onfocus="WP.comp_init(this, true);" />
 			<input type="submit" value="Search" />
