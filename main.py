@@ -8,6 +8,7 @@ import image
 import post
 import tag
 import browse
+import rotate
 
 @get("/static/<fn>")
 def static(fn):
