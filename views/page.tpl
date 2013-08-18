@@ -51,7 +51,9 @@
 		% for name, tag, i in zip(tagnames, tags, range(len(tagnames))):
 			% if tag:
 				<% prefix, clean = tag_prefix(name), tag_clean(name) %>
+				<% tag, cmp, value = tag %>
 				<li>${ prefix }<a href="${ base }tag/${ tag.guid }" class="tt-${ tag.type }">${ tagfmt(clean) }</a>
+				${ tagvalue(value, cmp) }
 				<ul>
 				<% qc = tagnames[:] %>
 				% for pre in [pre for pre in (u'', u'!', u'~', u'-') if pre != prefix]:
@@ -110,15 +112,15 @@
 	</span>
 </%def>
 
-<%def name="tagvalue(tag)">
+<%def name="tagvalue(value, cmp=None)">
 	<%
-	value = tag.value
 	if value is None: return u''
 	value = unicode(value)
+	cmp = u' %s ' % (cmp or u'=',)
 	if len(value) <= 10:
-		return u' = ' + value
+		return cmp + value
 	%>
-	<span title="${ value }">= ${ value[:6] }...</span>
+	<span title="${ value }">${ cmp } ${ value[:6] }...</span>
 </%def>
 
 <%def name="taglist(tags, q=None)">
@@ -130,7 +132,7 @@
 		c = u'tag implied' if impl else u'tag'
 		if t.ordered: c += u' ordered'
 		%>
-		<li class="${ c }"><a class="tt-${ t.type }" href="${ base }tag/${ t.guid }">${ n }</a>${ tagvalue(t) }
+		<li class="${ c }"><a class="tt-${ t.type }" href="${ base }tag/${ t.guid }">${ n }</a>${ tagvalue(t.value) }
 		% if q:
 			<ul>
 			% for prefix, caption in (u' ', u'+'), (u' -', u'-'):

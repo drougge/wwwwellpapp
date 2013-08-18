@@ -1,7 +1,7 @@
 <%inherit file="page.tpl"/>
 <%block name="main">
 <div id="main">
-	${ local.query_string([tag.name], [tag], 'h1') }
+	${ local.query_string([tag.name], [(tag, None, None)], 'h1') }
 	<ul id="tagdata">
 
 		% if tag.alias or user:
