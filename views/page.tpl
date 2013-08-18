@@ -110,6 +110,17 @@
 	</span>
 </%def>
 
+<%def name="tagvalue(tag)">
+	<%
+	value = tag.value
+	if value is None: return u''
+	value = unicode(value)
+	if len(value) <= 10:
+		return u' = ' + value
+	%>
+	<span title="${ value }">= ${ value[:6] }...</span>
+</%def>
+
 <%def name="taglist(tags, q=None)">
 	## print #tags list
 	<% if not tags: return '' %>
@@ -119,7 +130,7 @@
 		c = u'tag implied' if impl else u'tag'
 		if t.ordered: c += u' ordered'
 		%>
-		<li class="${ c }"><a class="tt-${ t.type }" href="${ base }tag/${ t.guid }">${ n }</a>
+		<li class="${ c }"><a class="tt-${ t.type }" href="${ base }tag/${ t.guid }">${ n }</a>${ tagvalue(t) }
 		% if q:
 			<ul>
 			% for prefix, caption in (u' ', u'+'), (u' -', u'-'):
