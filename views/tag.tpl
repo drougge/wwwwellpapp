@@ -46,6 +46,10 @@
 		% endif
 		</li>
 
+		% if tag.valuetype:
+			<li>Valuetype: ${ tag.valuetype }</li>
+		% endif
+
 		<li>Posts: ${ tag.posts }</li>
 		<li>Weak posts: ${ tag.weak_posts }</li>
 
