@@ -29,11 +29,10 @@ def r_search():
 	data.cloud = []
 	data.result_count = 0
 	ta = []
-	for i, (tag, cmp, val) in enumerate(data.tags):
+	for i, (tag, cmp, val) in enumerate(filter(None, data.tags)):
 		if cmp:
 			qa[i] = tag_prefix(qa[i]) + tag.name
 		ta.append((tag, cmp, val))
-	ta = filter(None, ta)
 	if ta or not q:
 		if data.user and request.query.ALL:
 			range = [0, 1 << 31 - 1]
