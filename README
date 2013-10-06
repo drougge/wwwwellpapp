@@ -11,7 +11,7 @@ mako (tested with 0.5.0)
 
 Quick start:
 
-Create a .wellpapprc wwwwellpapp directory with at least the following:
+Create a .wellpapprc in wwwwellpapp directory with at least the following:
 
 thumb_sizes=200 # you can use something else, but it might look bad
 server, port, image_base, thumb_base as in your normal rc.
