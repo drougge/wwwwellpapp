@@ -154,7 +154,12 @@ def prt_qs(names, tags, tagaround=None):
 
 def tags_as_html(post):
 	"""Returns single string of HTML escaped tag names for post"""
-	names = sorted(tagfmt(t, False) for t in post.tags or [] if not t.datatag)
+	tags = post.tags or {}
+	names = sorted(tagfmt(t, False) for t in tags if not t.datatag)
+	for dt in ('aaaaaa-aaaadt-faketg-gpspos', 'aaaaaa-aaaac8-faketg-bddate',):
+		t = tags.get(dt)
+		if t:
+			names.append(tagfmt(t, False))
 	return Markup(u' ').join(names)
 
 def prt_search_form(q=u''):
