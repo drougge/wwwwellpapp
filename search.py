@@ -39,7 +39,7 @@ def r_search():
 			page = -1
 		else:
 			range = [per_page * page, per_page * page + per_page - 1]
-		order = "aaaaaa-aaaads-faketg-create"
+		order = "aaaaaa-aaaac8-faketg-bddate"
 		if ta and ta[0][0].ordered:
 			order = "group"
 		props = DotDict()

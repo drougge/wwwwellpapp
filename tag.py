@@ -88,7 +88,7 @@ def r_tag(guid):
 	data.implies_tags = get_impl(False)
 	data.implied_by_tags = get_impl(True)
 	
-	order = "group" if tag.ordered else "aaaaaa-aaaads-faketg-create"
+	order = "group" if tag.ordered else "aaaaaa-aaaac8-faketg-bddate"
 	props = DotDict()
 	posts = client.search_post(guids=[guid], order=order, range=[0, per_page - 1], wanted=["tagname", "implied"], props=props)
 	data.posts = posts
