@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from common import init, globaldata, taglist
+from common import init, globaldata, taglist, wanted
 from wellpapp import Post
 from bottle import get, abort, mako_view as view
 
@@ -9,7 +9,7 @@ from bottle import get, abort, mako_view as view
 @view("post")
 def r_post(m):
 	client = init()
-	post = client.get_post(m, wanted=["width", "height", "ext", "tagname", "tagguid", "tagdata", "rotate"], separate_implied=True)
+	post = client.get_post(m, wanted=wanted + ("width", "height", "ext", "rotate",), separate_implied=True)
 	if not post: abort(404)
 	data = globaldata()
 	

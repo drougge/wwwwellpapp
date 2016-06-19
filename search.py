@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from common import globaldata, init, per_page, makelink, pagelinks, tagcloud, tag_prefix
+from common import globaldata, init, per_page, makelink, pagelinks, tagcloud, tag_prefix, wanted
 from bottle import get, post, request, mako_view as view
 from wellpapp import Tag, DotDict
 
@@ -44,7 +44,8 @@ def r_search():
 			order = "group"
 		props = DotDict()
 		ga = [(t.pguid, cmp, val) for t, cmp, val in ta]
-		posts = client.search_post(guids=ga, order=order, range=range, wanted=["tagname", "implied"], props=props)
+		posts = client.search_post(guids=ga, order=order, range=range, wanted=wanted, props=props)
+		print "mm"
 		if posts:
 			data.posts = posts
 			data.result_count = props.result_count

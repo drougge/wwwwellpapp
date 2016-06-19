@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from markupsafe import escape, Markup
-from wellpapp import Client, Config, DotDict
+from wellpapp import Client, Config, DotDict, Tag
 from urllib import urlencode
 import re
 from math import ceil
@@ -52,6 +52,11 @@ _zwsp_nr_re = re.compile(ur'(\d+)')
 _zwsp_re = re.compile(ur'\u200b+')
 def tagfmt(n, html_ok=True):
 	"""Format a tagname for printing in html"""
+	if isinstance(n, Tag):
+		if n.value is not None:
+			n = '%s=%s' % (n.pname, n.value,)
+		else:
+			n = n.pname
 	n = _zwsp_pre_re.sub(u'\u200b\\1', n)
 	n = _zwsp_post_re.sub(u'\\1\u200b', n)
 	n = _zwsp_nr_re.sub(u'\u200b\\1\u200b', n)
@@ -149,8 +154,8 @@ def prt_qs(names, tags, tagaround=None):
 
 def tags_as_html(post):
 	"""Returns single string of HTML escaped tag names for post"""
-	names = sorted([t.pname for t in post.tags or []])
-	return Markup(u' ').join([tagfmt(n, False) for n in names])
+	names = sorted(tagfmt(t, False) for t in post.tags or [] if not t.datatag)
+	return Markup(u' ').join(names)
 
 def prt_search_form(q=u''):
 	"""Print search form"""
@@ -237,3 +242,5 @@ def globaldata():
 	d = DotDict(_globaldata)
 	d.base = unicode(request.environ["SCRIPT_NAME"].rstrip("/") + "/")
 	return d
+
+wanted = ("tagname", "tagguid", "implied", "tagdata", "datatags",)

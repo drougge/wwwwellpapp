@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from common import init, globaldata, tagcloud, tagname, per_page, makelink, pagelinks
+from common import init, globaldata, tagcloud, tagname, per_page, makelink, pagelinks, wanted
 from wellpapp import DotDict, ImplicationTuple
 from bottle import get, post, abort, request, mako_view as view
 from collections import namedtuple
@@ -90,7 +90,7 @@ def r_tag(guid):
 	
 	order = "group" if tag.ordered else "aaaaaa-aaaac8-faketg-bddate"
 	props = DotDict()
-	posts = client.search_post(guids=[guid], order=order, range=[0, per_page - 1], wanted=["tagname", "implied"], props=props)
+	posts = client.search_post(guids=[guid], order=order, range=[0, per_page - 1], wanted=wanted, props=props)
 	data.posts = posts
 	data.result_count = props.result_count
 	data.page = 0
