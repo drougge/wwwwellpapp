@@ -379,6 +379,22 @@ p {
 	color: #444;
 }
 
+#metadata {
+	background-color: #dde4f6;
+	padding: 0;
+	margin: 8px 0 8px 0;
+	width: 150px;
+	color: #000;
+	border-top: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+	list-style-type: none;
+}
+#metadata li:nth-child(even) {
+	background-color: #eaeefb;
+}
+
 .dist0 {
 	margin: -27px -35px -27px -35px;
 	-o-transform: scale(0.8);

@@ -39,6 +39,10 @@
 <div id="left">
 	${ local.search_form(q) }
 	${ local.taglist(tags) }
+	<ul id="metadata">
+		<li>${ post.width } x ${ post.height }</li>
+		<li>${ ' '.join(str(post.imgdate).split('T')) }</li>
+	</ul>
 	% if user:
 		${ local.tagform() }
 	% endif

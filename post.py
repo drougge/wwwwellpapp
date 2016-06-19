@@ -9,7 +9,7 @@ from bottle import get, abort, mako_view as view
 @view("post")
 def r_post(m):
 	client = init()
-	post = client.get_post(m, wanted=wanted + ("width", "height", "ext", "rotate",), separate_implied=True)
+	post = client.get_post(m, wanted=wanted + ("width", "height", "imgdate", "ext", "rotate",), separate_implied=True)
 	if not post: abort(404)
 	data = globaldata()
 	
