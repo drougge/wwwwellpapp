@@ -5,6 +5,9 @@
 	<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 	<link rel="stylesheet" href="${ base }static/style.css" />
 	<link rel="stylesheet" href="${ base }static/tagstyle.css" />
+% if gps:
+	<link rel="stylesheet" href="${ base }static/leaflet-0.7.7/leaflet.css" />
+% endif
 	${ script("common.js") }
 	<link rel="help" href="${ base }static/help.html" />
 	<link rel="home" href="${ base }" />

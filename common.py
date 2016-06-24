@@ -242,7 +242,8 @@ def makesearchlink(q, tags):
 _globaldata = dict(user=user, tagfmt=tagfmt, tag_prefix=tag_prefix,
                    tag_clean=tag_clean, makesearchlink=makesearchlink,
                    makelink=makelink, thumbsize=thumbsize,
-                   tags_as_html=tags_as_html, cfg=cfg)
+                   tags_as_html=tags_as_html, cfg=cfg, gps=False,
+                  )
 def globaldata():
 	d = DotDict(_globaldata)
 	d.base = unicode(request.environ["SCRIPT_NAME"].rstrip("/") + "/")

@@ -42,4 +42,7 @@ def r_post(m):
 				if do_rel and d[1]:
 					data.rels.append((d[1], p.md5))
 	
+	if 'aaaaaa-aaaadt-faketg-gpspos' in post.datatags:
+		data.gps = post.datatags['aaaaaa-aaaadt-faketg-gpspos'].value
+	
 	return data

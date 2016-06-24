@@ -14,7 +14,7 @@ import ajax_completetag
 import ajax_tag
 import post_tag
 
-@get("/static/<fn>")
+@get("/static/<fn:path>")
 def static(fn):
 	return static_file(fn, root="./static/")
 

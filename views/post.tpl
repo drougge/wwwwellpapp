@@ -42,12 +42,35 @@
 	<ul id="metadata">
 		<li>${ post.width } x ${ post.height }</li>
 		<li>${ ' '.join(str(post.imgdate).split('T')) }</li>
+		% if gps:
+		<li>
+			<input type="text" name="gps" value="${ post.datatags['aaaaaa-aaaadt-faketg-gpspos'].value }" />
+			<div id="map">
+				<noscript>No map without javascript</noscript>
+			</div>
+		</li>
+		% endif
 	</ul>
 	% if user:
 		${ local.tagform() }
 	% endif
 	<div id="help"><a href="${ base }static/help.html">Help</a></div>
 </div>
+% if gps:
+	${ local.script("leaflet-0.7.7/leaflet.js") }
+	${ local.inline_script("""
+		var gps = [%f, %f];
+		var osmlayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+		})
+		var map = L.map('map', {
+			center: gps,
+			zoom: 10,
+			layers: [osmlayer]
+		})
+		L.marker(gps).addTo(map);
+	""" % (gps.lat, gps.lon,)) }
+% endif
 </%block>
 
 <%def name="img(m, post, id)">

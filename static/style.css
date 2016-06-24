@@ -394,6 +394,14 @@ p {
 #metadata li:nth-child(even) {
 	background-color: #eaeefb;
 }
+#metadata input {
+	background-color: #dde4f6;
+}
+
+#map {
+	height: 150px;
+	width: 150px;
+}
 
 .dist0 {
 	margin: -27px -35px -27px -35px;
