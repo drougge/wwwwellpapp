@@ -92,6 +92,10 @@
 		}
 		WP.size.container.style.setProperty("--width", iw + "px");
 		WP.size.container.style.setProperty("--height", ih + "px");
+		// If we got here CSS variables should work, so remove the
+		// fallback sizer so it doesn't overflow the regular sizer.
+		var fallback = document.getElementById("fallback-sizer");
+		if (fallback) { fallback.parentNode.removeChild(fallback); }
 		return false;
 	};
 }());
