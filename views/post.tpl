@@ -19,6 +19,7 @@
 		style="rotate: var(--rotate); translate: var(--translate-horiz) var(--translate-vert);"
 		/>
 		<div id="main-image-sizer">
+			<div id="fallback-sizer" style="height: ${ initial_height }px; width: ${initial_raw_width }px;"></div>
 		</div>
 	</div>
 	${ local.inline_script(u'WP.size.toggle(true);') }
