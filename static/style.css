@@ -185,6 +185,18 @@ img {
 	border-style: none;
 }
 
+#main-image {
+	image-orientation: none;
+	position: absolute;
+	float: left;
+	z-index: 3;
+}
+#main-image-sizer {
+	position: relative;
+	width: var(--width);
+	height: var(--height);
+}
+
 #thumbs {
 	clear: both;
 }

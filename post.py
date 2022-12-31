@@ -4,6 +4,7 @@
 from common import init, globaldata, taglist, wanted, cfg
 from wellpapp import Post
 from bottle import get, abort, mako_view as view
+import math
 
 @get("/post/<m:re:[0-9a-f]{32}>")
 @view("post")
@@ -25,11 +26,16 @@ def r_post(m):
 	scale = min(float(cfg.fallback_width or 800) / width, float(cfg.fallback_height or 600) / height, 1)
 	data.initial_width = int(scale * width)
 	data.initial_height = int(scale * height)
+	if int(post.rotate) in (90, 270):
+		data.translate_horiz = math.trunc((data.initial_width - data.initial_height) / 2.0)
+		data.translate_vert = math.trunc((data.initial_height - data.initial_width) / 2.0)
+		data.initial_raw_width = data.initial_height
+		data.initial_raw_height = data.initial_width
+	else:
+		data.translate_horiz = data.translate_vert = 0
+		data.initial_raw_width = data.initial_width
+		data.initial_raw_height = data.initial_height
 
-	if post.rotate > 0:
-		spec = u'%(width)dx%(height)d-%(rotate)d' % post
-		data.svg = data.base + u'rotate/' + spec + u'/' + m + u'.' + post.ext
-	
 	data.ordered_tags = [t for t in post.tags if t.ordered]
 	if data.ordered_tags:
 		do_rel = (len(data.ordered_tags) == 1)

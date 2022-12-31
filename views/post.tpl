@@ -5,14 +5,22 @@
 	If you had javascript, image resizing might work
 	</div></noscript>
 	<div onclick="return WP.size.toggle(false);" id="rescaled-msg" class="msgbox"></div>
-	% if post.rotate > 0:
-		<object type="image/svg+xml" id="main-image" data="${ svg }" data-width="${ post.width }" data-height="${ post.height }" width="${ initial_width }" height="${ initial_height }">
-			<div>This image should be rotated, but your browser does not appear to support that.</div>
-			${ img(post.md5, post, u"fallback-image") }
-		</object>
-	% else:
-		${ img(post.md5, post, u"main-image") }
-	% endif
+	<div id="main-image-container" style="--width: ${ initial_width }px; --height: ${ initial_height }px; --translate-horiz: ${ translate_horiz }px; --translate-vert: ${ translate_vert }px; --rotate: ${ post.rotate }deg;">
+		<img
+		id="main-image"
+		src="${ base }image/${ post.md5 }.${ post.ext }"
+		alt="${ post.md5 }"
+		width="${ initial_raw_width }"
+		height="${ initial_raw_height }"
+		data-width="${ post.width }"
+		data-height="${ post.height }"
+		data-rotate="${ post.rotate }"
+		onmousedown="return WP.size.toggle(false);"
+		style="rotate: var(--rotate); translate: var(--translate-horiz) var(--translate-vert);"
+		/>
+		<div id="main-image-sizer">
+		</div>
+	</div>
 	${ local.inline_script(u'WP.size.toggle(true);') }
 	% if rel_posts:
 		<div id="related" class="underimg">
@@ -72,19 +80,6 @@
 	""" % (gps.lat, gps.lon,)) }
 % endif
 </%block>
-
-<%def name="img(m, post, id)">
-	## Render main image
-	<img onmousedown="return WP.size.toggle(false);"
-	src="${ base }image/${ m }.${ post.ext }"
-	alt="${ m }"
-	id="${ id }"
-	data-width="${ post.width }"
-	data-height="${ post.height }"
-	width="${ initial_width }"
-	height="${ initial_height }"
-	/>
-</%def>
 
 <%def name="tagform()">
 	## Render form for tagging single image
