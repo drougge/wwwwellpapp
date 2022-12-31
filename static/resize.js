@@ -43,8 +43,8 @@
 			WP.size.img = document.getElementById("main-image");
 			WP.size.div = document.getElementById("rescaled-msg");
 			if (!WP.size.img || !WP.size.div) { return false; }
-			WP.size.orgWidth = WP.size.img.width;
-			WP.size.orgHeight = WP.size.img.height;
+			WP.size.orgWidth = parseInt(WP.size.img.getAttribute("data-width"));
+			WP.size.orgHeight = parseInt(WP.size.img.getAttribute("data-height"));
 			WP.size.state = 1;
 		} else if (WP.size.msg) {
 			WP.size.div.style.display = "none";

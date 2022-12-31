@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from common import init, globaldata, taglist, wanted
+from common import init, globaldata, taglist, wanted, cfg
 from wellpapp import Post
 from bottle import get, abort, mako_view as view
 
@@ -20,6 +20,12 @@ def r_post(m):
 	data.rel_posts = [Post(md5=md5) for md5 in client.post_rels(m) or []]
 	data.rels = []
 	
+	width = int(post.width)
+	height = int(post.height)
+	scale = min(float(cfg.fallback_width or 800) / width, float(cfg.fallback_height or 600) / height, 1)
+	data.initial_width = int(scale * width)
+	data.initial_height = int(scale * height)
+
 	if post.rotate > 0:
 		spec = u'%(width)dx%(height)d-%(rotate)d' % post
 		data.svg = data.base + u'rotate/' + spec + u'/' + m + u'.' + post.ext

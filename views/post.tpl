@@ -6,7 +6,7 @@
 	</div></noscript>
 	<div onclick="return WP.size.toggle(false);" id="rescaled-msg" class="msgbox"></div>
 	% if post.rotate > 0:
-		<object type="image/svg+xml" id="main-image" data="${ svg }" width="${ post.width }" height="${ post.height }">
+		<object type="image/svg+xml" id="main-image" data="${ svg }" data-width="${ post.width }" data-height="${ post.height }" width="${ initial_width }" height="${ initial_height }">
 			<div>This image should be rotated, but your browser does not appear to support that.</div>
 			${ img(post.md5, post, u"fallback-image") }
 		</object>
@@ -79,8 +79,10 @@
 	src="${ base }image/${ m }.${ post.ext }"
 	alt="${ m }"
 	id="${ id }"
-	width="${ post.width }"
-	height="${ post.height }"
+	data-width="${ post.width }"
+	data-height="${ post.height }"
+	width="${ initial_width }"
+	height="${ initial_height }"
 	/>
 </%def>
 
