@@ -14,6 +14,9 @@ Quick start:
 Create a .wellpapprc in wwwwellpapp directory with at least the following:
 
 thumb_sizes=200 # you can use something else, but it might look bad
+webbase=/
+fallback_width=800 # image width if js is unavailable
+fallback_height=600 # image height if js is unavailable
 server, port, image_base, thumb_base as in your normal rc.
 
 If you want to browse the filesystem, also set browsebase to the directory
