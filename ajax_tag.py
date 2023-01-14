@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from common import init, tag_clean, tag_prefix, tags_as_html, tag_post, tagtypes

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from common import globaldata, init, per_page, makelink, pagelinks, tagcloud, tag_prefix, wanted
