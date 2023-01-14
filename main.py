@@ -8,7 +8,6 @@ import image
 import post
 import tag
 import browse
-import rotate
 import post_rotate
 import ajax_completetag
 import ajax_tag
