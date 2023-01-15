@@ -29,7 +29,7 @@
 
 		<li>Type:
 		% if user:
-			<form action="{ tag.guid }" method="post"><div>
+			<form action="${ tag.guid }" method="post"><div>
 			<select name="type">
 			% for tt in tagtypes:
 				<option value="${ tt }"

@@ -8,12 +8,14 @@ from collections import namedtuple
 ImplicationTupleWithName = namedtuple("ImplicationTupleWithName", ImplicationTuple._fields + ("name",))
 
 def modify_tag(client, data):
+	forms = request.forms.decode('utf-8')
+	print(dict(forms))
 	guid = data.tag.guid
 	try:
-		set_prio = int(request.query.prio)
+		set_prio = int(forms.prio)
 	except Exception:
 		set_prio = 0
-	data.implies = request.query.implies.strip()
+	data.implies = forms.implies.strip()
 	if data.implies and ' ' not in data.implies:
 		implguid = client.find_tag(data.implies, with_prefix=True)
 		if implguid:
@@ -23,10 +25,10 @@ def modify_tag(client, data):
 				set_prio = 0
 			except Exception:
 				pass
-	mod_guid = request.query.guid
+	mod_guid = forms.guid
 	if mod_guid:
 		try:
-			if request.query.delete:
+			if forms.delete:
 				client.remove_implies(guid, mod_guid)
 			else:
 				client.add_implies(guid, mod_guid, set_prio)
@@ -35,7 +37,7 @@ def modify_tag(client, data):
 		set_prio = 0
 	data.set_prio = set_prio
 	update = False
-	data.add_alias = request.query.alias.strip()
+	data.add_alias = forms.alias.strip()
 	if data.add_alias:
 		try:
 			client.add_alias(data.add_alias, guid)
@@ -43,14 +45,14 @@ def modify_tag(client, data):
 			update = True
 		except Exception:
 			pass
-	rem_alias = request.query.unalias
+	rem_alias = forms.unalias
 	if rem_alias:
 		try:
 			client.remove_alias(rem_alias)
 			update = True
 		except Exception:
 			pass
-	new_type = request.query.type
+	new_type = forms.type
 	if new_type:
 		try:
 			client.mod_tag(guid, type=new_type)
