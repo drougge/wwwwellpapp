@@ -1,5 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+0_0 # Python >= 3.6 is required
 
 from bottle import get, static_file
 

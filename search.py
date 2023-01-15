@@ -23,7 +23,7 @@ def r_search():
 		page = 0
 	q = request.query.q.strip()
 	data.tagnames = qa = q.split()
-	data.tags = map(parse_tag, qa)
+	data.tags = list(map(parse_tag, qa))
 	data.q = q = u' '.join(qa)
 	data.cloud = []
 	data.result_count = 0
@@ -44,7 +44,6 @@ def r_search():
 		props = DotDict()
 		ga = [(t.pguid, cmp, val) for t, cmp, val in ta]
 		posts = client.search_post(guids=ga, order=order, range=range, wanted=wanted, props=props)
-		print "mm"
 		if posts:
 			data.posts = posts
 			data.result_count = props.result_count

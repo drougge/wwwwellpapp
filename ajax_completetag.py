@@ -6,9 +6,9 @@ from os.path import commonprefix
 from common import init
 from bottle import get, request
 
-_fuzz_ignore = u"".join(map(unichr, range(33))) + u"-_()[]{}.,!/\"'?<>@=+%$#|\\"
+_fuzz_ignore = "".join(map(chr, range(33))) + "-_()[]{}.,!/\"'?<>@=+%$#|\\"
 def _completefuzz(word):
-	return filter(lambda c: c not in _fuzz_ignore, word.lower())
+	return list(filter(lambda c: c not in _fuzz_ignore, word.lower()))
 
 def complete(client, word):
 	for t, get in ("EI", lambda t: t.name), ("EAI", lambda t: t.alias[0]), \
@@ -19,14 +19,15 @@ def complete(client, word):
 			return (get(t), t.type), []
 		if len(tags) > 1: break
 	aliases = [[(a, t.type) for a in t.alias] or [] for t in tags]
-	aliases = chain(*aliases)
+	aliases = list(chain(*aliases))
 	tags = [(t.name, t.type) for t in tags]
 	inc = lambda t: t[0][:len(word)] == word
-	candidates = filter(inc, tags) + filter(inc, aliases)
+	all_candidates = tags + aliases
+	candidates = list(filter(inc, all_candidates))
 	if not candidates:
 		word = _completefuzz(word)
 		inc = lambda t: _completefuzz(t[0])[:len(word)] == word
-		candidates = filter(inc, tags) + filter(inc, aliases)
+		candidates = list(filter(inc, all_candidates))
 	return (commonprefix([n for n, t in candidates]), ""), candidates
 
 @get("/ajax-completetag")

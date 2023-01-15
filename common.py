@@ -2,7 +2,7 @@
 
 from markupsafe import escape, Markup
 from wellpapp import Client, Config, DotDict, Tag
-from urllib import urlencode
+from urllib.parse import urlencode
 import re
 from math import ceil
 
@@ -20,9 +20,9 @@ def init():
 cfg = Config(local_rc=True)
 per_page = 32
 user = "fake"
-base = unicode(cfg.webbase)
+base = cfg.webbase
 assert base
-thumbsize = unicode(cfg.thumb_sizes.split()[0])
+thumbsize = cfg.thumb_sizes.split()[0]
 assert thumbsize
 
 def tag_clean(n):
@@ -35,7 +35,7 @@ def tag_prefix(n):
 	return u''
 
 def prt(*a):
-	"""Print (unicode) to client.
+	"""Print to client.
 	Conceptually at least, nothing is actually sent until finish is called.
 	"""
 	request.outdata.extend(a)
@@ -44,12 +44,13 @@ def prtfields(*fields):
 	"""Print (fieldname, value) pairs as html attributes
 	Output ends with a space.
 	"""
-	map(lambda f: prt(f[0], u'="', escape(unicode(f[1])), u'" '), fields)
+	for f in fields:
+		prt(f[0], '="', escape(f[1]), '" ')
 
-_zwsp_pre_re = re.compile(ur'([(<\[]|\b\d)')
-_zwsp_post_re = re.compile(ur'([:/)>\]&\\,\._-])')
-_zwsp_nr_re = re.compile(ur'(\d+)')
-_zwsp_re = re.compile(ur'\u200b+')
+_zwsp_pre_re = re.compile(r'([(<\[]|\b\d)')
+_zwsp_post_re = re.compile(r'([:/)>\]&\\,\._-])')
+_zwsp_nr_re = re.compile(r'(\d+)')
+_zwsp_re = re.compile(r'\u200b+')
 def tagfmt(n, html_ok=True):
 	"""Format a tagname for printing in html"""
 	if isinstance(n, Tag):
@@ -189,7 +190,7 @@ def pagelinks(link, page, result_count):
 	link is the base-link, page is current page, result_count is number
 	of results we can display (not pages).
 	"""
-	pages = range(int(ceil(float(result_count) / per_page)))
+	pages = list(range(int(ceil(float(result_count) / per_page))))
 	if len(pages) == 1:
 		if not user: return u''
 		pages = []
@@ -203,7 +204,7 @@ def pagelinks(link, page, result_count):
 	rels = []
 	if pages and not request.query.ALL:
 		def add_rel(rel, p):
-			rels.append((rel, link + u"&page=" + unicode(p)))
+			rels.append((rel, link + "&page=" + str(p)))
 		if page > 0:
 			add_rel(u"first", 0)
 			add_rel(u"prev", page - 1)
@@ -246,7 +247,7 @@ _globaldata = dict(user=user, tagfmt=tagfmt, tag_prefix=tag_prefix,
                   )
 def globaldata():
 	d = DotDict(_globaldata)
-	d.base = unicode(request.environ["SCRIPT_NAME"].rstrip("/") + "/")
+	d.base = request.environ["SCRIPT_NAME"].rstrip("/") + "/"
 	return d
 
 wanted = ("tagname", "tagguid", "implied", "tagdata", "datatags",)

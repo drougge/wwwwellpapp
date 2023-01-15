@@ -118,7 +118,7 @@
 <%def name="tagvalue(value, cmp=None)">
 	<%
 	if value is None: return u''
-	value = unicode(value)
+	value = str(value)
 	cmp = u' %s ' % (cmp or u'=',)
 	if len(value) <= 10:
 		return cmp + value

@@ -7,11 +7,12 @@ from bottle import post, request, redirect, mako_view as view
 @view("post-tag")
 def r_post_tag():
 	client = init()
-	m = request.forms.post
+	forms = request.forms.decode('utf-8')
+	m = forms.post
 	post = client.get_post(m)
-	tags = request.forms.tags
-	create = [a.decode("utf-8") for a in request.forms.getall("create")]
-	ctype  = [a.decode("utf-8") for a in request.forms.getall("ctype")]
+	tags = forms.tags
+	create = forms.getall("create")
+	ctype  = forms.getall("ctype")
 	full = set()
 	weak = set()
 	remove = set()

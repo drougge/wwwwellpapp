@@ -9,8 +9,8 @@ from bottle import get, abort
 
 def md5file(fn):
 	m = md5()
-	with file(fn, "rb") as fh:
-		for data in iter(lambda: fh.read(65536), ""):
+	with open(fn, 'rb') as fh:
+		for data in iter(lambda: fh.read(65536), b''):
 			m.update(data)
 	return m.hexdigest()
 

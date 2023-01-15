@@ -6,16 +6,17 @@ from bottle import post, request
 @post("/ajax-tag")
 def ajax_tag():
 	client = init()
-	tags = request.forms.tags
-	name = request.forms.name
+	forms = request.forms.decode('utf-8')
+	tags = forms.tags
+	name = forms.name
 	if name:
 		try:
-			type = request.forms.type
+			type = forms.type
 			client.add_tag(tag_clean(name), type)
 			tags = name
 		except Exception:
 			msg = u'Failed to create'
-	m = request.forms.m.split()
+	m = forms.m.split()
 	full = set()
 	weak = set()
 	remove = set()
