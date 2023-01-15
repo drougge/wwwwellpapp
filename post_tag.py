@@ -21,7 +21,7 @@ def r_post_tag():
 	for n, t in zip(create, ctype):
 		if t:
 			client.add_tag(tag_clean(n), t)
-			tags += u' ' + n
+			tags += ' ' + n
 	for t in tags.split():
 		tag = client.find_tag(tag_clean(t))
 		if tag:

@@ -15,7 +15,7 @@ def r_post(m):
 	
 	data.post = post
 	data.q = ""
-	data.extra_script = u"resize.js"
+	data.extra_script = "resize.js"
 	data.tags = sorted(taglist(post, False) + taglist(post, True))
 	data.rel_posts = [Post(md5=md5) for md5 in client.post_rels(m) or []]
 	data.rels = []
@@ -41,8 +41,8 @@ def r_post(m):
 		for t in data.ordered_tags:
 			posts = client.search_post(guids=[t.guid], order="group")
 			pos = [p.md5 for p in posts].index(m)
-			odata = [(u'dist2', None), (u'dist1', u'prev'), (u'dist0', None),
-			         (u'dist1', u'next'), (u'dist2', None)]
+			odata = [('dist2', None), ('dist1', 'prev'), ('dist0', None),
+			         ('dist1', 'next'), ('dist2', None)]
 			start, end = pos - 2, pos + 3
 			if start < 0:
 				odata = odata[-start:]

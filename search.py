@@ -24,7 +24,7 @@ def r_search():
 	q = request.query.q.strip()
 	data.tagnames = qa = q.split()
 	data.tags = list(map(parse_tag, qa))
-	data.q = q = u' '.join(qa)
+	data.q = q = ' '.join(qa)
 	data.cloud = []
 	data.result_count = 0
 	ta = []
@@ -48,7 +48,7 @@ def r_search():
 			data.posts = posts
 			data.result_count = props.result_count
 			data.page = page
-			data.pagelink = makelink(u'search', (u'q', q))
+			data.pagelink = makelink('search', ('q', q))
 			data.pages, data.rels = pagelinks(data.pagelink, page, data.result_count)
 			data.cloud = tagcloud(ga)
 	return data

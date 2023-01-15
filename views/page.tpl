@@ -59,9 +59,9 @@
 				${ tagvalue(value, cmp) }
 				<ul>
 				<% qc = tagnames[:] %>
-				% for pre in [pre for pre in (u'', u'!', u'~', u'-') if pre != prefix]:
+				% for pre in [pre for pre in ('', '!', '~', '-') if pre != prefix]:
 					<% qc[i] = pre + clean %>
-					<li><a href="${ makesearchlink(qc, tags) }">${ pre or u'+' }</a></li>
+					<li><a href="${ makesearchlink(qc, tags) }">${ pre or '+' }</a></li>
 				% endfor
 				<li><a href="${ makesearchlink(qc[:i] + qc[i + 1:], tags[:i] + tags[i + 1:]) }">X</a></li>
 				</ul></li>
@@ -98,7 +98,7 @@
 	% endif
 </%def>
 
-<%def name="post_thumb(post, link=True, classname=u'thumb')">
+<%def name="post_thumb(post, link=True, classname='thumb')">
 	## Render a single post in #thumbs view (or similar)
 	<span class="${ classname }" id="p${ post.md5 }">
 	% if link:
@@ -117,9 +117,9 @@
 
 <%def name="tagvalue(value, cmp=None)">
 	<%
-	if value is None: return u''
+	if value is None: return ''
 	value = str(value)
-	cmp = u' %s ' % (cmp or u'=',)
+	cmp = ' %s ' % (cmp or '=',)
 	if len(value) <= 10:
 		return cmp + value
 	%>
@@ -132,14 +132,14 @@
 	<ul id="tags">
 	% for n, t, impl in tags:
 		<%
-		c = u'tag implied' if impl else u'tag'
-		if t.ordered: c += u' ordered'
+		c = 'tag implied' if impl else 'tag'
+		if t.ordered: c += ' ordered'
 		%>
 		<li class="${ c }"><a class="tt-${ t.type }" href="${ base }tag/${ t.guid }">${ n }</a>${ tagvalue(t.value) }
 		% if q:
 			<ul>
-			% for prefix, caption in (u' ', u'+'), (u' -', u'-'):
-				<li><a href="${ makelink(u'search', (u'q', q + prefix + t.name)) }">${ caption }</a></li>
+			% for prefix, caption in (' ', '+'), (' -', '-'):
+				<li><a href="${ makelink('search', ('q', q + prefix + t.name)) }">${ caption }</a></li>
 			% endfor
 			</ul>
 		% endif

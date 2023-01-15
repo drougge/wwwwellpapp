@@ -43,15 +43,15 @@ def r_browse(path=""):
 	
 	prt_head()
 	prt_left_head()
-	prt(u'<ul id="dirs">\n')
+	prt('<ul id="dirs">\n')
 	for d in dirs:
-		prt(u'<li><a href="', d, u'/">', d, u'</a></li>\n')
-	prt(u'</ul>\n')
+		prt('<li><a href="', d, '/">', d, '</a></li>\n')
+	prt('</ul>\n')
 	prt_left_foot()
-	prt(u'<div id="main">\n',
-	    u'<h1>', pathpart, u'</h1>\n',
-	    pagelinks(u'', 0, 0))
+	prt('<div id="main">\n',
+	    '<h1>', pathpart, '</h1>\n',
+	    pagelinks('', 0, 0))
 	prt_posts([p[1] for p in sorted(posts)])
-	prt(u'</div>\n')
+	prt('</div>\n')
 	prt_foot()
 	return finish()

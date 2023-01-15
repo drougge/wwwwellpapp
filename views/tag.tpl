@@ -53,7 +53,7 @@
 		<li>Posts: ${ tag.posts }</li>
 		<li>Weak posts: ${ tag.weak_posts }</li>
 
-		% for txt, rev, tags in ((u'Implies', False, implies_tags), (u'Implied by', True, implied_by_tags)):
+		% for txt, rev, tags in (('Implies', False, implies_tags), ('Implied by', True, implied_by_tags)):
 			% if tags or (user and not rev):
 				<li>${ txt }
 				<ul>

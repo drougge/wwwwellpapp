@@ -22,7 +22,7 @@
 			<div id="fallback-sizer" style="height: ${ initial_height }px; width: ${initial_raw_width }px;"></div>
 		</div>
 	</div>
-	${ local.inline_script(u'WP.size.toggle(true);') }
+	${ local.inline_script('WP.size.toggle(true);') }
 	% if rel_posts:
 		<div id="related" class="underimg">
 			<div>Related posts</div>
@@ -37,7 +37,7 @@
 		<div id="ordered" class="underimg">
 			<div class="tt-${ t.type }">${ tagfmt(t.name) }</div>
 			% for p in t.relposts:
-				${ local.post_thumb(p, p.md5 != post.md5, u'thumb ' + p.reldist) }
+				${ local.post_thumb(p, p.md5 != post.md5, 'thumb ' + p.reldist) }
 			% endfor
 		</div>
 	% endfor

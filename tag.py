@@ -14,12 +14,12 @@ def modify_tag(client, data):
 	except Exception:
 		set_prio = 0
 	data.implies = request.query.implies.strip()
-	if data.implies and u' ' not in data.implies:
+	if data.implies and ' ' not in data.implies:
 		implguid = client.find_tag(data.implies, with_prefix=True)
 		if implguid:
 			try:
 				client.add_implies(guid, implguid, set_prio)
-				data.implies = u''
+				data.implies = ''
 				set_prio = 0
 			except Exception:
 				pass
@@ -39,7 +39,7 @@ def modify_tag(client, data):
 	if data.add_alias:
 		try:
 			client.add_alias(data.add_alias, guid)
-			data.add_alias = u''
+			data.add_alias = ''
 			update = True
 		except Exception:
 			pass
@@ -75,7 +75,7 @@ def r_tag(guid):
 	
 	data.cloud = tagcloud([guid])
 	data.q = tag.name
-	data.tagtypes = client.metalist(u"tagtypes")
+	data.tagtypes = client.metalist("tagtypes")
 	
 	def get_impl(rev):
 		res = []
@@ -94,6 +94,6 @@ def r_tag(guid):
 	data.result_count = props.result_count
 	data.page = 0
 	if posts:
-		data.pagelink = makelink(u'search', (u'q', tag.name))
+		data.pagelink = makelink('search', ('q', tag.name))
 		data.pages, data.rels = pagelinks(data.pagelink, 0, data.result_count)
 	return data

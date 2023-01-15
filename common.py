@@ -27,12 +27,12 @@ assert thumbsize
 
 def tag_clean(n):
 	"""Get tagname without prefix"""
-	if n[0] in u"-~!": return n[1:]
+	if n[0] in "-~!": return n[1:]
 	return n
 def tag_prefix(n):
 	"""Get prefix of tagname (if any)"""
-	if n[0] in u"-~!": return n[0]
-	return u''
+	if n[0] in "-~!": return n[0]
+	return ''
 
 def prt(*a):
 	"""Print to client.
@@ -58,10 +58,10 @@ def tagfmt(n, html_ok=True):
 			n = '%s=%s' % (n.pname, n.value,)
 		else:
 			n = n.pname
-	n = _zwsp_pre_re.sub(u'\u200b\\1', n)
-	n = _zwsp_post_re.sub(u'\\1\u200b', n)
-	n = _zwsp_nr_re.sub(u'\u200b\\1\u200b', n)
-	n = _zwsp_re.sub(u'\u200b', n)
+	n = _zwsp_pre_re.sub('\u200b\\1', n)
+	n = _zwsp_post_re.sub('\\1\u200b', n)
+	n = _zwsp_nr_re.sub('\u200b\\1\u200b', n)
+	n = _zwsp_re.sub('\u200b', n)
 	return escape(n)
 
 def tagname(guid):
@@ -109,49 +109,49 @@ def tag_post(p, full, weak, remove):
 def prt_tags(tags, q=None):
 	"""Print #tags list"""
 	if not tags: return
-	prt(u'<ul id="tags">')
+	prt('<ul id="tags">')
 	for n, t, impl in tags:
-		c = u'tag implied' if impl else u'tag'
-		if t.ordered: c += u' ordered'
-		prt(u'<li class="', c, u'"><a class="tt-', t.type, u'" href="',
-		    base, u'tag/', t.guid, u'">', n, u'</a>')
+		c = 'tag implied' if impl else 'tag'
+		if t.ordered: c += ' ordered'
+		prt('<li class="', c, '"><a class="tt-', t.type, '" href="',
+		    base, 'tag/', t.guid, '">', n, '</a>')
 		if q:
-			prt(u'\n<ul>')
-			for prefix, caption in (u' ', u'+'), (u' -', u'-'):
+			prt('\n<ul>')
+			for prefix, caption in (' ', '+'), (' -', '-'):
 				qa = prefix + t.name
-				link = makelink(u'search', (u'q', q + qa))
-				prt(u'<li><a href="', link, u'">', caption, u'</a></li>')
-			prt(u'</ul>\n')
-		prt(u'</li>\n')
-	prt(u'</ul>')
+				link = makelink('search', ('q', q + qa))
+				prt('<li><a href="', link, '">', caption, '</a></li>')
+			prt('</ul>\n')
+		prt('</li>\n')
+	prt('</ul>')
 
 def prt_qs(names, tags, tagaround=None):
 	"""Print #query-string list"""
 	def prt_mod(q, tags, caption):
-		q = u' '.join([q for q, t in zip(q, tags) if t])
-		link = makelink(u'search', (u'q', q))
-		prt(u'<li><a href="', link, u'">', caption, u'</a></li>')
-	prt(u'<ul id="query-string">\n')
+		q = ' '.join([q for q, t in zip(q, tags) if t])
+		link = makelink('search', ('q', q))
+		prt('<li><a href="', link, '">', caption, '</a></li>')
+	prt('<ul id="query-string">\n')
 	for name, tag, i in zip(names, tags, range(len(tags))):
 		if not tag:
-			prt(u' <li class="unknown">', tagfmt(name), u'</li>\n')
+			prt(' <li class="unknown">', tagfmt(name), '</li>\n')
 			continue
-		c = u' class="tt-' + tag.type + u'"'
+		c = ' class="tt-' + tag.type + '"'
 		prefix = tag_prefix(name)
 		clean = tag_clean(name)
 		if tagaround:
-			prt(u' <li><', tagaround, c, u'>', tagfmt(name), u'</', tagaround, u'>')
+			prt(' <li><', tagaround, c, '>', tagfmt(name), '</', tagaround, '>')
 		else:
-			prt(u' <li>', prefix, u'<a href="', base, u'tag/', tag.guid, u'"',
-			    c, u'>', tagfmt(clean), u'</a>')
-		prt(u'<ul>')
+			prt(' <li>', prefix, '<a href="', base, 'tag/', tag.guid, '"',
+			    c, '>', tagfmt(clean), '</a>')
+		prt('<ul>')
 		qc = names[:]
-		for pre in [pre for pre in (u'', u'!', u'~', u'-') if pre != prefix]:
+		for pre in [pre for pre in ('', '!', '~', '-') if pre != prefix]:
 			qc[i] = pre + clean
-			prt_mod(qc, tags, pre or u'+')
-		prt_mod(qc[:i] + qc[i + 1:], tags[:i] + tags[i + 1:], u'X')
-		prt(u'</ul></li>\n')
-	prt(u'</ul>\n')
+			prt_mod(qc, tags, pre or '+')
+		prt_mod(qc[:i] + qc[i + 1:], tags[:i] + tags[i + 1:], 'X')
+		prt('</ul></li>\n')
+	prt('</ul>\n')
 
 def tags_as_html(post):
 	"""Returns single string of HTML escaped tag names for post"""
@@ -161,26 +161,26 @@ def tags_as_html(post):
 		t = tags.get(dt)
 		if t:
 			names.append(tagfmt(t, False))
-	return Markup(u' ').join(names)
+	return Markup(' ').join(names)
 
-def prt_search_form(q=u''):
+def prt_search_form(q=''):
 	"""Print search form"""
-	prt(u'<form action="', base, u'search" method="get">\n',
-	    u'<div id="search-box">\n',
-	    u'<input type="text" name="q" id="search-q" value="', escape(q),
-	    u'" onfocus="WP.comp_init(this, true);" />\n',
-	    u'<input type="submit" value="Search" />\n',
-	    u'</div>\n',
-	    u'</form>\n')
+	prt('<form action="', base, 'search" method="get">\n',
+	    '<div id="search-box">\n',
+	    '<input type="text" name="q" id="search-q" value="', escape(q),
+	    '" onfocus="WP.comp_init(this, true);" />\n',
+	    '<input type="submit" value="Search" />\n',
+	    '</div>\n',
+	    '</form>\n')
 
 def makelink(fn, *args):
 	"""Make a html link to fn with (field, value) pairs as arguments"""
 	fn = base + fn
 	if not args: return fn
-	if u'?' in fn:
-		middle = u'&'
+	if '?' in fn:
+		middle = '&'
 	else:
-		middle = u'?'
+		middle = '?'
 	args = urlencode([(a, v.encode("utf-8")) for a, v in args])
 	return fn + middle + args
 
@@ -192,7 +192,7 @@ def pagelinks(link, page, result_count):
 	"""
 	pages = list(range(int(ceil(float(result_count) / per_page))))
 	if len(pages) == 1:
-		if not user: return u''
+		if not user: return ''
 		pages = []
 	if len(pages) > 16:
 		if page < 8:
@@ -206,11 +206,11 @@ def pagelinks(link, page, result_count):
 		def add_rel(rel, p):
 			rels.append((rel, link + "&page=" + str(p)))
 		if page > 0:
-			add_rel(u"first", 0)
-			add_rel(u"prev", page - 1)
+			add_rel("first", 0)
+			add_rel("prev", page - 1)
 		if page < pages[-1]:
-			add_rel(u"next", page + 1)
-			add_rel(u"last", pages[-1])
+			add_rel("next", page + 1)
+			add_rel("last", pages[-1])
 	return pages, rels
 
 def browser_wants_xhtml():
@@ -226,7 +226,7 @@ def browser_wants_xhtml():
 
 def finish(ctype = "text/html"):
 	"""Finish up, actually sending page to client."""
-	data = u''.join(request.outdata_head + request.outdata).encode("utf-8")
+	data = ''.join(request.outdata_head + request.outdata).encode('utf-8')
 	ctype = str(ctype)
 	if (ctype[:5] == "text/" or ctype == "application/json") and "charset" not in ctype:
 		ctype += "; charset=UTF-8"
@@ -237,8 +237,8 @@ def finish(ctype = "text/html"):
 	return data
 
 def makesearchlink(q, tags):
-	q = u' '.join([q for q, t in zip(q, tags) if t])
-	return makelink(u'search', (u'q', q))
+	q = ' '.join([q for q, t in zip(q, tags) if t])
+	return makelink('search', ('q', q))
 
 _globaldata = dict(user=user, tagfmt=tagfmt, tag_prefix=tag_prefix,
                    tag_clean=tag_clean, makesearchlink=makesearchlink,
