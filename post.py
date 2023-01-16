@@ -24,7 +24,7 @@ def r_post(m, client):
 	scale = min(float(cfg.fallback_width or 800) / width, float(cfg.fallback_height or 600) / height, 1)
 	data.initial_width = int(scale * width)
 	data.initial_height = int(scale * height)
-	if int(post.rotate) in (90, 270):
+	if int(post.rotate or 0) in (90, 270):
 		data.translate_horiz = math.trunc((data.initial_width - data.initial_height) / 2.0)
 		data.translate_vert = math.trunc((data.initial_height - data.initial_width) / 2.0)
 		data.initial_raw_width = data.initial_height
