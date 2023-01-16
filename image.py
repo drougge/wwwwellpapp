@@ -35,6 +35,6 @@ def thumb(m, z, client):
 	else:
 		return serve(client.thumb_path(m, z), "jpeg")
 
-@get("/image/<m:re:[0-9a-z]{32}>.<ext:re:[a-z]{3,4}>")
+@get("/image/<m:re:[0-9a-z]{32}>.<ext:re:[0-9a-z]{3,4}>")
 def r_image(m, ext, client):
 	return serve(client.image_path(m), ext)
