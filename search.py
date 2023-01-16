@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from common import globaldata, init, per_page, makelink, pagelinks, tagcloud, tag_prefix, wanted
+from common import globaldata, per_page, makelink, pagelinks, tagcloud, tag_prefix, wanted
 from bottle import get, post, request, mako_view as view
 from wellpapp import Tag, DotDict
 
@@ -8,9 +8,8 @@ from wellpapp import Tag, DotDict
 @get("/search")
 @post("/search")
 @view("search")
-def r_search():
+def r_search(client):
 	data = globaldata()
-	client = init()
 	def parse_tag(name):
 		res = client.parse_tag(name, comparison=True)
 		if res:

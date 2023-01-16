@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from common import init, globaldata, tagcloud, tagname, per_page, makelink, pagelinks, wanted
+from common import globaldata, tagcloud, tagname, per_page, makelink, pagelinks, wanted
 from wellpapp import DotDict, ImplicationTuple
 from bottle import get, post, abort, request, mako_view as view
 from collections import namedtuple
@@ -65,8 +65,7 @@ def modify_tag(client, data):
 @get("/tag/<guid:re:(?:\w{6}-){3}\w{6}>")
 @post("/tag/<guid:re:(?:\w{6}-){3}\w{6}>")
 @view("tag")
-def r_tag(guid):
-	client = init()
+def r_tag(guid, client):
 	tag = client.get_tag(guid)
 	if not tag: abort(404)
 	data = globaldata()

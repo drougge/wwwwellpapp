@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from common import init, tag_clean, tag_prefix, tags_as_html, tag_post, tagtypes
+from common import tag_clean, tag_prefix, tags_as_html, tag_post, tagtypes
 from bottle import post, request
 
 @post("/ajax-tag")
-def ajax_tag():
-	client = init()
+def ajax_tag(client):
 	forms = request.forms.decode('utf-8')
 	tags = forms.tags
 	name = forms.name

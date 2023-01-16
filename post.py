@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from common import init, globaldata, taglist, wanted, cfg
+from common import globaldata, taglist, wanted, cfg
 from wellpapp import Post
 from bottle import get, abort, mako_view as view
 import math
 
 @get("/post/<m:re:[0-9a-f]{32}>")
 @view("post")
-def r_post(m):
-	client = init()
+def r_post(m, client):
 	post = client.get_post(m, wanted=wanted + ("width", "height", "imgdate", "ext", "rotate",), separate_implied=True)
 	if not post: abort(404)
 	data = globaldata()

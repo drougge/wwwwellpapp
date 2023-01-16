@@ -5,7 +5,6 @@ from os import stat
 from time import strftime, gmtime, time
 
 from bottle import get, abort, response
-from common import init
 from wellpapp import RawWrapper, raw_exts
 
 def fmttime(t):
@@ -30,14 +29,12 @@ def serve(fn, ext):
 	return fh
 
 @get("/image/<z>/<m:re:[0-9a-z]{32}>")
-def thumb(m, z):
-	client = init()
+def thumb(m, z, client):
 	if z in ("normal", "large"):
 		return serve(client.pngthumb_path(m, z), "png")
 	else:
 		return serve(client.thumb_path(m, z), "jpeg")
 
 @get("/image/<m:re:[0-9a-z]{32}>.<ext:re:[a-z]{3,4}>")
-def r_image(m, ext):
-	client = init()
+def r_image(m, ext, client):
 	return serve(client.image_path(m), ext)

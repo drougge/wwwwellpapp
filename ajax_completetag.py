@@ -3,7 +3,6 @@
 from itertools import chain
 from os.path import commonprefix
 
-from common import init
 from bottle import get, request
 
 _fuzz_ignore = "".join(map(chr, range(33))) + "-_()[]{}.,!/\"'?<>@=+%$#|\\"
@@ -31,9 +30,8 @@ def complete(client, word):
 	return (commonprefix([n for n, t in candidates]), ""), candidates
 
 @get("/ajax-completetag")
-def ajax_completetag():
+def ajax_completetag(client):
 	tag = request.query.q
-	client = init()
 	full_tag, alts = complete(client, tag)
 	res = {}
 	if full_tag[0] or alts:

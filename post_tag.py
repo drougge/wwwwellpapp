@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from common import init, globaldata, tag_clean, tag_prefix, tag_post, tagtypes
+from common import globaldata, tag_clean, tag_prefix, tag_post, tagtypes
 from bottle import post, request, redirect, mako_view as view
 
 @post("/post-tag")
 @view("post-tag")
-def r_post_tag():
-	client = init()
+def r_post_tag(client):
 	forms = request.forms.decode('utf-8')
 	m = forms.post
 	post = client.get_post(m)

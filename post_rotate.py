@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from common import init
 from bottle import post, request, redirect
 from wellpapp import DotDict
 
 @post("/post-rotate")
-def r_post_rotate():
+def r_post_rotate(client):
 	m = request.forms.post
 	rot = int(request.forms.rot or 0)
 	assert rot in (0, 90, 180, 270)
 	if rot:
-		client = init()
 		post = client.get_post(m, wanted=["rotate", "ext", "width", "height"])
 		props = DotDict()
 		if rot in (90, 270):

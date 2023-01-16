@@ -16,7 +16,7 @@ def md5file(fn):
 
 @get("/browse/")
 @get("/browse/<path:path>")
-def r_browse(path=""):
+def r_browse(client, path=""):
 	if not common.cfg.browsebase:
 		abort(403)
 	# Three slashes, because normpath is stupidly posix-compliant.
@@ -24,7 +24,6 @@ def r_browse(path=""):
 	path = normpath(common.cfg.browsebase + pathpart)
 	if not exists(path):
 		abort(403)
-	client = common.init()
 	
 	posts = []
 	dirs = []
