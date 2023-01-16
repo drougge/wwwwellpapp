@@ -35,14 +35,13 @@ def ajax_tag(client):
 	res = {}
 	msg = ''
 	if full or weak or remove:
-		client.begin_transaction()
-		for p in map(client.get_post, m):
-			if not p:
-				msg = 'Posts missing?'
-			elif tag_post(p, full, weak, remove):
-				p = client.get_post(p.md5)
-				res[p.md5] = tags_as_html(p)
-		client.end_transaction()
+		with client.begin_transaction():
+			for p in map(client.get_post, m):
+				if not p:
+					msg = 'Posts missing?'
+				elif tag_post(p, full, weak, remove):
+					p = client.get_post(p.md5)
+					res[p.md5] = tags_as_html(p)
 	if not res and not msg and not failed and not (name and name[0] == '-'):
 		msg = 'Nothing to do?'
 	
