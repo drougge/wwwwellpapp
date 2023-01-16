@@ -4,7 +4,7 @@ from os import listdir, stat
 from os.path import normpath, exists, join as joinpath, isfile, isdir
 from hashlib import md5
 
-from common import *
+import common
 from bottle import get, abort
 
 def md5file(fn):
@@ -17,14 +17,14 @@ def md5file(fn):
 @get("/browse/")
 @get("/browse/<path:path>")
 def r_browse(path=""):
-	if not cfg.browsebase:
+	if not common.cfg.browsebase:
 		abort(403)
 	# Three slashes, because normpath is stupidly posix-compliant.
 	pathpart = normpath("///" + path)
-	path = normpath(cfg.browsebase + pathpart)
+	path = normpath(common.cfg.browsebase + pathpart)
 	if not exists(path):
 		abort(403)
-	client = init()
+	client = common.init()
 	
 	posts = []
 	dirs = []
@@ -41,17 +41,17 @@ def r_browse(path=""):
 	dirs.sort()
 	if pathpart != "/": dirs = [".."] + dirs
 	
-	prt_head()
-	prt_left_head()
-	prt('<ul id="dirs">\n')
+	common.prt_head()
+	common.prt_left_head()
+	common.prt('<ul id="dirs">\n')
 	for d in dirs:
-		prt('<li><a href="', d, '/">', d, '</a></li>\n')
-	prt('</ul>\n')
-	prt_left_foot()
-	prt('<div id="main">\n',
+		common.prt('<li><a href="', d, '/">', d, '</a></li>\n')
+	common.prt('</ul>\n')
+	common.prt_left_foot()
+	common.prt('<div id="main">\n',
 	    '<h1>', pathpart, '</h1>\n',
-	    pagelinks('', 0, 0))
-	prt_posts([p[1] for p in sorted(posts)])
-	prt('</div>\n')
-	prt_foot()
-	return finish()
+	    common.pagelinks('', 0, 0))
+	common.prt_posts([p[1] for p in sorted(posts)])
+	common.prt('</div>\n')
+	common.prt_foot()
+	return common.finish()
