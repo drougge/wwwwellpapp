@@ -7,7 +7,7 @@ from bottle import get, request
 
 _fuzz_ignore = "".join(map(chr, range(33))) + "-_()[]{}.,!/\"'?<>@=+%$#|\\"
 def _completefuzz(word):
-	return list(filter(lambda c: c not in _fuzz_ignore, word.lower()))
+	return [c for c in word.lower() if c not in _fuzz_ignore]
 
 def complete(client, word):
 	for t, get in ("EI", lambda t: t.name), ("EAI", lambda t: t.alias[0]), \
