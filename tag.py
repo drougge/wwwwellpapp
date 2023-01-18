@@ -9,7 +9,6 @@ ImplicationTupleWithName = namedtuple("ImplicationTupleWithName", ImplicationTup
 
 def modify_tag(client, data):
 	forms = request.forms.decode('utf-8')
-	print(dict(forms))
 	guid = data.tag.guid
 	try:
 		set_prio = int(forms.prio)
